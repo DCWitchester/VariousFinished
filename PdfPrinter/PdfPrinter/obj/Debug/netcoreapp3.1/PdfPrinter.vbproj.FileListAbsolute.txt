@@ -1,0 +1,10 @@
+D:\print\PrintEvent\PdfPrinter\PdfPrinter\bin\Debug\netcoreapp3.1\PdfPrinter.exe
+D:\print\PrintEvent\PdfPrinter\PdfPrinter\bin\Debug\netcoreapp3.1\PdfPrinter.deps.json
+D:\print\PrintEvent\PdfPrinter\PdfPrinter\bin\Debug\netcoreapp3.1\PdfPrinter.runtimeconfig.json
+D:\print\PrintEvent\PdfPrinter\PdfPrinter\bin\Debug\netcoreapp3.1\PdfPrinter.runtimeconfig.dev.json
+D:\print\PrintEvent\PdfPrinter\PdfPrinter\bin\Debug\netcoreapp3.1\PdfPrinter.dll
+D:\print\PrintEvent\PdfPrinter\PdfPrinter\bin\Debug\netcoreapp3.1\PdfPrinter.pdb
+D:\print\PrintEvent\PdfPrinter\PdfPrinter\obj\Debug\netcoreapp3.1\PdfPrinter.AssemblyInfoInputs.cache
+D:\print\PrintEvent\PdfPrinter\PdfPrinter\obj\Debug\netcoreapp3.1\PdfPrinter.AssemblyInfo.vb
+D:\print\PrintEvent\PdfPrinter\PdfPrinter\obj\Debug\netcoreapp3.1\PdfPrinter.dll
+D:\print\PrintEvent\PdfPrinter\PdfPrinter\obj\Debug\netcoreapp3.1\PdfPrinter.pdb

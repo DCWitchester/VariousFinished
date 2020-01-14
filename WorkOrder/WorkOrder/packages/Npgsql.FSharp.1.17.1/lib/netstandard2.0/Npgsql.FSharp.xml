@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>Npgsql.FSharp</name></assembly>
+<members>
+<member name="T:Npgsql.FSharp.SslMode.Require">
+<summary>
+ Fail the connection if the server doesn&apos;t support SSL.
+</summary>
+</member>
+<member name="T:Npgsql.FSharp.SslMode.Prefer">
+<summary>
+ Prefer SSL connections if the server allows them, but allow connections without SSL.
+</summary>
+</member>
+<member name="T:Npgsql.FSharp.SslMode.Disable">
+<summary>
+ SSL is disabled. If the server requires SSL, the connection will fail.
+</summary>
+</member>
+<member name="T:Npgsql.FSharp.SslMode">
+<summary>
+ Specifies how to manage SSL.
+</summary>
+</member>
+<member name="T:Npgsql.FSharp.OptionWorkflow.OptionBuilder">
+<summary>
+ A simple option workflow implementation
+</summary>
+</member>
+<member name="P:Npgsql.FSharp.OptionWorkflow.OptionBuilderImplementation.option">
+<summary>
+ A simple option workflow implementation that allows you to easily chain optionals together.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.executeManyTaskCt(System.Threading.CancellationToken,Npgsql.FSharp.SqlModule.SqlProps)">
+<summary>
+ Executes multiple queries and returns each result set as a distinct table
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.executeScalarSafe(Npgsql.FSharp.SqlModule.SqlProps)">
+<summary>
+ Executes the query and returns a scalar value safely (does not throw)
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.executeNonQuerySafeAsync(Npgsql.FSharp.SqlModule.SqlProps)">
+<summary>
+ Executes the query safely asynchronously (does not throw) and returns the number of rows affected
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.executeNonQuerySafeTask(Npgsql.FSharp.SqlModule.SqlProps)">
+<summary>
+ Executes the query safely as task (does not throw) and returns the number of rows affected
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.executeNonQuerySafeTaskCt(System.Threading.CancellationToken,Npgsql.FSharp.SqlModule.SqlProps)">
+<summary>
+ Executes the query safely as task (does not throw) and returns the number of rows affected
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.executeNonQueryAsync(Npgsql.FSharp.SqlModule.SqlProps)">
+<summary>
+ Executes the query as asynchronously and returns the number of rows affected
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.executeNonQueryTask(Npgsql.FSharp.SqlModule.SqlProps)">
+<summary>
+ Executes the query as a task and returns the number of rows affected
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.executeNonQueryTaskCt(System.Threading.CancellationToken,Npgsql.FSharp.SqlModule.SqlProps)">
+<summary>
+ Executes the query as a task and returns the number of rows affected
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.executeNonQuerySafe(Npgsql.FSharp.SqlModule.SqlProps)">
+<summary>
+ Executes the query safely (does not throw) and returns the number of rows affected
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.executeNonQuery(Npgsql.FSharp.SqlModule.SqlProps)">
+<summary>
+ Executes the query and returns the number of rows affected
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.executeMany(Npgsql.FSharp.SqlModule.SqlProps)">
+<summary>
+ Executes multiple queries and returns each result set as a distinct table
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readRowAsync(Npgsql.NpgsqlDataReader)">
+<summary>
+ Reads a single row from the data reader asynchronously
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readRowTask(Npgsql.NpgsqlDataReader)">
+<summary>
+ Reads a single row from the data reader asynchronously
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readRowTaskCt(System.Threading.CancellationToken,Npgsql.NpgsqlDataReader)">
+<summary>
+ Reads a single row from the data reader asynchronously
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readRow(Npgsql.NpgsqlDataReader)">
+<summary>
+ Reads a single row from the data reader synchronously
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readHStore(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as a `Map&lt;string, string&gt;` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `HStore` which is a key-value dictionary in Postgres.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readTimeWithTimeZone(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as a `DateTimeOffset` where the *date* component is dropped off from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `DateTimeOffset` or `time with timezone` in Postgres and when it is not null.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readTimestampTz(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as a `DateTime` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `timestamptz` or `timestamp with time zone` and when it is not null.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readTimestamp(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as a `DateTime` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `timestamp` or `timestamp without time zone` and when it is not null.
+ Returns `None` otherwise.
+ Alias for `Sql.readTimeWithTimeZone`
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readBytea(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as a `byte array` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `byte array` or `bytea` in Postgres and when it is not null.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readUuid(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as a `Guid` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `Guid` (type `Uuid` in Postgres) and when it is not null.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readNumber(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as a `double` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `double` and when it is not null.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readMoney(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as a `decimal` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `decimal` or `money` and when it is not null.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readDecimal(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as a `decimal` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `decimal` and when it is not null.
+ Returns `None` otherwise. Similar to `Sql.readMoney`.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readBool(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as a `bool` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `bool` and when it is not null.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readTime(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as a `TimeSpan` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `TimeSpan` and when it is not null.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readDate(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as a `DateTime` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `DateTime` and when it is not null.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readString(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as an `string` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `string` and when it is not null.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readLong(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as an `int64` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of `int64` and when it is not null.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.readInt(System.String,Microsoft.FSharp.Collections.FSharpList{System.Tuple{System.String,Npgsql.FSharp.SqlValue}})">
+<summary>
+ Tries to read the column value as an `int` from a row based on the provided name of the column.
+ Returns `Some value` when the column exists, when it has the type of integer and when it is not null.
+ Returns `None` otherwise.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.fromUriToConfig(System.Uri)">
+<summary>
+ Creates initial database connection configration from a the Uri components.
+ It try to find `Host`, `Username`, `Password`, `Database` and `Port` from the input `Uri`.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.fromUri(System.Uri)">
+<summary>
+ Turns the given postgres Uri into a proper connection string
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.port(System.Int32,Npgsql.FSharp.SqlModule.ConnectionStringBuilder)">
+<summary>
+ Specifies the port of the database server. If you don&apos;t specify the port, the default port of `5432` is used.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.sslMode(Npgsql.FSharp.SslMode,Npgsql.FSharp.SqlModule.ConnectionStringBuilder)">
+<summary>
+ Specifies how to manage SSL Mode.
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.database(System.String,Npgsql.FSharp.SqlModule.ConnectionStringBuilder)">
+<summary>
+ Specifies the database name
+</summary>
+</member>
+<member name="M:Npgsql.FSharp.SqlModule.password(System.String,Npgsql.FSharp.SqlModule.ConnectionStringBuilder)">
+<summary>
+ Specifies the password of the user that is logging in into the database server
+</summary>
+</member>
+</members>
+</doc>

@@ -1,0 +1,8 @@
+E:\Programe\WorkOrder\FsharpLibrary\bin\Debug\netstandard2.0\FsharpLibrary.deps.json
+E:\Programe\WorkOrder\FsharpLibrary\bin\Debug\netstandard2.0\FsharpLibrary.dll
+E:\Programe\WorkOrder\FsharpLibrary\bin\Debug\netstandard2.0\FsharpLibrary.pdb
+E:\Programe\WorkOrder\FsharpLibrary\obj\Debug\netstandard2.0\FsharpLibrary.fsprojAssemblyReference.cache
+E:\Programe\WorkOrder\FsharpLibrary\obj\Debug\netstandard2.0\FsharpLibrary.AssemblyInfoInputs.cache
+E:\Programe\WorkOrder\FsharpLibrary\obj\Debug\netstandard2.0\FsharpLibrary.AssemblyInfo.fs
+E:\Programe\WorkOrder\FsharpLibrary\obj\Debug\netstandard2.0\FsharpLibrary.dll
+E:\Programe\WorkOrder\FsharpLibrary\obj\Debug\netstandard2.0\FsharpLibrary.pdb

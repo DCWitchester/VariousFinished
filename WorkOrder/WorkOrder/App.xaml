@@ -1,0 +1,49 @@
+﻿<Application x:Class="WorkOrder.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WorkOrder"
+             Startup="ProgramStartup">
+    <Application.Resources>
+        <!--Font Family-->
+        <FontFamily x:Key="DefaultFont">News Gothic MT</FontFamily>
+        <!--Main Gradient-->
+        <LinearGradientBrush x:Key="MainGradientStyle" StartPoint="1,1" EndPoint="0,0" >
+            <GradientStop  Offset="0" Color="#0099ff" />
+            <GradientStop  Offset="1" Color="#ff9900" />
+        </LinearGradientBrush>
+        <!--#region ButtonStyles-->
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="Black"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="2,3,2,1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="20" Background="{TemplateBinding Background}">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Black" ShadowDepth="0" BlurRadius="0"/>
+                            </Border.Effect>
+                            <TextBlock Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding Content}" FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}" FontStyle="{TemplateBinding FontStyle}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#99c2ff"/>
+                </Trigger>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="Background" Value="#99c2ff"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="BorderThickness" Value="3,4,3,2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!--#endregion-->
+    </Application.Resources>
+</Application>
