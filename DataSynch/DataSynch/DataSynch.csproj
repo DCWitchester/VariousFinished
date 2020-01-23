@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Miscellaneous\Encryptor.cs" />
+    <Compile Include="Miscellaneous\Miscellaneous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
