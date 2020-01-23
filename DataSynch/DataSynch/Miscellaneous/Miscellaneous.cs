@@ -1,16 +1,23 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DataSynch.Miscellaneous
 {
     /// <summary>
-    /// this class contains all special functions that have no place anywhere else
+    /// this class will contain all functions that have no other place in the world
     /// </summary>
     class Miscellaneous
     {
+        //All non-Auxilliary functions in this class are to be static and public
+
         /// <summary>
-        /// the main function for closing the program
+        /// this function will close the current programs execution
         /// </summary>
-        public void ProgramClose()
+        public static void ProgramClose()
         {
             Process.GetCurrentProcess().Kill();
         }
