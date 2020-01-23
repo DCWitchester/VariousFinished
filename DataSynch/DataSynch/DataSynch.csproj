@@ -67,8 +67,16 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Message\MessageForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Message\Message.cs" />
+    <Compile Include="Message\MessageForm.xaml.cs">
+      <DependentUpon>MessageForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Miscellaneous\Encryptor.cs" />
     <Compile Include="Miscellaneous\Miscellaneous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -112,9 +120,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DatabaseFunctions\SqlFiles\originalDatabse.sql" />
+    <Resource Include="Message\images\error.jpg" />
+    <Resource Include="Message\images\info.jpg" />
+    <Resource Include="Message\images\success.jpg" />
+    <Resource Include="Message\images\warning.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DatabaseFunctions\SqlFiles\createDatabase.sql" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
