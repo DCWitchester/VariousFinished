@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-E:\GitRepos\MentorSynch\WorkOrder\WorkOrder\obj\Debug\
+E:\GitRepos\MentorSynch\WorkOrder\WorkOrder\obj\Release\
 WorkOrder
 none
 false
-DEBUG;TRACE
+TRACE
 E:\GitRepos\MentorSynch\WorkOrder\WorkOrder\App.xaml
 2-220893675
 

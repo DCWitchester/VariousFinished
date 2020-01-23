@@ -13,5 +13,6 @@ namespace DataSynch
     /// </summary>
     public partial class App : Application
     {
+        void StartupPath(object sender, StartupEventArgs e) { }
     }
 }
