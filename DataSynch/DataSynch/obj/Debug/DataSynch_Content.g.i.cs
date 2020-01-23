@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("foxprograms.txt")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("databasefunctions/sqlfiles/originaldatabse.sql")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("databasefunctions/sqlfiles/createdatabase.sql")]
 
 

@@ -69,6 +69,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Miscellaneous\Encryptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -107,6 +108,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="foxPrograms.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DatabaseFunctions\SqlFiles\originalDatabse.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DatabaseFunctions\SqlFiles\createDatabase.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

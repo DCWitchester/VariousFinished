@@ -113,11 +113,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\GitClones\\MiscellaneousFunctions\\MiscellaneousFunctions.fsproj",
+      "projectUniqueName": "E:\\GitRepos\\MentorSynch\\MiscellaneousFunctions\\MiscellaneousFunctions.fsproj",
       "projectName": "MiscellaneousFunctions",
-      "projectPath": "E:\\GitClones\\MiscellaneousFunctions\\MiscellaneousFunctions.fsproj",
+      "projectPath": "E:\\GitRepos\\MentorSynch\\MiscellaneousFunctions\\MiscellaneousFunctions.fsproj",
       "packagesPath": "C:\\Users\\DCW\\.nuget\\packages\\",
-      "outputPath": "E:\\GitClones\\MiscellaneousFunctions\\obj\\",
+      "outputPath": "E:\\GitRepos\\MentorSynch\\MiscellaneousFunctions\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

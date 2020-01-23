@@ -11,6 +11,7 @@ LPARAMETERS pMemoryFile
 	fi = FOPEN('mem.tmp')
 	IF FILE('mem_bak.ini') AND FILE('mem.ini')
 		ERASE mem_bak.ini
+
 	ENDIF 
 	IF FILE('mem.ini')
 		COPY FILE mem.ini TO mem_bak.ini
