@@ -1,8 +1,0 @@
-E:\GitClones\MiscellaneousFunctions\bin\Debug\netcoreapp3.0\MiscellaneousFunctions.deps.json
-E:\GitClones\MiscellaneousFunctions\bin\Debug\netcoreapp3.0\MiscellaneousFunctions.dll
-E:\GitClones\MiscellaneousFunctions\bin\Debug\netcoreapp3.0\MiscellaneousFunctions.pdb
-E:\GitClones\MiscellaneousFunctions\obj\Debug\netcoreapp3.0\MiscellaneousFunctions.fsprojAssemblyReference.cache
-E:\GitClones\MiscellaneousFunctions\obj\Debug\netcoreapp3.0\MiscellaneousFunctions.AssemblyInfoInputs.cache
-E:\GitClones\MiscellaneousFunctions\obj\Debug\netcoreapp3.0\MiscellaneousFunctions.AssemblyInfo.fs
-E:\GitClones\MiscellaneousFunctions\obj\Debug\netcoreapp3.0\MiscellaneousFunctions.dll
-E:\GitClones\MiscellaneousFunctions\obj\Debug\netcoreapp3.0\MiscellaneousFunctions.pdb
