@@ -13,6 +13,9 @@ namespace DataSynch
     /// </summary>
     public partial class App : Application
     {
-        void StartupPath(object sender, StartupEventArgs e) { }
+        void StartupPath(object sender, StartupEventArgs e) 
+        {
+            SystemTray.SystemTray.RunSystemTray();
+        }
     }
 }

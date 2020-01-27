@@ -14,3 +14,7 @@ E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\DataSynch.Properties.Resou
 E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\DataSynch.csproj.GenerateResource.cache
 E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\DataSynch.exe
 E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\DataSynch.pdb
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\Message\MessageForm.g.cs
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\DataSynch_Content.g.cs
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\App.baml
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\Message\MessageForm.baml

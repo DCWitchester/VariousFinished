@@ -14,6 +14,13 @@ namespace Message
         /// The MessageFormReturn property will dictate weatehr the message was exited with ok or cancel (true or false)
         /// </summary>
         public static bool messageFormReturn = false;           //setting for the return from window value: Used for 2-value forms
+        /// <summary>
+        /// this function will Reinitialize the Form Return 
+        /// </summary>
+        public static void ReinitializeFormUnload()
+        {
+            messageFormReturn = false;
+        }
     }
     //path to message background Images <= all included in application
     public class MessageImages
@@ -33,6 +40,33 @@ namespace Message
     }
     class Message
     {
-        
+        /// <summary>
+        /// this error is used to display a mutex violation.
+        /// </summary>
+        public static void UniqueInstanceError()
+        {
+            //we call the Reinitialization of the unload variable before launching the form.
+            MessageSettings.ReinitializeFormUnload();
+            PosCeption.MessageForm newMessage = new PosCeption.MessageForm();
+            newMessage.msgTitle.Content = "Eroare Instanta Unica";
+            newMessage.msgMessage.Content = "Programul deja ruleaza." + Environment.NewLine + 
+                                                "Se permite o unica instanta a programului." + Environment.NewLine + 
+                                                "Aceasta instanta se va inchide.";
+            //change the background image
+            newMessage.msgBackground.ImageSource = new BitmapImage(new Uri(@"pack://Application:,,," + MessageImages.errorImage));
+            //deactivate the cancel button
+            newMessage.btnCancel.Visibility = Visibility.Collapsed;
+            //recenter and set the content of the Accept button
+            newMessage.btnAccept.Margin = new Thickness(0, 0, 0, 10);
+            newMessage.btnAccept.Content = "Ok";
+            //Alters the height of the form as needed
+            newMessage.Height = newMessage.Height + MessageSettings.stringLineHeight * 3;
+            //We need to force focus to this form
+            newMessage.Focus();
+            //we set the message as Topmost always
+            newMessage.Topmost = true;
+            //we use showDialog to await user input
+            newMessage.ShowDialog();
+        }
     }
 }
