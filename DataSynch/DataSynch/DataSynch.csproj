@@ -34,9 +34,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>images\MENTOR.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,6 +60,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SystemTray\SytemTray.cs" />
+    <Compile Include="SystemTray\ViewModel\AboutViewModel.cs" />
+    <Compile Include="SystemTray\ViewModel\ComponentVersionInfo.cs" />
+    <Compile Include="SystemTray\ViewModel\StatusViewModel.cs" />
+    <Compile Include="SystemTray\ViewModel\ViewModelBase.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -120,6 +130,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DatabaseFunctions\SqlFiles\originalDatabse.sql" />
+    <None Include="Resources\MentorIcon.ico" />
+    <Resource Include="images\MENTOR.ico" />
     <Resource Include="Message\images\error.jpg" />
     <Resource Include="Message\images\info.jpg" />
     <Resource Include="Message\images\success.jpg" />
