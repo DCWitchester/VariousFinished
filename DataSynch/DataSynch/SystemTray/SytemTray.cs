@@ -16,15 +16,20 @@ namespace DataSynch.SystemTray
             Auxilliary.GenerateInstance();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
+            STAApplicationContext context = new STAApplicationContext();
             try
-            {
-                STAApplicationContext context = new STAApplicationContext();
+            { 
                 Application.Run(context);
             }
-            catch { }
+            catch 
+            {
+                context._deviceManager.Error();  
+            }
         }
     }
+    /// <summary>
+    /// the STAApplicationContext used for running the System Tray context
+    /// </summary>
     public class STAApplicationContext : ApplicationContext
     {
         public STAApplicationContext()
@@ -37,8 +42,14 @@ namespace DataSynch.SystemTray
             _deviceManager.Initialize();
         }
 
-        private ViewManager _viewManager;
-        private Auxilliary.DeviceManager _deviceManager;
+        /// <summary>
+        /// the _viewManager declaread outside the initialization for use within the methods
+        /// </summary>
+        public ViewManager _viewManager;
+        /// <summary>
+        /// the _deviceManager declaread outside the initialization for use within the methods
+        /// </summary>
+        public Auxilliary.DeviceManager _deviceManager;
 
         // Called from the Dispose method of the base class
         protected override void Dispose(bool disposing)
@@ -58,8 +69,11 @@ namespace DataSynch.SystemTray
     /// <summary>
     /// this class will contain all auxilliary functions for the systemTray
     /// </summary>
-    class Auxilliary
+    public class Auxilliary
     {
+        /// <summary>
+        /// the Mutex Class used for creating an unique instance
+        /// </summary>
         public static void GenerateInstance()
         {
             using (System.Threading.Mutex mutex = new System.Threading.Mutex(false, System.Reflection.Assembly.GetExecutingAssembly().GetType().GUID.ToString(), out Boolean createdNew))
@@ -110,12 +124,16 @@ namespace DataSynch.SystemTray
             {
                 Status = DeviceStatus.Uninitialised;
                 //i need the program to start on runtime
+                Initialize();
                 Start();
             }
 
             //a status timer used only for event simulation for now?? <=Weird but useful for further development
             private System.Windows.Threading.DispatcherTimer _statusTimer;
 
+            /// <summary>
+            /// the kill timer used to close the active timer
+            /// </summary>
             private void KillTimer()
             {
                 if (_statusTimer != null)
@@ -184,7 +202,7 @@ namespace DataSynch.SystemTray
             /// </summary>
             public void Start()
             {
-                if (Status == DeviceStatus.Initialised)
+                if (Status == DeviceStatus.Initialised || Status == DeviceStatus.Paused)
                 {
                     Status = DeviceStatus.Starting;
                     // Simulate a real device with a simple timer
@@ -237,8 +255,12 @@ namespace DataSynch.SystemTray
             public void Error()
             {
                 KillTimer();
-                Stop();
+                //Stop();
                 Status = DeviceStatus.Error;
+                if (OnStatusChange != null)
+                {
+                    OnStatusChange();
+                }
 
             }
 
@@ -260,8 +282,10 @@ namespace DataSynch.SystemTray
         #endregion
     }
 
-
-    class ViewManager
+    /// <summary>
+    /// the main view manager class used for efect control over the systray icon
+    /// </summary>
+    public class ViewManager
     {
         #region PrivateProperties
         // The Windows system tray class
@@ -275,6 +299,9 @@ namespace DataSynch.SystemTray
         //private DataSynch.SystemTray.ViewModel.View.AboutView _aboutView;
         private ViewModel.AboutViewModel _aboutViewModel;
         private ViewModel.StatusViewModel _statusViewModel;
+        /// <summary>
+        /// the appIcon image source
+        /// </summary>
         System.Windows.Media.ImageSource AppIcon
         {
             get
@@ -286,8 +313,16 @@ namespace DataSynch.SystemTray
                     System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
             }
         }
+        #region Tool Strip Items
+        private ToolStripMenuItem _startSynching;
+        private ToolStripMenuItem _pauseSynching;
+        #endregion
         #endregion
 
+        /// <summary>
+        /// the initial caller of the view manager that receives a live device manager as a parameter
+        /// </summary>
+        /// <param name="deviceManager"></param>
         public ViewManager(Auxilliary.DeviceManager deviceManager)
         {
             System.Diagnostics.Debug.Assert(deviceManager != null);
@@ -306,9 +341,17 @@ namespace DataSynch.SystemTray
 
             _notifyIcon.ContextMenuStrip.Opening += ContextMenuStrip_Opening;
             //_notifyIcon.DoubleClick += notifyIcon_DoubleClick;
-            //_notifyIcon.MouseUp += notifyIcon_MouseUp;
+            //_notifyIcon.MouseUp += notifyIcon_MouseUp; 
+
+            _hiddenWindow = new System.Windows.Window();
+            _hiddenWindow.Hide();
         }
 
+        /// <summary>
+        /// the initial creator for the contextMenu Strip
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ContextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = false;
@@ -316,9 +359,9 @@ namespace DataSynch.SystemTray
             if (_notifyIcon.ContextMenuStrip.Items.Count == 0)
             {
                 //the ToolStrip Menu Item for pausing execution
-                _notifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("Pauza Transferul", "Se pune pauza la transferul de date", startStopReaderItem_Click));
+                _notifyIcon.ContextMenuStrip.Items.Add(_pauseSynching = ToolStripMenuItemWithHandler("Pauza Transferul", "Se pune pauza la transferul de date", startStopReaderItem_Click));
 
-                _notifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("Reincepe Transferul", "Se reincepe transferul de date", startStopReaderItem_Click));
+                _notifyIcon.ContextMenuStrip.Items.Add(_startSynching = ToolStripMenuItemWithHandler("Reincepe Transferul", "Se reincepe transferul de date", startStopReaderItem_Click));
                 
                 //the Separator for the Strip Menu Item
                 _notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
@@ -344,10 +387,16 @@ namespace DataSynch.SystemTray
                 case Auxilliary.DeviceStatus.Starting:
                     break;
                 case Auxilliary.DeviceStatus.Running:
+                    _pauseSynching.Enabled = true;
+                    _startSynching.Enabled = false;
                     break;
                 case Auxilliary.DeviceStatus.Uninitialised:
                     break;
                 case Auxilliary.DeviceStatus.Error:
+                    break;
+                case Auxilliary.DeviceStatus.Paused:
+                    _pauseSynching.Enabled = false;
+                    _startSynching.Enabled = true;
                     break;
                 default:
                     System.Diagnostics.Debug.Assert(false, "SetButtonStatus() => Unknown state");
@@ -372,23 +421,9 @@ namespace DataSynch.SystemTray
             item.ToolTipText = tooltipText;
             return item;
         }
-        #region ToolStripEvents
         /// <summary>
-        /// the Main Event for initializing the status Change of the project
+        /// the status change event called by state changes
         /// </summary>
-        /// <param name="sender">the System Tray Menu</param>
-        /// <param name="e">the Click Event</param>
-        private void startStopReaderItem_Click(object sender, EventArgs e)
-        {
-            if (_deviceManager.Status == Auxilliary.DeviceStatus.Running)
-            {
-                _deviceManager.Pause();
-            }
-            else
-            {
-                _deviceManager.Start();
-            }
-        }
         public void OnStatusChange()
         {
             UpdateStatusView();
@@ -412,6 +447,11 @@ namespace DataSynch.SystemTray
                     break;
                 case Auxilliary.DeviceStatus.Error:
                     _notifyIcon.Text = _deviceManager.DeviceName + ": Error Detected";
+                    DisplayStatusMessage("Error Detected");
+                    break;
+                case Auxilliary.DeviceStatus.Paused:
+                    _notifyIcon.Text = _deviceManager.DeviceName + ": Paused";
+                    DisplayStatusMessage("Paused");
                     break;
                 default:
                     _notifyIcon.Text = _deviceManager.DeviceName + ": -";
@@ -419,6 +459,9 @@ namespace DataSynch.SystemTray
             }
             System.Windows.Media.ImageSource icon = AppIcon;
         }
+        /// <summary>
+        /// this function will update an existing view
+        /// </summary>
         private void UpdateStatusView()
         {
             if ((_statusViewModel != null) && (_deviceManager != null))
@@ -430,6 +473,10 @@ namespace DataSynch.SystemTray
                 _statusViewModel.SetStatusFlags(statusItems);
             }
         }
+        /// <summary>
+        /// this function will display the status message through windows tips
+        /// </summary>
+        /// <param name="text">the current status message</param>
         private void DisplayStatusMessage(string text)
         {
             _hiddenWindow.Dispatcher.Invoke(delegate
@@ -439,7 +486,23 @@ namespace DataSynch.SystemTray
                 _notifyIcon.ShowBalloonTip(3000);
             });
         }
-
+        #region ToolStripEvents
+        /// <summary>
+        /// the Main Event for initializing the status Change of the project
+        /// </summary>
+        /// <param name="sender">the System Tray Menu</param>
+        /// <param name="e">the Click Event</param>
+        private void startStopReaderItem_Click(object sender, EventArgs e)
+        {
+            if (_deviceManager.Status == Auxilliary.DeviceStatus.Running)
+            {
+                _deviceManager.Pause();
+            }
+            else
+            {
+                _deviceManager.Start();
+            }
+        }
         private void closeProgramFromTray(object sender, EventArgs e)
         {
             #warning TBD: Exit from System Tray

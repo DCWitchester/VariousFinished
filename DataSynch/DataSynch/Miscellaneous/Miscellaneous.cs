@@ -13,7 +13,6 @@ namespace DataSynch.Miscellaneous
     class Miscellaneous
     {
         //All non-Auxilliary functions in this class are to be static and public
-
         /// <summary>
         /// this function will close the current programs execution
         /// </summary>
