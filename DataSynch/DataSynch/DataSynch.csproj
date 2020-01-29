@@ -133,6 +133,7 @@
     <Resource Include="foxPrograms.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DatabaseFunctions\SqlFiles\DataSynchController.sql" />
     <Content Include="DatabaseFunctions\SqlFiles\originalDatabse.sql" />
     <None Include="Resources\MentorIcon.ico" />
     <Resource Include="images\MENTOR.ico" />

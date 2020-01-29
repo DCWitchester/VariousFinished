@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("databasefunctions/sqlfiles/datasynchcontroller.sql")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("databasefunctions/sqlfiles/originaldatabse.sql")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("databasefunctions/sqlfiles/createdatabase.sql")]
 

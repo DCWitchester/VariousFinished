@@ -1,15 +1,15 @@
 ﻿-- Started on 2020-01-23 14:22:45
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
+--SET statement_timeout = 0;
+--SET lock_timeout = 0;
+--SET idle_in_transaction_session_timeout = 0;
+--SET client_encoding = 'UTF8';
+--SET standard_conforming_strings = on;
+--SELECT pg_catalog.set_config('search_path', '', false);
+--SET check_function_bodies = false;
+--SET xmloption = content;
+--SET client_min_messages = warning;
+--SET row_security = off;
 
 --DROP DATABASE "<DatabaseName>";
 --
@@ -38,9 +38,10 @@ SET default_tablespace = '';
 -- TOC entry 223 (class 1259 OID 89444)
 -- Name: agenti; Type: TABLE; Schema: public; Owner: postgres
 --
-
+-- region: Agenti
 CREATE TABLE public.agenti (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     agent character varying(10) DEFAULT ''::character varying NOT NULL,
     tip character varying(10) DEFAULT ''::character varying NOT NULL,
     nume character varying(25) DEFAULT ''::character varying NOT NULL,
@@ -55,9 +56,17 @@ CREATE TABLE public.agenti (
     fuben character varying(4) DEFAULT ''::character varying NOT NULL,
     gest character varying(4) DEFAULT ''::character varying NOT NULL,
     zona character varying(20) DEFAULT ''::character varying NOT NULL,
-    chitanta numeric(10,0) DEFAULT 0 NOT NULL
+    chitanta numeric(10,0) DEFAULT 0 NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
 
+--Comments on agenti table
+COMMENT ON TABLE public.agenti IS 'Echivalent agenti.dbf <= Nomenclator Agenti <= Fisier Unic';
+COMMENT ON COLUMN agenti.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN agenti.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN agenti.retrieved IS 'The column used to synch data downward';
+--
 
 ALTER TABLE public.agenti OWNER TO postgres;
 
@@ -85,14 +94,17 @@ ALTER TABLE public.agenti_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.agenti_id_seq OWNED BY public.agenti.id;
 
+-- endregion Agenti
 
 --
 -- TOC entry 257 (class 1259 OID 89839)
 -- Name: avize; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Avize
 CREATE TABLE public.avize (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     nid numeric(10,0) DEFAULT 0 NOT NULL,
     pac character varying(3) DEFAULT ''::character varying NOT NULL,
     nrdoc numeric(10,0) DEFAULT 0 NOT NULL,
@@ -112,8 +124,18 @@ CREATE TABLE public.avize (
     procad numeric(6,2) DEFAULT 0 NOT NULL,
     pv2 numeric(20,8) DEFAULT 0 NOT NULL,
     z_old boolean DEFAULT false NOT NULL,
-    operator character varying(10) DEFAULT ''::character varying NOT NULL
+    operator character varying(10) DEFAULT ''::character varying NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
+
+-- Comments on agenti table
+COMMENT ON TABLE public.avize IS 'Echivalent avize.dbf <= Document Avize <= Fisier Unic';
+COMMENT ON COLUMN avize.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN avize.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN avize.retrieved IS 'The column used to synch data downward';
+--
+
 
 
 ALTER TABLE public.avize OWNER TO postgres;
@@ -142,14 +164,17 @@ ALTER TABLE public.avize_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.avize_id_seq OWNED BY public.avize.id;
 
+-- endregion Avize
 
 --
 -- TOC entry 205 (class 1259 OID 89163)
 -- Name: bonuri_consum; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Bonuri Consum
 CREATE TABLE public.bonuri_consum (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     pac character varying(3) DEFAULT ''::character varying NOT NULL,
     nrdoc numeric(10,0) DEFAULT 0 NOT NULL,
     aviz numeric(10,0) DEFAULT 0 NOT NULL,
@@ -172,9 +197,19 @@ CREATE TABLE public.bonuri_consum (
     dl character varying(15) DEFAULT ''::character varying NOT NULL,
     andoc numeric(4,0) DEFAULT 0 NOT NULL,
     lunadoc numeric(2,0) DEFAULT 0 NOT NULL,
-    blocat_old boolean DEFAULT false NOT NULL
+    blocat_old boolean DEFAULT false NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
 
+-- Comments on agenti table
+COMMENT ON TABLE public.bonuri_consum IS 'Echivalent bcmmyyyy.dbf <= Document Bonuri Consum <= Fisier Lunar';
+COMMENT ON COLUMN bonuri_consum.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN bonuri_consum.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN bonuri_consum.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN bonuri_consum.andoc IS 'Column is mandatory for the mmyyyy files';
+COMMENT ON COLUMN bonuri_consum.lunadoc IS 'Column is mandatory for the mmyyyy files';
+--
 
 ALTER TABLE public.bonuri_consum OWNER TO postgres;
 
@@ -202,12 +237,15 @@ ALTER TABLE public.bonuri_consum_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.bonuri_consum_id_seq OWNED BY public.bonuri_consum.id;
 
+-- endregion Bonuri Consum
 
 --
 -- TOC entry 243 (class 1259 OID 89640)
 -- Name: comandax; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Comandax
+--#warning TBD: COMANDAX SE LEAGA DE FOLDERUL PSM <= Multiple fisiere facute pe aceeasi structura
 CREATE TABLE public.comandax (
     id integer NOT NULL,
     pac character varying(4) DEFAULT ''::character varying NOT NULL,
@@ -268,14 +306,18 @@ ALTER TABLE public.comandax_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.comandax_id_seq OWNED BY public.comandax.id;
 
+-- endregion Comandax
 
 --
 -- TOC entry 229 (class 1259 OID 89488)
 -- Name: comenzi; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Comenzi
+
 CREATE TABLE public.comenzi (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     pac character varying(3) DEFAULT ''::character varying NOT NULL,
     nrdoc numeric(10,0) DEFAULT 0 NOT NULL,
     data date DEFAULT ('now'::text)::date NOT NULL,
@@ -288,8 +330,15 @@ CREATE TABLE public.comenzi (
     stoc numeric(13,4) DEFAULT 0 NOT NULL,
     descriere character varying(100) DEFAULT ''::character varying NOT NULL,
     datarecept date DEFAULT ('now'::text)::date NOT NULL,
-    stare numeric(10,0) DEFAULT 0 NOT NULL
+    stare numeric(10,0) DEFAULT 0 NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
+
+COMMENT ON TABLE public.comenzi IS 'Echivalent comenzi.dbf <= Document Comenzi <= Fisier Unic';
+COMMENT ON COLUMN comenzi.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN comenzi.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN comenzi.retrieved IS 'The column used to synch data downward';
 
 
 ALTER TABLE public.comenzi OWNER TO postgres;
@@ -318,14 +367,18 @@ ALTER TABLE public.comenzi_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.comenzi_id_seq OWNED BY public.comenzi.id;
 
+-- endregion Comenzi
 
 --
 -- TOC entry 263 (class 1259 OID 89908)
 -- Name: compensari; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Compensari
+
 CREATE TABLE public.compensari (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     pac character varying(3) DEFAULT ''::character varying NOT NULL,
     nrdoc numeric(10,0) DEFAULT 0 NOT NULL,
     data date DEFAULT ('now'::text)::date NOT NULL,
@@ -345,9 +398,18 @@ CREATE TABLE public.compensari (
     pc numeric(20,8) DEFAULT 0 NOT NULL,
     pv numeric(20,8) DEFAULT 0 NOT NULL,
     aviz numeric(10,0) DEFAULT 0 NOT NULL,
-    denp character varying(8) DEFAULT ''::character varying NOT NULL
+    denp character varying(8) DEFAULT ''::character varying NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
 
+-- Comments on agenti table
+COMMENT ON TABLE public.compensari IS 'Echivalent compens.dbf <= Document Compensari <= Fisier Unic';
+COMMENT ON COLUMN compensari.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN compensari.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN compensari.retrieved IS 'The column used to synch data downward';
+
+--
 
 ALTER TABLE public.compensari OWNER TO postgres;
 
@@ -375,12 +437,15 @@ ALTER TABLE public.compensari_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.compensari_id_seq OWNED BY public.compensari.id;
 
+-- endregion Compensari
 
 --
 -- TOC entry 221 (class 1259 OID 89415)
 -- Name: contracte; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Contracte
+-- Back HERE
 CREATE TABLE public.contracte (
     id integer NOT NULL,
     fuben character varying(4) DEFAULT ''::character varying NOT NULL,
@@ -621,6 +686,7 @@ ALTER SEQUENCE public.dispozitii_livrare_id_seq OWNED BY public.dispozitii_livra
 
 CREATE TABLE public.facturi (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     pac character varying(3) DEFAULT ''::character varying NOT NULL,
     nrdoc numeric(10,0) DEFAULT 0 NOT NULL,
     data date DEFAULT ('now'::text)::date NOT NULL,
@@ -666,9 +732,16 @@ CREATE TABLE public.facturi (
     judet character varying(2) DEFAULT ''::character varying NOT NULL,
     tara character varying(2) DEFAULT ''::character varying NOT NULL,
     z_old boolean DEFAULT false NOT NULL,
-    blocat_old boolean DEFAULT false NOT NULL
+    blocat_old boolean DEFAULT false NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
 
+--Comments for table Facturi
+COMMENT ON COLUMN facturi.local_id IS 'The id from the old structure table'
+COMMENT ON COLUMN facturi.synched IS 'The column used to synch data upward'
+COMMENT ON COLUMN facturi.retrieved IS 'The column used to synch data downward'
+--End Comments
 
 ALTER TABLE public.facturi OWNER TO postgres;
 
