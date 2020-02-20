@@ -8,12 +8,12 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DataSynch")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Data Synch Program for old structures")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Mentor Constanta")]
 [assembly: AssemblyProduct("DataSynch")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © Mentor Constanta 2020")]
+[assembly: AssemblyTrademark("™Mentor Constanta")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible

@@ -1,0 +1,43 @@
+﻿<Window x:Class="DataSynch.Settings.SettingsForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DataSynch.Settings"
+        xmlns:app="clr-namespace:DataSynch.Controllers"
+        xmlns:extensions="using:Microsoft.Toolkit"
+        mc:Ignorable="d"
+        Title="Settings" Height="350" Width="500" Cursor="Arrow" WindowStyle="None" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid Background="{DynamicResource MainGradientStyle}">
+        <Grid x:Name="grTitleBar" Height="60" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="#2d2d2d" MouseDown="MoveWindow">
+            <Label Foreground="White" Content="Setari Program" FontSize="25" FontFamily="{StaticResource DefaultFont}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+            <Ellipse Width="35" Height="35" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,10,0" MouseUp="FormClose">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="..\images\close.jpg"/>
+                </Ellipse.Fill>
+            </Ellipse>
+        </Grid>
+        <Grid Margin="0,60,0,0">
+            <!--#region Labels-->
+            <Label Content="GUID Client"            FontSize="13" FontFamily="{StaticResource DefaultFont}" VerticalContentAlignment="Center" Margin="5,10,350,245" LostFocus="ValidateGUIDTextBox" x:Name="lblClientGuid"/>
+            <Label Content="GUID Punct Lucru"       FontSize="13" FontFamily="{StaticResource DefaultFont}" VerticalContentAlignment="Center" Margin="5,50,350,205" LostFocus="ValidateGUIDTextBox" x:Name="lblWorkPointGuid"/>
+            <Label Content="Interval de Upload"     FontSize="13" FontFamily="{StaticResource DefaultFont}" VerticalContentAlignment="Center" Margin="5,90,350,165"/>
+            <Label Content="Interval de Download"   FontSize="13" FontFamily="{StaticResource DefaultFont}" VerticalContentAlignment="Center" Margin="5,130,350,125"/>
+            <!--#endregion-->
+            <!--#region TextBoxes-->
+            <TextBox x:Name="tbClientGUID"        FontSize="13" FontFamily="{StaticResource DefaultFont}" VerticalContentAlignment="Center" Margin="155,10,50,245" MaxLength="36" HorizontalContentAlignment="Center" PreviewTextInput="GUID_PreviewTextInput"/>
+            <TextBox x:Name="tbWorkStationGUID"   FontSize="13" FontFamily="{StaticResource DefaultFont}" VerticalContentAlignment="Center" Margin="155,50,50,205" MaxLength="36" HorizontalContentAlignment="Center" PreviewTextInput="GUID_PreviewTextInput"/>
+            <!--#endregion-->
+            <!--#region Spinners-->
+            <app:NumericSpinner x:Name="spUpload"      Width="100" Height="35" Margin="155,90,245,165"     Value="1000" Step="1000" MinValue="1000" MaxValue="60000" FontSize="13" FontFamily="{StaticResource DefaultFont}"/>
+            <app:NumericSpinner x:Name="spDownload"    Width="100" Height="35" Margin="155,130,245,125"    Value="1000" Step="1000" MinValue="1000" MaxValue="60000" FontSize="13" FontFamily="{StaticResource DefaultFont}"/>
+            <Label Content="ms" Width="35" Height="35" VerticalContentAlignment="Center" Margin="195,90,245,165"    FontFamily="{StaticResource DefaultFont}" FontSize="13"/>
+            <Label Content="ms" Width="35" Height="35" VerticalContentAlignment="Center" Margin="195,130,245,125"   FontFamily="{StaticResource DefaultFont}" FontSize="13"/>
+            <!--#endregion-->
+            <!--#region Buttons-->
+            <Button x:Name="btnAccept" FontSize="13" FontFamily="{StaticResource DefaultFont}" Style="{StaticResource ButtonStyle}"  Margin="125,235,260,10" Content="Salveaza" Click="SaveSetting"/>
+            <Button x:Name="btnCancel" FontSize="13" FontFamily="{StaticResource DefaultFont}" Style="{StaticResource ButtonStyle}"  Margin="260,235,125,10" Content="Renunta" Click="FormClose"/>
+            <!--#endregion-->
+        </Grid>
+    </Grid>
+</Window>

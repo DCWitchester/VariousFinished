@@ -16,7 +16,7 @@ module Say =
     
     
     type ILogin =
-       abstract member IsValid: bool
+        abstract member IsValid: bool
 
        
 

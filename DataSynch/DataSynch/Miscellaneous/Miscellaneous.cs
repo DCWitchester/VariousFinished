@@ -20,5 +20,15 @@ namespace DataSynch.Miscellaneous
         {
             Process.GetCurrentProcess().Kill();
         }
+        /// <summary>
+        /// this function will be used to move a window passed as parameter
+        /// </summary>
+        /// <param name="e">the Mouse Input needed for moving the form</param>
+        /// <param name="window">the given window</param>
+        public static void MoveWindow(System.Windows.Input.MouseButtonEventArgs e, System.Windows.Window window)
+        {
+            if (e.ChangedButton == System.Windows.Input.MouseButton.Left)
+                window.DragMove();
+        }
     }
 }

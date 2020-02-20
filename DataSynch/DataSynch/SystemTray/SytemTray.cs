@@ -505,7 +505,7 @@ namespace DataSynch.SystemTray
         }
         private void closeProgramFromTray(object sender, EventArgs e)
         {
-            #warning TBD: Exit from System Tray
+            Miscellaneous.Miscellaneous.ProgramClose();
         }
         #endregion
     }

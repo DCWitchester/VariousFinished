@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
 
 namespace DataSynch
 {
@@ -15,6 +17,7 @@ namespace DataSynch
     {
         void StartupPath(object sender, StartupEventArgs e) 
         {
+            Settings.Settings.RetrieveSettingsFromFile();
             SystemTray.SystemTray.RunSystemTray();
         }
     }

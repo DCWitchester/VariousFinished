@@ -63,9 +63,9 @@ CREATE TABLE public.agenti (
 
 --Comments on agenti table
 COMMENT ON TABLE public.agenti IS 'Echivalent agenti.dbf <= Nomenclator Agenti <= Fisier Unic';
-COMMENT ON COLUMN agenti.local_id IS 'File id on the local dbf file';
-COMMENT ON COLUMN agenti.synched IS 'The column used to synch data upward';
-COMMENT ON COLUMN agenti.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.agenti.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.agenti.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.agenti.retrieved IS 'The column used to synch data downward';
 --
 
 ALTER TABLE public.agenti OWNER TO postgres;
@@ -129,11 +129,11 @@ CREATE TABLE public.avize (
     retrieved boolean DEFAULT true NOT NULL
 );
 
--- Comments on agenti table
+-- Comments on avize table
 COMMENT ON TABLE public.avize IS 'Echivalent avize.dbf <= Document Avize <= Fisier Unic';
-COMMENT ON COLUMN avize.local_id IS 'File id on the local dbf file';
-COMMENT ON COLUMN avize.synched IS 'The column used to synch data upward';
-COMMENT ON COLUMN avize.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.avize.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.avize.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.avize.retrieved IS 'The column used to synch data downward';
 --
 
 
@@ -202,13 +202,13 @@ CREATE TABLE public.bonuri_consum (
     retrieved boolean DEFAULT true NOT NULL
 );
 
--- Comments on agenti table
+-- Comments on bonuri consum table
 COMMENT ON TABLE public.bonuri_consum IS 'Echivalent bcmmyyyy.dbf <= Document Bonuri Consum <= Fisier Lunar';
-COMMENT ON COLUMN bonuri_consum.local_id IS 'File id on the local dbf file';
-COMMENT ON COLUMN bonuri_consum.synched IS 'The column used to synch data upward';
-COMMENT ON COLUMN bonuri_consum.retrieved IS 'The column used to synch data downward';
-COMMENT ON COLUMN bonuri_consum.andoc IS 'Column is mandatory for the mmyyyy files';
-COMMENT ON COLUMN bonuri_consum.lunadoc IS 'Column is mandatory for the mmyyyy files';
+COMMENT ON COLUMN public.bonuri_consum.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.bonuri_consum.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.bonuri_consum.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.bonuri_consum.andoc IS 'Column is mandatory for the mmyyyy files';
+COMMENT ON COLUMN public.bonuri_consum.lunadoc IS 'Column is mandatory for the mmyyyy files';
 --
 
 ALTER TABLE public.bonuri_consum OWNER TO postgres;
@@ -336,9 +336,9 @@ CREATE TABLE public.comenzi (
 );
 
 COMMENT ON TABLE public.comenzi IS 'Echivalent comenzi.dbf <= Document Comenzi <= Fisier Unic';
-COMMENT ON COLUMN comenzi.local_id IS 'File id on the local dbf file';
-COMMENT ON COLUMN comenzi.synched IS 'The column used to synch data upward';
-COMMENT ON COLUMN comenzi.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.comenzi.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.comenzi.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.comenzi.retrieved IS 'The column used to synch data downward';
 
 
 ALTER TABLE public.comenzi OWNER TO postgres;
@@ -403,11 +403,11 @@ CREATE TABLE public.compensari (
     retrieved boolean DEFAULT true NOT NULL
 );
 
--- Comments on agenti table
+-- Comments on compensari table
 COMMENT ON TABLE public.compensari IS 'Echivalent compens.dbf <= Document Compensari <= Fisier Unic';
-COMMENT ON COLUMN compensari.local_id IS 'File id on the local dbf file';
-COMMENT ON COLUMN compensari.synched IS 'The column used to synch data upward';
-COMMENT ON COLUMN compensari.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.compensari.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.compensari.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.compensari.retrieved IS 'The column used to synch data downward';
 
 --
 
@@ -445,9 +445,9 @@ ALTER SEQUENCE public.compensari_id_seq OWNED BY public.compensari.id;
 --
 
 -- region Contracte
--- Back HERE
 CREATE TABLE public.contracte (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     fuben character varying(4) DEFAULT ''::character varying NOT NULL,
     nrcontr numeric(9,0) DEFAULT 0 NOT NULL,
     datacontr date DEFAULT ('now'::text)::date NOT NULL,
@@ -465,9 +465,17 @@ CREATE TABLE public.contracte (
     termenplata numeric(10,0) DEFAULT 0 NOT NULL,
     penalitati numeric(10,2) DEFAULT 0 NOT NULL,
     zilesc_otc numeric(4,0) DEFAULT 0 NOT NULL,
-    zona character varying(20) DEFAULT ''::character varying NOT NULL
+    zona character varying(20) DEFAULT ''::character varying NOT NULL,
+    synched boolean default false NOT NULL,
+    retrieved boolean default true NOT NULL
 );
 
+-- Comments on contracte table
+COMMENT ON TABLE public.contracte IS 'Echivalent contr.dbf <= Document Contracte <= Fisier Unic';
+COMMENT ON COLUMN public.contracte.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.contracte.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.contracte.retrieved IS 'The column used to synch data downward';
+--
 
 ALTER TABLE public.contracte OWNER TO postgres;
 
@@ -495,14 +503,18 @@ ALTER TABLE public.contracte_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.contracte_id_seq OWNED BY public.contracte.id;
 
+-- endregion Contracte
 
 --
 -- TOC entry 213 (class 1259 OID 89293)
 -- Name: conturi; Type: TABLE; Schema: public; Owner: postgres
 --
 
+--region Conturi
+
 CREATE TABLE public.conturi (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     felc numeric(1,0) DEFAULT 0 NOT NULL,
     contp character varying(8) DEFAULT ''::character varying NOT NULL,
     subo numeric(1,0) DEFAULT 0 NOT NULL,
@@ -518,8 +530,21 @@ CREATE TABLE public.conturi (
     sidval numeric(20,8) DEFAULT 0 NOT NULL,
     sicval numeric(20,8) DEFAULT 0 NOT NULL,
     pdval numeric(20,8) DEFAULT 0 NOT NULL,
-    pcval numeric(20,8) DEFAULT 0 NOT NULL
+    pcval numeric(20,8) DEFAULT 0 NOT NULL,
+    andoc numeric(4,0) DEFAULT 0 NOT NULL,
+    lunadoc numeric(2,0) DEFAULT 0 NOT NULL,  
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
+
+-- Comments on plan conturi table
+COMMENT ON TABLE public.conturi IS 'Echivalent fcmmyyyy.dbf <= Nomenclator Plan Conturi <= Fisier Lunar';
+COMMENT ON COLUMN public.conturi.local_id IS 'File id on the local nom file';
+COMMENT ON COLUMN public.conturi.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.conturi.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.conturi.andoc IS 'Column is mandatory for the mmyyyy files';
+COMMENT ON COLUMN public.conturi.lunadoc IS 'Column is mandatory for the mmyyyy files';
+--
 
 
 ALTER TABLE public.conturi OWNER TO postgres;
@@ -548,6 +573,7 @@ ALTER TABLE public.conturi_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.conturi_id_seq OWNED BY public.conturi.id;
 
+-- endregion conturi
 
 --
 -- TOC entry 219 (class 1259 OID 89398)
@@ -556,11 +582,20 @@ ALTER SEQUENCE public.conturi_id_seq OWNED BY public.conturi.id;
 
 CREATE TABLE public.curs (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     data date DEFAULT ('now'::text)::date NOT NULL,
     codval character varying(5) DEFAULT ''::character varying NOT NULL,
-    cursof numeric(11,4) DEFAULT 0 NOT NULL
+    cursof numeric(11,4) DEFAULT 0 NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
 
+-- Comments on curs table
+COMMENT ON TABLE public.curs IS 'Echivalent curs.dbf <= Nomenclator Cursuri Valutar <= Fisier Unic';
+COMMENT ON COLUMN public.curs.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.curs.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.curs.retrieved IS 'The column used to synch data downward';
+--
 
 ALTER TABLE public.curs OWNER TO postgres;
 
@@ -588,11 +623,14 @@ ALTER TABLE public.curs_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.curs_id_seq OWNED BY public.curs.id;
 
+-- endregion Curs
 
 --
 -- TOC entry 199 (class 1259 OID 89015)
 -- Name: datablock; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Datablock
 
 CREATE TABLE public.datablock (
     id integer NOT NULL,
@@ -626,11 +664,14 @@ ALTER TABLE public.datablock_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.datablock_id_seq OWNED BY public.datablock.id;
 
+-- endregion Datablock
 
 --
 -- TOC entry 271 (class 1259 OID 89995)
 -- Name: dispozitii_livrare; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Dispozitii Livrare
 
 CREATE TABLE public.dispozitii_livrare (
     id integer NOT NULL,
@@ -678,11 +719,14 @@ ALTER TABLE public.dispozitii_livrare_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.dispozitii_livrare_id_seq OWNED BY public.dispozitii_livrare.id;
 
+-- endregion Dispozitii Livrare
 
 --
 -- TOC entry 197 (class 1259 OID 88937)
 -- Name: facturi; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Facturi
 
 CREATE TABLE public.facturi (
     id integer NOT NULL,
@@ -738,10 +782,14 @@ CREATE TABLE public.facturi (
 );
 
 --Comments for table Facturi
-COMMENT ON COLUMN facturi.local_id IS 'The id from the old structure table'
-COMMENT ON COLUMN facturi.synched IS 'The column used to synch data upward'
-COMMENT ON COLUMN facturi.retrieved IS 'The column used to synch data downward'
---End Comments
+COMMENT ON TABLE public.facturi IS 'Echivalent fammyyyy.dbf <= Document Facturi <= Fisier Lunar';
+COMMENT ON COLUMN public.facturi.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.facturi.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.facturi.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.facturi.andoc IS 'Column is mandatory for the mmyyyy files';
+COMMENT ON COLUMN public.facturi.lunadoc IS 'Column is mandatory for the mmyyyy files';
+--
+
 
 ALTER TABLE public.facturi OWNER TO postgres;
 
@@ -769,14 +817,18 @@ ALTER TABLE public.facturi_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.facturi_id_seq OWNED BY public.facturi.id;
 
+-- endregion facturi
 
 --
 -- TOC entry 209 (class 1259 OID 89233)
 -- Name: financiar; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Financiar
+
 CREATE TABLE public.financiar (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     pac character varying(3) DEFAULT ''::character varying NOT NULL,
     nrnota numeric(3,0) DEFAULT 0 NOT NULL,
     nrreg numeric(10,0) DEFAULT 0 NOT NULL,
@@ -805,8 +857,19 @@ CREATE TABLE public.financiar (
     andoc numeric(4,0) DEFAULT 0 NOT NULL,
     lunadoc numeric(2,0) DEFAULT 0 NOT NULL,
     blocat_old boolean DEFAULT false NOT NULL,
-    tip394 character varying(10) DEFAULT ''::character varying NOT NULL
+    tip394 character varying(10) DEFAULT ''::character varying NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
+
+--Comments for table Financiar
+COMMENT ON TABLE public.financiar IS 'Echivalent fimmyyyy.dbf <= Document Financiar <= Fisier Lunar';
+COMMENT ON COLUMN public.financiar.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.financiar.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.financiar.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.financiar.andoc IS 'Column is mandatory for the mmyyyy files';
+COMMENT ON COLUMN public.financiar.lunadoc IS 'Column is mandatory for the mmyyyy files';
+--
 
 
 ALTER TABLE public.financiar OWNER TO postgres;
@@ -835,14 +898,18 @@ ALTER TABLE public.financiar_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.financiar_id_seq OWNED BY public.financiar.id;
 
+-- endregion Financiar
 
 --
 -- TOC entry 241 (class 1259 OID 89616)
 -- Name: gestiuni; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Gestiuni
+
 CREATE TABLE public.gestiuni (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     gest character varying(4) DEFAULT ''::character varying NOT NULL,
     felg character varying(1) DEFAULT ''::character varying NOT NULL,
     deng character varying(50) DEFAULT ''::character varying NOT NULL,
@@ -858,8 +925,17 @@ CREATE TABLE public.gestiuni (
     lasttran numeric(10,0) DEFAULT 0 NOT NULL,
     lastnir numeric(10,0) DEFAULT 0 NOT NULL,
     lastbco numeric(10,0) DEFAULT 0 NOT NULL,
-    lastprv numeric(10,0) DEFAULT 0 NOT NULL
+    lastprv numeric(10,0) DEFAULT 0 NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT false NOT NULL
 );
+
+--Comments for table Gestiuni
+COMMENT ON TABLE public.gestiuni IS 'Echivalent gest.dbf <= Nomenclator Gestiuni <= Fisier Unic';
+COMMENT ON COLUMN public.gestiuni.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.gestiuni.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.gestiuni.retrieved IS 'The column used to synch data downward';
+--
 
 
 ALTER TABLE public.gestiuni OWNER TO postgres;
@@ -888,11 +964,14 @@ ALTER TABLE public.gestiuni_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.gestiuni_id_seq OWNED BY public.gestiuni.id;
 
+-- endregion Gestiuni
 
 --
 -- TOC entry 225 (class 1259 OID 89467)
 -- Name: grupe; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Grupe
 
 CREATE TABLE public.grupe (
     id integer NOT NULL,
@@ -928,11 +1007,14 @@ ALTER TABLE public.grupe_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.grupe_id_seq OWNED BY public.grupe.id;
 
+-- endregion grupe
 
 --
 -- TOC entry 227 (class 1259 OID 89478)
 -- Name: incadrare; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Incadrare
 
 CREATE TABLE public.incadrare (
     id integer NOT NULL,
@@ -967,11 +1049,14 @@ ALTER TABLE public.incadrare_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.incadrare_id_seq OWNED BY public.incadrare.id;
 
+-- endregion Incadrare
 
 --
 -- TOC entry 237 (class 1259 OID 89582)
 -- Name: inventar; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Inventar
 
 CREATE TABLE public.inventar (
     id integer NOT NULL,
@@ -1013,11 +1098,15 @@ ALTER TABLE public.inventar_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.inventar_id_seq OWNED BY public.inventar.id;
 
+-- endregion Inventar
 
 --
 -- TOC entry 259 (class 1259 OID 89868)
 -- Name: lastcod; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Lastcod
+-- #warning TBD:
 
 CREATE TABLE public.lastcod (
     id integer NOT NULL,
@@ -1065,11 +1154,14 @@ ALTER TABLE public.lastcod_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.lastcod_id_seq OWNED BY public.lastcod.id;
 
+-- endregion lastcod
 
 --
 -- TOC entry 269 (class 1259 OID 89970)
 -- Name: limita_consum; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Limita Consum
 
 CREATE TABLE public.limita_consum (
     id integer NOT NULL,
@@ -1119,11 +1211,14 @@ ALTER TABLE public.limita_consum_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.limita_consum_id_seq OWNED BY public.limita_consum.id;
 
+-- endregion Limita Consum
 
 --
 -- TOC entry 265 (class 1259 OID 89936)
 -- Name: loturi; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Loturi
 
 CREATE TABLE public.loturi (
     id integer NOT NULL,
@@ -1170,11 +1265,14 @@ ALTER TABLE public.loturi_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.loturi_id_seq OWNED BY public.loturi.id;
 
+-- endregion Loturi
 
 --
 -- TOC entry 251 (class 1259 OID 89759)
 -- Name: masini; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Masini
 
 CREATE TABLE public.masini (
     id integer NOT NULL,
@@ -1240,14 +1338,18 @@ ALTER TABLE public.masini_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.masini_id_seq OWNED BY public.masini.id;
 
+-- endregion Masini
 
 --
 -- TOC entry 203 (class 1259 OID 89115)
 -- Name: niruri; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Niruri
+
 CREATE TABLE public.niruri (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     pac character varying(3) DEFAULT ''::character varying NOT NULL,
     nrdoc numeric(10,0) DEFAULT 0 NOT NULL,
     data date DEFAULT ('now'::text)::date NOT NULL,
@@ -1285,9 +1387,19 @@ CREATE TABLE public.niruri (
     cui character varying(20) DEFAULT ''::character varying NOT NULL,
     nume character varying(30) DEFAULT ''::character varying NOT NULL,
     judet character varying(2) DEFAULT ''::character varying NOT NULL,
-    tara character varying(2) DEFAULT ''::character varying NOT NULL
+    tara character varying(2) DEFAULT ''::character varying NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
 
+--Comments for table Niruri
+COMMENT ON TABLE public.niruri IS 'Echivalent nimmyyyy.dbf <= Document Niruri <= Fisier Lunar';
+COMMENT ON COLUMN public.niruri.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.niruri.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.niruri.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.niruri.andoc IS 'Column is mandatory for the mmyyyy files';
+COMMENT ON COLUMN public.niruri.lunadoc IS 'Column is mandatory for the mmyyyy files';
+--
 
 ALTER TABLE public.niruri OWNER TO postgres;
 
@@ -1315,11 +1427,14 @@ ALTER TABLE public.niruri_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.niruri_id_seq OWNED BY public.niruri.id;
 
+-- endregion Niruri
 
 --
 -- TOC entry 239 (class 1259 OID 89599)
 -- Name: operatori; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Operatori
 
 CREATE TABLE public.operatori (
     id integer NOT NULL,
@@ -1361,11 +1476,14 @@ ALTER TABLE public.operatori_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.operatori_id_seq OWNED BY public.operatori.id;
 
+-- endregion Operatori
 
 --
 -- TOC entry 235 (class 1259 OID 89552)
 -- Name: ordin_plata; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Ordin Plata
 
 CREATE TABLE public.ordin_plata (
     id integer NOT NULL,
@@ -1416,14 +1534,18 @@ ALTER TABLE public.ordin_plata_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.ordin_plata_id_seq OWNED BY public.ordin_plata.id;
 
+-- endregion Ordin Plata
 
 --
 -- TOC entry 217 (class 1259 OID 89361)
 -- Name: parteneri; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Parteneri
+
 CREATE TABLE public.parteneri (
     id integer NOT NULL,
+    local_id numeric NOT NULL,
     fuben character varying(4) DEFAULT ''::character varying NOT NULL,
     codf character varying(15) DEFAULT ''::character varying NOT NULL,
     denfb character varying(200) DEFAULT ''::character varying NOT NULL,
@@ -1447,9 +1569,17 @@ CREATE TABLE public.parteneri (
     text1 character varying(100) DEFAULT ''::character varying NOT NULL,
     text2 character varying(100) DEFAULT ''::character varying NOT NULL,
     text3 character varying(100) DEFAULT ''::character varying NOT NULL,
-    data date DEFAULT ('now'::text)::date NOT NULL
+    data date DEFAULT ('now'::text)::date NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
 
+--Comments for table Parteneri
+COMMENT ON TABLE public.parteneri IS 'Echivalent fb.dbf <= Nomenclator Parteneri <= Fisier Lunar';
+COMMENT ON COLUMN public.parteneri.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.parteneri.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.parteneri.retrieved IS 'The column used to synch data downward';
+--
 
 ALTER TABLE public.parteneri OWNER TO postgres;
 
@@ -1477,11 +1607,14 @@ ALTER TABLE public.parteneri_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.parteneri_id_seq OWNED BY public.parteneri.id;
 
+-- endregion Parteneri
 
 --
 -- TOC entry 261 (class 1259 OID 89891)
 -- Name: preturi_multiple; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Preturi Multiple 
 
 CREATE TABLE public.preturi_multiple (
     id integer NOT NULL,
@@ -1523,14 +1656,18 @@ ALTER TABLE public.preturi_multiple_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.preturi_multiple_id_seq OWNED BY public.preturi_multiple.id;
 
+-- endregion Preturi Multiple
 
 --
 -- TOC entry 207 (class 1259 OID 89194)
 -- Name: procese_verbale; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Procese Verbale
+
 CREATE TABLE public.procese_verbale (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     pac character varying(3) DEFAULT ''::character varying NOT NULL,
     felp character varying(2) DEFAULT ''::character varying NOT NULL,
     nrdoc numeric(10,0) DEFAULT 0 NOT NULL,
@@ -1560,9 +1697,20 @@ CREATE TABLE public.procese_verbale (
     dl character varying(15) DEFAULT ''::character varying NOT NULL,
     andoc numeric(4,0) DEFAULT 0 NOT NULL,
     lunadoc numeric(2,0) DEFAULT 0 NOT NULL,
-    blocat_old boolean DEFAULT false NOT NULL
+    blocat_old boolean DEFAULT false NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
+
 );
 
+--Comments for table Procese Verbale
+COMMENT ON TABLE public.procese_verbale IS 'Echivalent prmmyyyy.dbf <= Document Procese Verbale <= Fisier Lunar';
+COMMENT ON COLUMN public.procese_verbale.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.procese_verbale.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.procese_verbale.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.procese_verbale.andoc IS 'Column is mandatory for the mmyyyy files';
+COMMENT ON COLUMN public.procese_verbale.lunadoc IS 'Column is mandatory for the mmyyyy files';
+--
 
 ALTER TABLE public.procese_verbale OWNER TO postgres;
 
@@ -1590,14 +1738,18 @@ ALTER TABLE public.procese_verbale_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.procese_verbale_id_seq OWNED BY public.procese_verbale.id;
 
+-- endregion Procese Verbale
 
 --
 -- TOC entry 215 (class 1259 OID 89317)
 -- Name: produse; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Produse
+
 CREATE TABLE public.produse (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     codp character varying(13) DEFAULT ''::character varying NOT NULL,
     denm character varying(50) DEFAULT ''::character varying NOT NULL,
     um character varying(3) DEFAULT ''::character varying NOT NULL,
@@ -1633,9 +1785,17 @@ CREATE TABLE public.produse (
     pcrol numeric(20,8) DEFAULT 0 NOT NULL,
     pvrol numeric(20,8) DEFAULT 0 NOT NULL,
     pcvrol numeric(20,8) DEFAULT 0 NOT NULL,
-    z_old boolean DEFAULT false NOT NULL
+    z_old boolean DEFAULT false NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
 
+--Comments for table Produse
+COMMENT ON TABLE public.produse IS 'Echivalent fp.dbf <= Nomenclator Produse <= Fisier Unic';
+COMMENT ON COLUMN public.produse.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.produse.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.produse.retrieved IS 'The column used to synch data downward';
+--
 
 ALTER TABLE public.produse OWNER TO postgres;
 
@@ -1663,11 +1823,14 @@ ALTER TABLE public.produse_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.produse_id_seq OWNED BY public.produse.id;
 
+-- endregion Produse
 
 --
 -- TOC entry 231 (class 1259 OID 89509)
 -- Name: proforma; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Proforma
 
 CREATE TABLE public.proforma (
     id integer NOT NULL,
@@ -1717,11 +1880,14 @@ ALTER TABLE public.proforma_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.proforma_id_seq OWNED BY public.proforma.id;
 
+-- endregion Proforma
 
 --
 -- TOC entry 273 (class 1259 OID 90019)
 -- Name: retete; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Retete
 
 CREATE TABLE public.retete (
     id integer NOT NULL,
@@ -1759,14 +1925,18 @@ ALTER TABLE public.retete_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.retete_id_seq OWNED BY public.retete.id;
 
+-- endregion Retete
 
 --
 -- TOC entry 247 (class 1259 OID 89711)
 -- Name: scadentar; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Scadentar
+
 CREATE TABLE public.scadentar (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     pac character varying(3) DEFAULT ''::character varying NOT NULL,
     pacc character varying(3) DEFAULT ''::character varying NOT NULL,
     gest character varying(4) DEFAULT ''::character varying NOT NULL,
@@ -1796,16 +1966,56 @@ CREATE TABLE public.scadentar (
     operator character varying(10) DEFAULT ''::character varying NOT NULL,
     mijltr character varying(10) DEFAULT ''::character varying NOT NULL,
     nrgest numeric(5,0) DEFAULT 0 NOT NULL,
-    rol_old boolean DEFAULT false NOT NULL
+    rol_old boolean DEFAULT false NOT NULL,
+    andoc numeric(4,0) DEFAULT 0 NOT NULL,
+    lunadoc numeric(2,0) DEFAULT 0 NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
 
+--Comments for table Scadentar
+COMMENT ON TABLE public.scadentar IS 'Echivalent scmmyyyy.dbf <= Document Scadentar <= Fisier Lunar';
+COMMENT ON COLUMN public.scadentar.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.scadentar.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.scadentar.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.scadentar.andoc IS 'Column is mandatory for the mmyyyy files';
+COMMENT ON COLUMN public.scadentar.lunadoc IS 'Column is mandatory for the mmyyyy files';
+--
 
 ALTER TABLE public.scadentar OWNER TO postgres;
+
+--
+-- TOC entry 246 (class 1259 OID 89709)
+-- Name: scadentar_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.scadentar_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.scadentar_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3975 (class 0 OID 0)
+-- Dependencies: 246
+-- Name: scadentar_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.scadentar_id_seq OWNED BY public.scadentar.id;
+
+-- endregion Scadentar
 
 --
 -- TOC entry 245 (class 1259 OID 89689)
 -- Name: scadentar_clienti; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Scadentar Clienti
 
 CREATE TABLE public.scadentar_clienti (
     id integer NOT NULL,
@@ -1848,36 +2058,14 @@ ALTER TABLE public.scadentar_clienti_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.scadentar_clienti_id_seq OWNED BY public.scadentar_clienti.id;
 
-
---
--- TOC entry 246 (class 1259 OID 89709)
--- Name: scadentar_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.scadentar_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.scadentar_id_seq OWNER TO postgres;
-
---
--- TOC entry 3975 (class 0 OID 0)
--- Dependencies: 246
--- Name: scadentar_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.scadentar_id_seq OWNED BY public.scadentar.id;
-
+-- endregion Scadentar Clienti
 
 --
 -- TOC entry 255 (class 1259 OID 89818)
 -- Name: service; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Service
 
 CREATE TABLE public.service (
     id integer NOT NULL,
@@ -1923,14 +2111,18 @@ ALTER TABLE public.service_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.service_id_seq OWNED BY public.service.id;
 
+-- endregion Service
 
 --
 -- TOC entry 211 (class 1259 OID 89271)
 -- Name: stoc; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Stoc 
+
 CREATE TABLE public.stoc (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     gest character varying(4) DEFAULT ''::character varying NOT NULL,
     contp character varying(8) DEFAULT ''::character varying NOT NULL,
     codp character varying(13) DEFAULT ''::character varying NOT NULL,
@@ -1944,9 +2136,19 @@ CREATE TABLE public.stoc (
     andoc numeric(4,0) DEFAULT 0 NOT NULL,
     lunadoc numeric(2,0) DEFAULT 0 NOT NULL,
     tora character varying(25) DEFAULT ''::character varying NOT NULL,
-    blocat_old boolean DEFAULT false NOT NULL
+    blocat_old boolean DEFAULT false NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean DEFAULT true NOT NULL
 );
 
+--Comments for table Stoc
+COMMENT ON TABLE public.stoc IS 'Echivalent stmmyyyy.dbf <= Document Stoc <= Fisier Lunar';
+COMMENT ON COLUMN public.stoc.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.stoc.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.stoc.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.stoc.andoc IS 'Column is mandatory for the mmyyyy files';
+COMMENT ON COLUMN public.stoc.lunadoc IS 'Column is mandatory for the mmyyyy files';
+--
 
 ALTER TABLE public.stoc OWNER TO postgres;
 
@@ -1974,11 +2176,14 @@ ALTER TABLE public.stoc_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.stoc_id_seq OWNED BY public.stoc.id;
 
+-- endregion Stoc
 
 --
 -- TOC entry 233 (class 1259 OID 89536)
 -- Name: stoc_minim_maxim; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Stoc Minim Maxim
 
 CREATE TABLE public.stoc_minim_maxim (
     id integer NOT NULL,
@@ -2015,11 +2220,14 @@ ALTER TABLE public.stoc_minim_maxim_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.stoc_minim_maxim_id_seq OWNED BY public.stoc_minim_maxim.id;
 
+-- endregion Stoc Minim Maxim
 
 --
 -- TOC entry 275 (class 1259 OID 90032)
 -- Name: stoc_real; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Stoc Real
 
 CREATE TABLE public.stoc_real (
     id integer NOT NULL,
@@ -2067,11 +2275,14 @@ ALTER TABLE public.stoc_real_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.stoc_real_id_seq OWNED BY public.stoc_real.id;
 
+-- endregion Stoc Real
 
 --
 -- TOC entry 267 (class 1259 OID 89958)
 -- Name: text_suplimentar; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Text Suplimentar
 
 CREATE TABLE public.text_suplimentar (
     id integer NOT NULL,
@@ -2108,11 +2319,14 @@ ALTER TABLE public.text_suplimentar_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.text_suplimentar_id_seq OWNED BY public.text_suplimentar.id;
 
+-- endregion Text Suplimentar
 
 --
 -- TOC entry 253 (class 1259 OID 89804)
 -- Name: tip_service; Type: TABLE; Schema: public; Owner: postgres
 --
+
+-- region Tip Service
 
 CREATE TABLE public.tip_service (
     id integer NOT NULL,
@@ -2151,14 +2365,18 @@ ALTER TABLE public.tip_service_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.tip_service_id_seq OWNED BY public.tip_service.id;
 
+-- endregion
 
 --
 -- TOC entry 201 (class 1259 OID 89078)
 -- Name: transferuri; Type: TABLE; Schema: public; Owner: postgres
 --
 
+-- region Transferuri
+
 CREATE TABLE public.transferuri (
     id integer NOT NULL,
+    local_id integer NOT NULL,
     pac character varying(3) DEFAULT ''::character varying NOT NULL,
     nrdoc numeric(10,0) DEFAULT 0 NOT NULL,
     data date DEFAULT ('now'::text)::date NOT NULL,
@@ -2186,9 +2404,20 @@ CREATE TABLE public.transferuri (
     dl character varying(15) DEFAULT ''::character varying NOT NULL,
     andoc numeric(4,0) DEFAULT 0 NOT NULL,
     lunadoc numeric(2,0) DEFAULT 0 NOT NULL,
-    blocat_old boolean DEFAULT false NOT NULL
+    blocat_old boolean DEFAULT false NOT NULL,
+    synched boolean DEFAULT false NOT NULL,
+    retrieved boolean default true NOT NULL
 );
 
+
+--Comments for table Transferuri
+COMMENT ON TABLE public.transferuri IS 'Echivalent trmmyyyy.dbf <= Document Transferuri <= Fisier Lunar';
+COMMENT ON COLUMN public.transferuri.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.transferuri.synched IS 'The column used to synch data upward';
+COMMENT ON COLUMN public.transferuri.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.transferuri.andoc IS 'Column is mandatory for the mmyyyy files';
+COMMENT ON COLUMN public.transferuri.lunadoc IS 'Column is mandatory for the mmyyyy files';
+--
 
 ALTER TABLE public.transferuri OWNER TO postgres;
 
@@ -2629,720 +2858,6 @@ ALTER TABLE ONLY public.tip_service ALTER COLUMN id SET DEFAULT nextval('public.
 --
 
 ALTER TABLE ONLY public.transferuri ALTER COLUMN id SET DEFAULT nextval('public.transferuri_id_seq'::regclass);
-
-
---
--- TOC entry 3626 (class 2604 OID 90059)
--- Name: tranzactii id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.tranzactii ALTER COLUMN id SET DEFAULT nextval('public.tranz_id_seq'::regclass);
-
-
---
--- TOC entry 3424 (class 2604 OID 89752)
--- Name: zone id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.zone ALTER COLUMN id SET DEFAULT nextval('public.zone_id_seq'::regclass);
-
-
---
--- TOC entry 3883 (class 0 OID 89444)
--- Dependencies: 223
--- Data for Name: agenti; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3917 (class 0 OID 89839)
--- Dependencies: 257
--- Data for Name: avize; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3865 (class 0 OID 89163)
--- Dependencies: 205
--- Data for Name: bonuri_consum; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3903 (class 0 OID 89640)
--- Dependencies: 243
--- Data for Name: comandax; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3889 (class 0 OID 89488)
--- Dependencies: 229
--- Data for Name: comenzi; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3923 (class 0 OID 89908)
--- Dependencies: 263
--- Data for Name: compensari; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3881 (class 0 OID 89415)
--- Dependencies: 221
--- Data for Name: contracte; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3873 (class 0 OID 89293)
--- Dependencies: 213
--- Data for Name: conturi; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3879 (class 0 OID 89398)
--- Dependencies: 219
--- Data for Name: curs; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3859 (class 0 OID 89015)
--- Dependencies: 199
--- Data for Name: datablock; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-INSERT INTO public.datablock (id, bloc) VALUES (1, '');
-
-
---
--- TOC entry 3931 (class 0 OID 89995)
--- Dependencies: 271
--- Data for Name: dispozitii_livrare; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3857 (class 0 OID 88937)
--- Dependencies: 197
--- Data for Name: facturi; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3869 (class 0 OID 89233)
--- Dependencies: 209
--- Data for Name: financiar; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3901 (class 0 OID 89616)
--- Dependencies: 241
--- Data for Name: gestiuni; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3885 (class 0 OID 89467)
--- Dependencies: 225
--- Data for Name: grupe; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3887 (class 0 OID 89478)
--- Dependencies: 227
--- Data for Name: incadrare; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3897 (class 0 OID 89582)
--- Dependencies: 237
--- Data for Name: inventar; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3919 (class 0 OID 89868)
--- Dependencies: 259
--- Data for Name: lastcod; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3929 (class 0 OID 89970)
--- Dependencies: 269
--- Data for Name: limita_consum; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3925 (class 0 OID 89936)
--- Dependencies: 265
--- Data for Name: loturi; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3911 (class 0 OID 89759)
--- Dependencies: 251
--- Data for Name: masini; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3863 (class 0 OID 89115)
--- Dependencies: 203
--- Data for Name: niruri; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3899 (class 0 OID 89599)
--- Dependencies: 239
--- Data for Name: operatori; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3895 (class 0 OID 89552)
--- Dependencies: 235
--- Data for Name: ordin_plata; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3877 (class 0 OID 89361)
--- Dependencies: 217
--- Data for Name: parteneri; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3921 (class 0 OID 89891)
--- Dependencies: 261
--- Data for Name: preturi_multiple; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3867 (class 0 OID 89194)
--- Dependencies: 207
--- Data for Name: procese_verbale; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3875 (class 0 OID 89317)
--- Dependencies: 215
--- Data for Name: produse; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3891 (class 0 OID 89509)
--- Dependencies: 231
--- Data for Name: proforma; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3933 (class 0 OID 90019)
--- Dependencies: 273
--- Data for Name: retete; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3907 (class 0 OID 89711)
--- Dependencies: 247
--- Data for Name: scadentar; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3905 (class 0 OID 89689)
--- Dependencies: 245
--- Data for Name: scadentar_clienti; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3915 (class 0 OID 89818)
--- Dependencies: 255
--- Data for Name: service; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3871 (class 0 OID 89271)
--- Dependencies: 211
--- Data for Name: stoc; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3893 (class 0 OID 89536)
--- Dependencies: 233
--- Data for Name: stoc_minim_maxim; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3935 (class 0 OID 90032)
--- Dependencies: 275
--- Data for Name: stoc_real; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3927 (class 0 OID 89958)
--- Dependencies: 267
--- Data for Name: text_suplimentar; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3913 (class 0 OID 89804)
--- Dependencies: 253
--- Data for Name: tip_service; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3861 (class 0 OID 89078)
--- Dependencies: 201
--- Data for Name: transferuri; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3937 (class 0 OID 90056)
--- Dependencies: 277
--- Data for Name: tranzactii; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3909 (class 0 OID 89749)
--- Dependencies: 249
--- Data for Name: zone; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 3985 (class 0 OID 0)
--- Dependencies: 222
--- Name: agenti_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.agenti_id_seq', 1, false);
-
-
---
--- TOC entry 3986 (class 0 OID 0)
--- Dependencies: 256
--- Name: avize_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.avize_id_seq', 1, false);
-
-
---
--- TOC entry 3987 (class 0 OID 0)
--- Dependencies: 204
--- Name: bonuri_consum_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.bonuri_consum_id_seq', 1, false);
-
-
---
--- TOC entry 3988 (class 0 OID 0)
--- Dependencies: 242
--- Name: comandax_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.comandax_id_seq', 1, false);
-
-
---
--- TOC entry 3989 (class 0 OID 0)
--- Dependencies: 228
--- Name: comenzi_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.comenzi_id_seq', 1, false);
-
-
---
--- TOC entry 3990 (class 0 OID 0)
--- Dependencies: 262
--- Name: compensari_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.compensari_id_seq', 1, false);
-
-
---
--- TOC entry 3991 (class 0 OID 0)
--- Dependencies: 220
--- Name: contracte_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.contracte_id_seq', 1, false);
-
-
---
--- TOC entry 3992 (class 0 OID 0)
--- Dependencies: 212
--- Name: conturi_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.conturi_id_seq', 1, false);
-
-
---
--- TOC entry 3993 (class 0 OID 0)
--- Dependencies: 218
--- Name: curs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.curs_id_seq', 1, false);
-
-
---
--- TOC entry 3994 (class 0 OID 0)
--- Dependencies: 198
--- Name: datablock_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.datablock_id_seq', 1, true);
-
-
---
--- TOC entry 3995 (class 0 OID 0)
--- Dependencies: 270
--- Name: dispozitii_livrare_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.dispozitii_livrare_id_seq', 1, false);
-
-
---
--- TOC entry 3996 (class 0 OID 0)
--- Dependencies: 196
--- Name: facturi_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.facturi_id_seq', 1, false);
-
-
---
--- TOC entry 3997 (class 0 OID 0)
--- Dependencies: 208
--- Name: financiar_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.financiar_id_seq', 1, false);
-
-
---
--- TOC entry 3998 (class 0 OID 0)
--- Dependencies: 240
--- Name: gestiuni_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.gestiuni_id_seq', 1, false);
-
-
---
--- TOC entry 3999 (class 0 OID 0)
--- Dependencies: 224
--- Name: grupe_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.grupe_id_seq', 1, false);
-
-
---
--- TOC entry 4000 (class 0 OID 0)
--- Dependencies: 226
--- Name: incadrare_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.incadrare_id_seq', 1, false);
-
-
---
--- TOC entry 4001 (class 0 OID 0)
--- Dependencies: 236
--- Name: inventar_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.inventar_id_seq', 1, false);
-
-
---
--- TOC entry 4002 (class 0 OID 0)
--- Dependencies: 258
--- Name: lastcod_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.lastcod_id_seq', 1, false);
-
-
---
--- TOC entry 4003 (class 0 OID 0)
--- Dependencies: 268
--- Name: limita_consum_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.limita_consum_id_seq', 1, false);
-
-
---
--- TOC entry 4004 (class 0 OID 0)
--- Dependencies: 264
--- Name: loturi_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.loturi_id_seq', 1, false);
-
-
---
--- TOC entry 4005 (class 0 OID 0)
--- Dependencies: 250
--- Name: masini_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.masini_id_seq', 1, false);
-
-
---
--- TOC entry 4006 (class 0 OID 0)
--- Dependencies: 202
--- Name: niruri_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.niruri_id_seq', 1, false);
-
-
---
--- TOC entry 4007 (class 0 OID 0)
--- Dependencies: 238
--- Name: operatori_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.operatori_id_seq', 1, false);
-
-
---
--- TOC entry 4008 (class 0 OID 0)
--- Dependencies: 234
--- Name: ordin_plata_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.ordin_plata_id_seq', 1, false);
-
-
---
--- TOC entry 4009 (class 0 OID 0)
--- Dependencies: 216
--- Name: parteneri_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.parteneri_id_seq', 1, false);
-
-
---
--- TOC entry 4010 (class 0 OID 0)
--- Dependencies: 260
--- Name: preturi_multiple_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.preturi_multiple_id_seq', 1, false);
-
-
---
--- TOC entry 4011 (class 0 OID 0)
--- Dependencies: 206
--- Name: procese_verbale_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.procese_verbale_id_seq', 1, false);
-
-
---
--- TOC entry 4012 (class 0 OID 0)
--- Dependencies: 214
--- Name: produse_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.produse_id_seq', 1, false);
-
-
---
--- TOC entry 4013 (class 0 OID 0)
--- Dependencies: 230
--- Name: proforma_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.proforma_id_seq', 1, false);
-
-
---
--- TOC entry 4014 (class 0 OID 0)
--- Dependencies: 272
--- Name: retete_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.retete_id_seq', 1, false);
-
-
---
--- TOC entry 4015 (class 0 OID 0)
--- Dependencies: 244
--- Name: scadentar_clienti_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.scadentar_clienti_id_seq', 1, false);
-
-
---
--- TOC entry 4016 (class 0 OID 0)
--- Dependencies: 246
--- Name: scadentar_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.scadentar_id_seq', 1, false);
-
-
---
--- TOC entry 4017 (class 0 OID 0)
--- Dependencies: 254
--- Name: service_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.service_id_seq', 1, false);
-
-
---
--- TOC entry 4018 (class 0 OID 0)
--- Dependencies: 210
--- Name: stoc_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.stoc_id_seq', 1, false);
-
-
---
--- TOC entry 4019 (class 0 OID 0)
--- Dependencies: 232
--- Name: stoc_minim_maxim_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.stoc_minim_maxim_id_seq', 1, false);
-
-
---
--- TOC entry 4020 (class 0 OID 0)
--- Dependencies: 274
--- Name: stoc_real_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.stoc_real_id_seq', 1, false);
-
-
---
--- TOC entry 4021 (class 0 OID 0)
--- Dependencies: 266
--- Name: text_suplimentar_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.text_suplimentar_id_seq', 1, false);
-
-
---
--- TOC entry 4022 (class 0 OID 0)
--- Dependencies: 252
--- Name: tip_service_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.tip_service_id_seq', 1, false);
-
-
---
--- TOC entry 4023 (class 0 OID 0)
--- Dependencies: 200
--- Name: transferuri_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.transferuri_id_seq', 1, false);
-
-
---
--- TOC entry 4024 (class 0 OID 0)
--- Dependencies: 276
--- Name: tranz_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.tranz_id_seq', 1, false);
-
-
---
--- TOC entry 4025 (class 0 OID 0)
--- Dependencies: 248
--- Name: zone_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.zone_id_seq', 1, false);
 
 
 --

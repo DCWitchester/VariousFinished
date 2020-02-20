@@ -1,7 +1,6 @@
 E:\GitRepos\MentorSynch\DataSynch\DataSynch\bin\Debug\DataSynch.exe.config
 E:\GitRepos\MentorSynch\DataSynch\DataSynch\bin\Debug\DataSynch.exe
 E:\GitRepos\MentorSynch\DataSynch\DataSynch\bin\Debug\DataSynch.pdb
-E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\DataSynch.csprojAssemblyReference.cache
 E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\Interop.VisualFoxpro.dll
 E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\DataSynch.csproj.ResolveComReference.cache
 E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\MainWindow.g.cs
@@ -18,3 +17,15 @@ E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\Message\MessageForm.g.cs
 E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\DataSynch_Content.g.cs
 E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\App.baml
 E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\Message\MessageForm.baml
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\Settings\SettingsForm.g.cs
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\Settings\SettingsForm.baml
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\Controllers\NumericSpinner.g.cs
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\Controllers\NumericSpinner.baml
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\DataSynch.csprojAssemblyReference.cache
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\bin\Debug\Microsoft.Toolkit.dll
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\bin\Debug\Newtonsoft.Json.dll
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\bin\Debug\Microsoft.Toolkit.pdb
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\bin\Debug\Microsoft.Toolkit.xml
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\bin\Debug\Newtonsoft.Json.xml
+E:\GitRepos\MentorSynch\DataSynch\DataSynch\obj\Debug\DataSynch.csproj.CopyComplete
