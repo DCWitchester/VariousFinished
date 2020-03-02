@@ -163,7 +163,7 @@ namespace DataSynch.Settings
             settings.WorkStationGuid = this.tbWorkStationGUID.Text;
             settings.DownloadInterval = Decimal.ToInt32(this.spDownload.Value);
             settings.UploadInterval = Decimal.ToInt32(this.spUpload.Value);
-            settings.LastUpdateTime = DateTime.Now;
+            settings.LastUpdateTime = new DateTime(1990,1,1);
         }
         #endregion
     }

@@ -49,7 +49,7 @@ ALTER TABLE public.puncte_lucru OWNER TO postgres;
 -- #region Setari Punct Lucru --
 CREATE TABLE public.setari_puncte_lucru (
     id SERIAL NOT NULL PRIMARY KEY,
-    punct_lucru_id INTEGER NOT NULL DEFAULT 0 REFERENCES public.puncte_lucru(id),
+    punct_lucru_id INTEGER NOT NULL DEFAULT 0 REFERENCES public.puncte_lucru(id) UNIQUE,
     retrieve_from_server BOOLEAN NOT NULL DEFAULT false,
     retrieved_id_list VARCHAR NOT NULL DEFAULT '', 
     retrieve_documents BOOLEAN NOT NULL DEFAULT false,
@@ -64,7 +64,7 @@ ALTER TABLE public.setari_puncte_lucru OWNER TO postgres;
 -- #region Setari Client --
 CREATE TABLE public.setari_client (
     id SERIAL NOT NULL PRIMARY KEY,
-    client_id INTEGER NOT NULL DEFAULT 0,
+    client_id INTEGER NOT NULL DEFAULT 0 REFERENCES public.clienti(id) UNIQUE,
     display_mesaj BOOLEAN NOT NULL DEFAULT false,
     mesaj VARCHAR NOT NULL DEFAULT '',
     blocat BOOLEAN NOT NULL DEFAULT false

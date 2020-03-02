@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media.Imaging;
-
+using DataSynch.Settings;
 
 namespace Message
 {
@@ -77,6 +77,7 @@ namespace Message
             //we use showDialog to await user input
             newMessage.ShowDialog();
         }
+        #region Settings & SettingsForm
         /// <summary>
         /// the warning message displayed because pf a lack of settings file
         /// </summary>
@@ -182,14 +183,45 @@ namespace Message
             //we use showDialog to await user input
             newMessage.ShowDialog();
         }
+        /// <summary>
+        /// this function exists only for errors on validation fields
+        /// </summary>
         public static void FormValidationError()
         {
             //we call the Reinitialization of the unload variable before launching the form.
             MessageSettings.ReinitializeFormUnload();
             PosCeption.MessageForm newMessage = new PosCeption.MessageForm();
             newMessage.msgTitle.Content = "Atentie: Campuri Completate Necorespunzator";
-            newMessage.msgMessage.Content = "Unul sau mai multe campuri obligatorii necompletate ." + Environment.NewLine +
+            newMessage.msgMessage.Content = "Unul sau mai multe campuri obligatorii necompletate." + Environment.NewLine +
                                                 "Verificati campurile marcate cu rosu si reincercati.";
+            //change the background image
+            newMessage.msgBackground.ImageSource = new BitmapImage(new Uri(@"pack://Application:,,," + MessageImages.warningImage));
+            //deactivate the cancel button
+            newMessage.btnCancel.Visibility = Visibility.Collapsed;
+            //recenter and set the content of the Accept button
+            newMessage.btnAccept.Margin = new Thickness(0, 0, 0, 10);
+            newMessage.btnAccept.Content = "Ok";
+            //Alters the height of the form as needed
+            newMessage.Height = newMessage.Height + MessageSettings.stringLineHeight * MessageSettings.RetriveNumberOfLinesOfString(newMessage.msgMessage.Content.ToString());
+            //We need to force focus to this form
+            newMessage.Focus();
+            //we set the message as Topmost always
+            newMessage.Topmost = true;
+            //we use showDialog to await user input
+            newMessage.ShowDialog();
+        }
+        #endregion
+        /// <summary>
+        /// this error is used when the connection to the database cannot be established
+        /// </summary>
+        public static void DatabaseConnectionError()
+        {
+            //we call the Reinitialization of the unload variable before launching the form.
+            MessageSettings.ReinitializeFormUnload();
+            PosCeption.MessageForm newMessage = new PosCeption.MessageForm();
+            newMessage.msgTitle.Content = "Atentie: Legatura nereusita";
+            newMessage.msgMessage.Content = "Nu s-a putut realiza conexiunea la baza de date." + Environment.NewLine +
+                                                "Verificati accesul la internet si reincercati ulterior.";
             //change the background image
             newMessage.msgBackground.ImageSource = new BitmapImage(new Uri(@"pack://Application:,,," + MessageImages.errorImage));
             //deactivate the cancel button
@@ -206,6 +238,133 @@ namespace Message
             //we use showDialog to await user input
             newMessage.ShowDialog();
         }
-
+        /// <summary>
+        /// this function will be the main error for failing to retrieve the client settings
+        /// </summary>
+        public static void NoClientForGUID()
+        {
+            //we call the Reinitialization of the unload variable before launching the form.
+            MessageSettings.ReinitializeFormUnload();
+            PosCeption.MessageForm newMessage = new PosCeption.MessageForm();
+            newMessage.msgTitle.Content = "Atentie: Client invalid.";
+            newMessage.msgMessage.Content = "Nu exista un cont de client atribuit acestei statii." + Environment.NewLine +
+                                                "Contactati firma Mentor.";
+            //change the background image
+            newMessage.msgBackground.ImageSource = new BitmapImage(new Uri(@"pack://Application:,,," + MessageImages.errorImage));
+            //deactivate the cancel button
+            newMessage.btnCancel.Visibility = Visibility.Collapsed;
+            //recenter and set the content of the Accept button
+            newMessage.btnAccept.Margin = new Thickness(0, 0, 0, 10);
+            newMessage.btnAccept.Content = "Ok";
+            //Alters the height of the form as needed
+            newMessage.Height = newMessage.Height + MessageSettings.stringLineHeight * MessageSettings.RetriveNumberOfLinesOfString(newMessage.msgMessage.Content.ToString());
+            //We need to force focus to this form
+            newMessage.Focus();
+            //we set the message as Topmost always
+            newMessage.Topmost = true;
+            //we use showDialog to await user input
+            newMessage.ShowDialog();
+        }
+        /// <summary>
+        /// this message will be used to display a message that contains both title and message
+        /// </summary>
+        public static void DisplayMentorTitleMessage()
+        {
+            //we call the Reinitialization of the unload variable before launching the form.
+            MessageSettings.ReinitializeFormUnload();
+            PosCeption.MessageForm newMessage = new PosCeption.MessageForm();
+            newMessage.msgTitle.Content = ServerSettings.clientSettings.ClientMessage.Split(';')[0].Trim();
+            newMessage.msgMessage.Content = ServerSettings.clientSettings.ClientMessage.Split(';')[1].Trim();
+            //change the background image
+            newMessage.msgBackground.ImageSource = new BitmapImage(new Uri(@"pack://Application:,,," + MessageImages.infoImage));
+            //deactivate the cancel button
+            newMessage.btnCancel.Visibility = Visibility.Collapsed;
+            //recenter and set the content of the Accept button
+            newMessage.btnAccept.Margin = new Thickness(0, 0, 0, 10);
+            newMessage.btnAccept.Content = "Ok";
+            //Alters the height of the form as needed
+            newMessage.Height = newMessage.Height + MessageSettings.stringLineHeight * MessageSettings.RetriveNumberOfLinesOfString(newMessage.msgMessage.Content.ToString());
+            //We need to force focus to this form
+            newMessage.Focus();
+            //we set the message as Topmost always
+            newMessage.Topmost = true;
+            //we use showDialog to await user input
+            newMessage.ShowDialog();
+        }
+        /// <summary>
+        /// this message will be  used to display a titleless message from us
+        /// </summary>
+        public static void DisplayMentorMessage()
+        {
+            //we call the Reinitialization of the unload variable before launching the form.
+            MessageSettings.ReinitializeFormUnload();
+            PosCeption.MessageForm newMessage = new PosCeption.MessageForm();
+            newMessage.msgMessage.Content = ServerSettings.clientSettings.ClientMessage.Trim();
+            //change the background image
+            newMessage.msgBackground.ImageSource = new BitmapImage(new Uri(@"pack://Application:,,," + MessageImages.infoImage));
+            //deactivate the cancel button
+            newMessage.btnCancel.Visibility = Visibility.Collapsed;
+            //recenter and set the content of the Accept button
+            newMessage.btnAccept.Margin = new Thickness(0, 0, 0, 10);
+            newMessage.btnAccept.Content = "Ok";
+            //Alters the height of the form as needed
+            newMessage.Height = newMessage.Height + MessageSettings.stringLineHeight * MessageSettings.RetriveNumberOfLinesOfString(newMessage.msgMessage.Content.ToString());
+            //We need to force focus to this form
+            newMessage.Focus();
+            //we set the message as Topmost always
+            newMessage.Topmost = true;
+            //we use showDialog to await user input
+            newMessage.ShowDialog();
+        }
+        /// <summary>
+        /// generic message for blocked transfer
+        /// </summary>
+        public static void BlockedTransferMessage()
+        {
+            //we call the Reinitialization of the unload variable before launching the form.
+            MessageSettings.ReinitializeFormUnload();
+            PosCeption.MessageForm newMessage = new PosCeption.MessageForm();
+            newMessage.msgTitle.Content = "Atentie: Transfer blocat.";
+            newMessage.msgMessage.Content = "Tranferul de date pentru acest client este inactiv.";
+            //change the background image
+            newMessage.msgBackground.ImageSource = new BitmapImage(new Uri(@"pack://Application:,,," + MessageImages.errorImage));
+            //deactivate the cancel button
+            newMessage.btnCancel.Visibility = Visibility.Collapsed;
+            //recenter and set the content of the Accept button
+            newMessage.btnAccept.Margin = new Thickness(0, 0, 0, 10);
+            newMessage.btnAccept.Content = "Ok";
+            //Alters the height of the form as needed
+            newMessage.Height = newMessage.Height + MessageSettings.stringLineHeight * MessageSettings.RetriveNumberOfLinesOfString(newMessage.msgMessage.Content.ToString());
+            //We need to force focus to this form
+            newMessage.Focus();
+            //we set the message as Topmost always
+            newMessage.Topmost = true;
+            //we use showDialog to await user input
+            newMessage.ShowDialog();
+        }
+        public static void DataSynchSettingsError()
+        {
+            //we call the Reinitialization of the unload variable before launching the form.
+            MessageSettings.ReinitializeFormUnload();
+            PosCeption.MessageForm newMessage = new PosCeption.MessageForm();
+            newMessage.msgTitle.Content = "Atentie: Setari Necorespunzatoare.";
+            newMessage.msgMessage.Content = "Tranferul de date nu a fost setat corespunzator."+Environment.NewLine+
+                                                "Contactati firma Mentor";
+            //change the background image
+            newMessage.msgBackground.ImageSource = new BitmapImage(new Uri(@"pack://Application:,,," + MessageImages.errorImage));
+            //deactivate the cancel button
+            newMessage.btnCancel.Visibility = Visibility.Collapsed;
+            //recenter and set the content of the Accept button
+            newMessage.btnAccept.Margin = new Thickness(0, 0, 0, 10);
+            newMessage.btnAccept.Content = "Ok";
+            //Alters the height of the form as needed
+            newMessage.Height = newMessage.Height + MessageSettings.stringLineHeight * MessageSettings.RetriveNumberOfLinesOfString(newMessage.msgMessage.Content.ToString());
+            //We need to force focus to this form
+            newMessage.Focus();
+            //we set the message as Topmost always
+            newMessage.Topmost = true;
+            //we use showDialog to await user input
+            newMessage.ShowDialog();
+        }
     }
 }

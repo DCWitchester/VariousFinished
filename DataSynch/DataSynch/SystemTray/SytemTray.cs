@@ -503,8 +503,14 @@ namespace DataSynch.SystemTray
                 _deviceManager.Start();
             }
         }
+        /// <summary>
+        /// the event on the tray for closing the program
+        /// </summary>
+        /// <param name="sender">System Tray Entry</param>
+        /// <param name="e">Click</param>
         private void closeProgramFromTray(object sender, EventArgs e)
         {
+            
             Miscellaneous.Miscellaneous.ProgramClose();
         }
         #endregion

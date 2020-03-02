@@ -253,24 +253,31 @@ namespace DataSynch.Settings
             //then we hid our file once anew
             localFile.Attributes |= FileAttributes.Hidden;
         }
+        #endregion
         /// <summary>
         /// this function will be the main path for the setting file 
         /// </summary>
-        #endregion
         public static void RetrieveSettingsFromFile()
         {
+            //first we check if the settings file exists
             if (!File.Exists(settingsPath))
             {
+                //if it doesn't we display a warning 
                 Message.Message.MissingSettingsError();
                 if (Message.MessageSettings.messageFormReturn)
                 {
+                    //if they want to create a clean settings file we initialize and call the form
                     SettingsForm settingsForm = new SettingsForm();
                     settingsForm.ShowDialog();
+                    //and then if the settings have been initialized
                     if (initializedSettings)
                     {
+                        //we save them to the file
                         SaveSettingsToFile();
+                        //we display a message that the settong have been changed
                         Message.Message.SettingsHaveBeenChanged();
-                        String systemPath = System.Reflection.Assembly.GetEntryAssembly().Location + '/';
+                        //then we restart the program
+                        String systemPath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + @"\";
                         using (StreamWriter sw = File.CreateText(systemPath + "restart.bat"))
                         {
                             sw.WriteLine("timeout /t 5");
@@ -286,18 +293,21 @@ namespace DataSynch.Settings
                     }
                     else
                     {
+                        //if the settings have not been initialized we close the program
                         Message.Message.ProgramWillNowClose();
                         Miscellaneous.Miscellaneous.ProgramClose();
                     }
                 }
                 else
                 {
+                    //same if they opt not to generate a settings folder
                     Message.Message.ProgramWillNowClose();
                     Miscellaneous.Miscellaneous.ProgramClose();
                 }
             }
             else
             {
+                //if the settings folder was found we will retrieve the settings from the file.
                 ParseSettingFile();
                 SetSettingsFromList();
                 initializedSettings = true;
@@ -305,5 +315,386 @@ namespace DataSynch.Settings
         }
         
     }
-    
+    class ServerSettings
+    {
+        #region ConnectionSettings
+        /// <summary>
+        /// the main connection string for retrieving data from the database
+        /// </summary>
+        private static readonly String connectionString = "Host = 5.2.228.239; Port = 26662; Database = DataSynchController; User Id = postgres; Password = pgsql";
+        /// <summary>
+        /// this is the main getter
+        /// </summary>
+        public static String getConnectionString => connectionString;
+        #endregion
+        #region
+        /// <summary>
+        /// the clientSettings based upon the existing structure
+        /// </summary>
+        public static ClientSettings.ClientSettingsStructure clientSettings { get; set; } = new ClientSettings.ClientSettingsStructure();
+        public static ClientSettings.DataSychStructure dataSynch { get; set; } = new ClientSettings.DataSychStructure();
+        #endregion
+        public class ClientSettings
+        {
+            #region Settings Static Properties
+
+            #endregion
+            /// <summary>
+            /// the main structure for the ClientSettings
+            /// </summary>
+            public class ClientSettingsStructure
+            {
+                /// <summary>
+                /// the client ID from the Server propery
+                /// </summary>
+                private Int32 clientID = new Int32();
+                /// <summary>
+                /// the Main GUID linked to the client property
+                /// </summary>
+                private String clientGUID = String.Empty;
+                /// <summary>
+                /// the client firm fiscalCode property
+                /// </summary>
+                private String fiscalCode = String.Empty;
+                /// <summary>
+                /// the client firm name property
+                /// </summary>
+                private String clientName = String.Empty;
+                /// <summary>
+                /// the client message property <= used to display message for our clients
+                /// </summary>
+                private String clientMessage = String.Empty;
+                /// <summary>
+                /// whether the client has seen the last message or not
+                /// </summary>
+                private Boolean displayMessage = new Boolean();
+                /// <summary>
+                /// if the dataSynch is active or not
+                /// </summary>
+                private Boolean synchBlocked = new Boolean();
+                /// <summary>
+                /// the main getter and setter for the client id property
+                /// </summary>
+                public Int32 ClientID
+                {
+                    get => clientID;
+                    set => clientID = value;
+                }
+                /// <summary>
+                /// the main getter and setter for the client guid property
+                /// </summary>
+                public String ClientGUID
+                {
+                    get => clientGUID;
+                    set => clientGUID = value;
+                }
+                /// <summary>
+                /// the main getter and setter for the fiscalCode property
+                /// </summary>
+                public String FiscalCode
+                {
+                    get => fiscalCode;
+                    set => fiscalCode = value;
+                }
+                ///<summary>
+                ///the main getter and setter for the clientName property
+                ///</summary>
+                public String ClientName
+                {
+                    get => clientName;
+                    set => clientName = value;
+                }
+                /// <summary>
+                /// the main getter and setter for the clientMessage property
+                /// </summary>
+                public String ClientMessage
+                {
+                    get => clientMessage;
+                    set => clientMessage = value;
+                }
+                /// <summary>
+                /// the main getter and setter for the clientMessage property
+                /// </summary>
+                public Boolean DisplayMessage
+                {
+                    get => displayMessage;
+                    set => displayMessage = value;
+                }
+                /// <summary>
+                /// the main getter and setter for the synchBlocked property
+                /// </summary>
+                public Boolean SynchBlocked
+                {
+                    get => synchBlocked;
+                    set => synchBlocked = value;
+                }
+            }
+            public static void RetrieveServerSettings()
+            {
+                if (DatabaseFunctions.DatabaseConnections.DatabaseFunctions.ControllerFunctions.ClientFunctions.RetrieveClientSettings())
+                {
+                    //if the data is viable for synching
+                    CheckSynched();
+                    //we will retrieve the settings for synching
+                    DatabaseFunctions.DatabaseConnections.DatabaseFunctions.ControllerFunctions.ClientFunctions.RetriveDataSynch();
+                }
+                else
+                {
+                    //we managed to attain a connection but there was no valid client for retrieval
+                    Message.Message.NoClientForGUID();
+                    Miscellaneous.Miscellaneous.ProgramClose();
+                }
+            }
+            /// <summary>
+            /// this function will check if the data synch has been blocked by us and inform the client as instructed
+            /// </summary>
+            static void CheckSynched()
+            {
+                //we check if the synch is blocked
+                if (clientSettings.SynchBlocked)
+                {
+                    //if so we display either the message given by us if it exists
+                    if (clientSettings.DisplayMessage)
+                    {
+                        //with title
+                        if (clientSettings.ClientMessage.Contains(';') && !clientSettings.ClientMessage.StartsWith(";") && !clientSettings.ClientMessage.EndsWith(";"))
+                            Message.Message.DisplayMentorTitleMessage();
+                        //or without title 
+                        else Message.Message.DisplayMentorMessage();
+                    }
+                    //or a generic message
+                    else Message.Message.BlockedTransferMessage();
+                    //and close the program
+                    Miscellaneous.Miscellaneous.ProgramClose();
+                }
+                else
+                {
+                    //if there is a message we display it even if the synch is permited
+                    if (clientSettings.DisplayMessage)
+                    {
+                        if (clientSettings.ClientMessage.Contains(';') && !clientSettings.ClientMessage.StartsWith(";") && !clientSettings.ClientMessage.EndsWith(";"))
+                            Message.Message.DisplayMentorTitleMessage();
+                        else Message.Message.DisplayMentorMessage();
+                    }
+                }
+            }
+            /// <summary>
+            /// the main Structure for the WorkStation
+            /// </summary>
+            public class WorkStationStructure
+            {
+                /// <summary>
+                /// the workStation ID property
+                /// </summary>
+                private Int32 workStationID = new Int32();
+                /// <summary>
+                /// the workStation GUID property
+                /// </summary>
+                private String workStationGUID = String.Empty;
+                /// <summary>
+                /// the workStation MAC property
+                /// </summary>
+                private String workStationMAC = String.Empty;
+                /// <summary>
+                /// the workStation WAN property
+                /// </summary>
+                private String workStationWAN = String.Empty;
+                /// <summary>
+                /// the workStation LAN property
+                /// </summary>
+                private String workStationLAN = String.Empty;
+                /// <summary>
+                /// the workStation ConnectionString Property
+                /// </summary>
+                private String workStationConnectionString = String.Empty;
+                /// <summary>
+                /// the workStation LocalFilePath property
+                /// </summary>
+                private String workStationFilePath = String.Empty;
+                /// <summary>
+                /// the workStation isServer property
+                /// </summary>
+                private Boolean isServer = new Boolean();
+                
+                /// <summary>
+                /// the getter amd setter for the workStationID property
+                /// </summary>
+                public Int32 WorkStationID
+                {
+                    get => workStationID;
+                    set => workStationID = value;
+                }
+                /// <summary>
+                /// the getter and setter for the workStationGUID property
+                /// </summary>
+                public String WorkStationGUID
+                {
+                    get => workStationGUID;
+                    set => workStationGUID = value;
+                }
+                /// <summary>
+                /// the getter and setter for the workStationMAC property
+                /// </summary>
+                public String WorkStationMAC
+                {
+                    get => workStationMAC;
+                    set => workStationMAC = value;
+                }
+                /// <summary>
+                /// the getter and setter for the workStationWAN property
+                /// </summary>
+                public String WorkStationWAN
+                {
+                    get => workStationWAN;
+                    set => workStationWAN = value;
+                }
+                /// <summary>
+                /// the getter and setter for the workStationLAN property
+                /// </summary>
+                public String WorkStationLAN
+                {
+                    get => workStationLAN;
+                    set => workStationLAN = value;
+                }
+                /// <summary>
+                /// the getter and setter for the workStationConnectionString property
+                /// </summary>
+                public String WorkStationConnectionString
+                {
+                    get => workStationConnectionString;
+                    set => workStationConnectionString = value;
+                }
+                /// <summary>
+                /// the getter and setter for the workStationFile property
+                /// </summary>
+                public String WorkStationFilePath 
+                {
+                    get => workStationFilePath;
+                    set => workStationFilePath = value;
+                }
+                /// <summary>
+                /// the getter and setter for the isServer property
+                /// </summary>
+                public Boolean IsServer
+                {
+                    get => isServer;
+                    set => isServer = value;
+                } 
+            }
+            /// <summary>
+            /// the main Structure for the DataSynch
+            /// </summary>
+            public class DataSychStructure
+            {
+                /// <summary>
+                /// the localWorkStation property
+                /// </summary>
+                private WorkStationStructure localWorkStation = new WorkStationStructure();
+                /// <summary>
+                /// the serverWorkStation property
+                /// </summary>
+                private WorkStationStructure serverWorkStation = new WorkStationStructure();
+                /// <summary>
+                /// the retrieveFromServer property
+                /// </summary>
+                private Boolean retrieveFromServer = new Boolean();
+                /// <summary>
+                /// the retrieveSpecificWorkStation property
+                /// </summary>
+                private Boolean retrieveSpecificWorkStations = new Boolean();
+                /// <summary>
+                /// the retrieveDocuments property
+                /// </summary>
+                private Boolean retrieveDocuments = new Boolean();
+                /// <summary>
+                /// the retrieveNomenclators property
+                /// </summary>
+                private Boolean retrieveNomenclators = new Boolean();
+                /// <summary>
+                /// the retrieveSpecificFiles property
+                /// </summary>
+                private Boolean retrieveSpecificFiles = new Boolean();
+                /// <summary>
+                /// the specificWorkStationIDList property
+                /// </summary>
+                private String specificWorkStationIDList = String.Empty;
+                /// <summary>
+                /// the specificFileList property
+                /// </summary>
+                private String specificFileList = String.Empty;
+                /// <summary>
+                /// this is the getter and setter for the localWorkStation
+                /// </summary>
+                public WorkStationStructure LocalWorkStation
+                {
+                    get => localWorkStation;
+                    set => localWorkStation = value;
+                }
+                /// <summary>
+                /// this is the getter and setter for the serverWorkStation
+                /// </summary>
+                public WorkStationStructure ServerWorkStation
+                {
+                    get => serverWorkStation;
+                    set => serverWorkStation = value;
+                }
+                /// <summary>
+                /// this is the getter and setter for the retrieveFromServer
+                /// </summary>
+                public Boolean RetrieveFromServer
+                {
+                    get => retrieveFromServer;
+                    set => retrieveFromServer = value;
+                }
+                /// <summary>
+                /// this is the getter and setter for the retrieveSpecificWorkStations
+                /// </summary>
+                public Boolean RetrieveSpecificWorkStations
+                {
+                    get => retrieveSpecificWorkStations;
+                    set => retrieveSpecificWorkStations = value;
+                }
+                /// <summary>
+                /// this is the getter and setter for the retrieveDocuments
+                /// </summary>
+                public Boolean RetrieveDocuments
+                {
+                    get => retrieveDocuments;
+                    set => retrieveDocuments = value;
+                }
+                /// <summary>
+                /// this is the getter and setter for the retrieveNomenclators
+                /// </summary>
+                public Boolean RetrieveNomenclator
+                {
+                    get => retrieveNomenclators;
+                    set => retrieveNomenclators = value;
+                }
+                /// <summary>
+                /// this is the getter and setter for the retriveSpecificFiles
+                /// </summary>
+                public Boolean RetrieveSpecificFiles
+                {
+                    get => retrieveSpecificFiles;
+                    set => retrieveSpecificFiles = value;
+                }
+                /// <summary>
+                /// this is the getter and setter for the specificWorkStationIDList
+                /// </summary>
+                public String SpecificWorkStationIDList
+                {
+                    get => specificWorkStationIDList;
+                    set => specificWorkStationIDList = value;
+                }
+                /// <summary>
+                /// this is the getter and setter for the specificFileList
+                /// </summary>
+                public String SpecificFileList
+                {
+                    get => specificFileList;
+                    set => specificFileList = value;
+                }
+            }
+        }
+    }
 }
