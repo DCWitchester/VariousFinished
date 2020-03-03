@@ -34,10 +34,10 @@ namespace Message
     //path to message background Images <= all included in application
     public class MessageImages
     {
-        public static String errorImage = @"images/error.jpg";
-        public static String warningImage = @"images/warning.jpg";
-        public static String infoImage = @"images/info.jpg";
-        public static String succesImage = @"images/success.jpg";
+        public static String errorImage = @"/Message/images/error.jpg";
+        public static String warningImage = @"/Message/images/warning.jpg";
+        public static String infoImage = @"/Message/images/info.jpg";
+        public static String succesImage = @"/Message/images/success.jpg";
     }
     //public messageTypes to be used later on
     public enum messageTypes

@@ -22,11 +22,18 @@ namespace DataSynch
         /// <param name="e"></param>
         void StartupPath(object sender, StartupEventArgs e)
         {
+#if (DEBUG)
+            String y = "";
+#else
+            String z = "";
+#endif
+
+
             //the creation of the vfpFunction List
             FoxResources.VFPIntegration.CreateFunctionsList();
-            String step = "";
-            FoxResources.VFPCaller.RetriveProducts();
-            String t = "";
+#if (DEBUG)
+            FoxResources.VFPCaller.RetrieveProductsTest();
+#endif
             //first we will retrieve the program settings from the settings file
             Settings.Settings.RetrieveSettingsFromFile();
             //then we will retrieve the clients and workStation Settings

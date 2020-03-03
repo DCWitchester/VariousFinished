@@ -1749,7 +1749,7 @@ ALTER SEQUENCE public.procese_verbale_id_seq OWNED BY public.procese_verbale.id;
 
 CREATE TABLE public.produse (
     id integer NOT NULL,
-    local_id integer NOT NULL,
+    local_id integer NOT NULL UNIQUE,
     codp character varying(13) DEFAULT ''::character varying NOT NULL,
     denm character varying(50) DEFAULT ''::character varying NOT NULL,
     um character varying(3) DEFAULT ''::character varying NOT NULL,
@@ -1786,6 +1786,7 @@ CREATE TABLE public.produse (
     pvrol numeric(20,8) DEFAULT 0 NOT NULL,
     pcvrol numeric(20,8) DEFAULT 0 NOT NULL,
     z_old boolean DEFAULT false NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
     synched boolean DEFAULT false NOT NULL,
     retrieved boolean DEFAULT true NOT NULL
 );
@@ -1793,6 +1794,7 @@ CREATE TABLE public.produse (
 --Comments for table Produse
 COMMENT ON TABLE public.produse IS 'Echivalent fp.dbf <= Nomenclator Produse <= Fisier Unic';
 COMMENT ON COLUMN public.produse.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.produse.deleted IS 'The column used to mark a deleted element';
 COMMENT ON COLUMN public.produse.synched IS 'The column used to synch data upward';
 COMMENT ON COLUMN public.produse.retrieved IS 'The column used to synch data downward';
 --
