@@ -3,15 +3,12 @@
 ************************************************
 LPARAMETERS pMemoryFile
 ************************************************
-	
 	RESTORE FROM <InitialMemoryFile> &&the memory file marker will be replaced at before recompiling the program
-		 
 	ERASE mem.tmp
 	LIST MEMORY LIKE m_* TO mem.tmp NOCONSOLE 
 	fi = FOPEN('mem.tmp')
 	IF FILE('mem_bak.ini') AND FILE('mem.ini')
 		ERASE mem_bak.ini
-
 	ENDIF 
 	IF FILE('mem.ini')
 		COPY FILE mem.ini TO mem_bak.ini
@@ -55,20 +52,16 @@ RETURN
 PROCEDURE dataFormat
 PARAMETERS value
 DO CASE
- 
 	CASE TYPE('value')='N'		&& NUMBER
 		RETURN ALLTRIM(PADL(value,30))
-		
 	CASE TYPE('value')='D'		&& DATE
 	    IF EMPTY(value) 
 	    	return '{}'
 	    ELSE
 	    	RETURN "DATE("+PADL(YEAR(value),4)+","+PADL(MONTH(value),2,'0')+","+PADL(DAY(value),2,'0')+")"
 	    ENDIF
-	    
 	CASE TYPE('value')='L'		&& LOGICAL
 		RETURN IIF(value,'.T.','.F.')
-		
 	OTHERWISE 					&& CHAR
 		tmpsir = STRTRAN(value, CHR(13), "" )
 		rez=""
@@ -93,16 +86,22 @@ RETURN ''
 *<Separator/>*
 	SELECT 0
 	USE fp SHARED ALIAS fpTemp
-	SELECT * FROM fpTemp INTO CURSOR fpCursor WHERE !DELETED()
-	SELECT * FROM fpTemp INTO CURSOR fpDeleted WHERE DELETED()
+	**the corections needed for a functional data Synch
+	UPDATE fpTemp SET id = RECNO() WHERE EMPTY(id)
+	UPDATE fpTemp SET serverid = id WHERE EMPTY(serverid)
+	UPDATE fpTemp SET deviceid = <deviceID> WHERE EMPTY(deviceid)
+	**the data retrieval
+	SELECT * FROM fpTemp INTO CURSOR fpCursor WHERE !synched 
+	UPDATE fpTemp SET synched = .T. WHERE !synched
 	USE IN fpTemp
 	SELECT fpCursor
-	handler=FCREATE('produse.sql')
+	handler=FCREATE('<FileName>')
 	SCAN
-		 insertString = "INSERT INTO produse(local_id,codp,denm,um,tva,pc,pcv,contp,pv,grupa,fuben,producator,pcval,pvval,codval,data,um2,um1um2,"+;
+		 insertString = "INSERT INTO produse(local_id,device_id,codp,denm,um,tva,pc,pcv,contp,pv,grupa,fuben,producator,pcval,pvval,codval,data,um2,um1um2,"+;
 						"um3,um2um3,incadrare,ct,net,reteta_old,formula,dataexp,lot,codtimbru,divizie,psmentor,codext,denext,"+;
 						"cod394,pcrol,pvrol,pcvrol,z_old) "+;
-						"VALUES("+formatID(fpCursor.id)+;
+						"VALUES("+dataFormat(fpCursor.serverid)+;
+							","+dataFormat(fpCursor.deviceid)+;
 							",'"+ALLTRIM(fpCursor.codp)+"'"+;
 							",'"+dataFormat(fpCursor.denm)+"'"+;
 							",'"+dataFormat(fpCursor.um)+"'"+;
@@ -139,7 +138,7 @@ RETURN ''
 							","+ALLTRIM(STR(fpCursor.pvrol,20,8))+;
 							","+ALLTRIM(STR(fpCursor.pcvrol,20,8))+""+;
 							","+dataFormat(fpCursor.z_)+")"+CHR(13)+;
-							"ON CONFLICT (local_id) DO UPDATE SET "+;
+							"ON CONFLICT (local_id,device_id) DO UPDATE SET "+;
 							"codp = "+"'"+ALLTRIM(fpCursor.codp)+"'"+;
 							",denm = "+"'"+dataFormat(fpCursor.denm)+"'"+;
 							",um = "+"'"+dataFormat(fpCursor.um)+"'"+;
@@ -178,17 +177,18 @@ RETURN ''
 							",z_old = "+dataFormat(fpCursor.z_)+";"
 		=fputs(handler,insertString)
 	ENDSCAN
-	SELECT fpDeleted
-	SCAN
-		insertString = "UPDATE produse SET deleted = true WHERE local_id = "+formatID(fpCursor.id)+";"
-		=fputs(handler,insertString)
-	ENDSCAN
 	=fclose(handler)
+	USE IN fpCursor
+	CLOSE DATABASES ALL
+	CLEAR ALL
 ***return is needed to exit the program
 RETURN 
 *************************************************
 PROCEDURE dataFormat
 PARAMETERS value
+	IF VARTYPE(value)=="N"
+		RETURN ALLTRIM(STR(value,20))
+	ENDIF
 	IF VARTYPE(value)=="D"
 		IF(EMPTY(value)) 
 			RETURN '2000-01-01'
@@ -205,11 +205,148 @@ PARAMETERS value
 	ENDIF
 RETURN
 *************************************************
-**For now this procedure does nothing <= needs to be used after finishing testing
-PROCEDURE formatID
+*<Separator/>*
+*retreiveSales.prg
+*<Separator/>*
+	SELECT 0
+	USE <SalesFile> SHARED ALIAS faTemp
+	**the corections needed for a functional data Synch
+	UPDATE faTemp SET id = RECNO() WHERE EMPTY(id)
+	UPDATE faTemp SET serverid = id WHERE EMPTY(serverid)
+	UPDATE faTemp SET deviceid = <deviceID> WHERE EMPTY(deviceid)
+	**the retrieval of the data Structure so that i can close the files
+	SELECT * FROM faTemp INTO CURSOR faCursor WHERE !synched 
+	UPDATE faTemp SET synched = .T. WHERE !synched
+	USE IN faTemp
+	SELECT faCursor
+	handler=FCREATE('<FileName>')
+	SCAN
+		sqlString = "INSERT INTO facturi(local_id, device_id, pac, nrdoc, data, gest, fuben, datasc, agent, aviz, achit,"+;
+										"delegat, mijltr, tvac, codval, codp, denp, um, cant, pc, prad, pcv, pv, operator,"+;
+										"tora, nrcontr, jurntva, zona, lot, nrnota, dl, codfiscal, andoc, lunadoc, div,"+;
+										"electro, pcvpv, tip394, pnum, pcard, pbonm, pvira, cui, nume, judet, tara, z_old, blocat_old)"+;
+										"VALUES("+dataFormat(serverid)+;
+										","+dataFormat(deviceid)+;
+										","+dataFormat(pac)+;
+										","+ALLTRIM(STR(nrdoc,10,0))+;
+										","+dataFormat(data)+;
+										","+dataFormat(gest)+;
+										","+dataFormat(fuben)+;
+										","+dataFormat(datasc)+;
+										","+dataFormat(agent)+;
+										","+ALLTRIM(STR(aviz,10,0))+;
+										","+dataFormat(achit)+;
+										","+dataFormat(delegat)+;
+										","+dataFormat(mijltr)+;
+										","+ALLTRIM(STR(tvac,2,0))+;
+										","+dataFormat(codval)+;
+										","+dataFormat(codp)+;
+										","+dataFormat(denp)+;
+										","+dataFormat(um)+;
+										","+ALLTRIM(STR(cant,13,4))+;
+										","+ALLTRIM(STR(pc,20,8))+;
+										","+ALLTRIM(STR(prad,10,4))+;
+										","+ALLTRIM(STR(pcv,20,8))+;
+										","+ALLTRIM(STR(pv,20,8))+;
+										","+dataFormat(operator)+;
+										","+dataFormat(tora)+;
+										","+ALLTRIM(STR(nrcontr,10,0))+;
+										","+dataFormat(jurntva)+;
+										","+dataFormat(zona)+;
+										","+dataFormat(lot)+;
+										","+ALLTRIM(STR(nrnota,3,0))+;
+										","+dataFormat(dl)+;
+										","+dataFormat(codfiscal)+;
+										","+ALLTRIM(STR(andoc,4,0))+;
+										","+ALLTRIM(STR(lunadoc,2,0))+;
+										","+dataFormat(div)+;
+										","+dataFormat(electro)+;
+										","+dataFormat(pcvpv)+;
+										","+dataFormat(tip394)+;
+										","+ALLTRIM(STR(pnum,15,2))+;
+										","+ALLTRIM(STR(pcard,15,2))+;
+										","+ALLTRIM(STR(pbonm,15,2))+;
+										","+ALLTRIM(STR(pvira,15,2))+;
+										","+dataFormat(cui)+;
+										","+dataFormat(nume)+;
+										","+dataFormat(judet)+;
+										","+dataFormat(tara)+;
+										","+dataFormat(z_)+;
+										","+dataFormat(blocat)+")"+CHR(13)+;
+										"ON CONFLICT(local_id, device_id) DO UPDATE SET "+;
+										"pac = "+dataFormat(pac)+;
+										", nrdoc = "+ALLTRIM(STR(nrdoc,10,0))+;
+										", data = "+dataFormat(data)+;
+										", gest = "+dataFormat(gest)+;
+										", fuben = "+dataFormat(fuben)+;
+										", datasc = "+dataFormat(datasc)+;
+										", agent = "+dataFormat(agent)+;
+										", aviz = "+ALLTRIM(STR(aviz,10,0))+;
+										", achit = "+dataFormat(achit)+;
+										", delegat = "+dataFormat(delegat)+;
+										", mijltr = "+dataFormat(mijltr)+;
+										", tvac = "+ALLTRIM(STR(tvac,2,0))+;
+										", codval = "+dataFormat(codval)+;
+										", codp = "+dataFormat(codp)+;
+										", denp = "+dataFormat(denp)+;
+										", um = "+dataFormat(um)+;
+										", cant = "+ALLTRIM(STR(cant,13,4))+;
+										", pc = "+ALLTRIM(STR(pc,20,8))+;
+										", prad = "+ALLTRIM(STR(prad,10,4))+;
+										", pcv = "+ALLTRIM(STR(pcv,20,8))+;
+										", pv = "+ALLTRIM(STR(pv,20,8))+;
+										", operator = "+dataFormat(operator)+;
+										", tora = "+dataFormat(tora)+;
+										", nrcontr = "+ALLTRIM(STR(nrcontr,10,0))+;
+										", jurntva = "+dataFormat(jurntva)+;
+										", zona = "+dataFormat(zona)+;
+										", lot = "+dataFormat(lot)+;
+										", nrnota = "+ALLTRIM(STR(nrnota,3,0))+;
+										", dl = "+dataFormat(dl)+;
+										", codfiscal = "+dataFormat(codfiscal)+;
+										", andoc = "+ALLTRIM(STR(andoc,4,0))+;
+										", lunadoc = "+ALLTRIM(STR(lunadoc,2,0))+;
+										", div = "+dataFormat(div)+;
+										", electro = "+dataFormat(electro)+;
+										", pcvpv = "+dataFormat(pcvpv)+;
+										", tip394 = "+dataFormat(tip394)+;
+										", pnum = "+ALLTRIM(STR(pnum,15,2))+;
+										", pcard = "+ALLTRIM(STR(pcard,15,2))+;
+										", pbonm = "+ALLTRIM(STR(pbonm,15,2))+;
+										", pvira = "+ALLTRIM(STR(pvira,15,2))+;
+										", cui = "+dataFormat(cui)+;
+										", nume = "+dataFormat(nume)+;
+										", judet = "+dataFormat(judet)+;
+										", tara = "+dataFormat(tara)+;
+										", z_old = "+dataFormat(z_)+;
+										", blocat_old = "+dataFormat(blocat)+";"			
+		=FPUTS(handler,sqlString)
+	ENDSCAN
+	=FCLOSE(handler)
+	USE IN faCursor
+	CLOSE DATABASES ALL
+	CLEAR ALL
+RETURN 
+*************************************************
+PROCEDURE dataFormat
 PARAMETERS value
-	localID = ALLTRIM(STR(value,20))
-	localIDPrefix = <idPrefix>
-	return ALLTRIM(localIDPrefix + localID)
+	IF VARTYPE(value)=="N"
+		RETURN ALLTRIM(STR(value,20))
+	ENDIF
+	IF VARTYPE(value)=="D"
+		IF(EMPTY(value)) 
+			RETURN "'2000-01-01'"
+		ELSE
+			newDate = "'"+PADL(YEAR(value),4,'0')+'-'+PADL(MONTH(value),2,'0')+'-'+PADL(DAY(value),2,'0')+"'"
+			RETURN newDate
+		ENDIF
+	ENDIF
+	IF VARTYPE(value)=="C"
+		RETURN "'" + ALLTRIM(STRTRAN(STRTRAN(value,"'",""),'"',''))+ "'"
+	ENDIF
+	IF VARTYPE(value)=="L"
+		RETURN IIF(value,"true","false")
+	ENDIF
 RETURN
+*************************************************
 *<Separator/>*

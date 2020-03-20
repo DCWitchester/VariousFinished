@@ -50,7 +50,7 @@ namespace DataSynch.DatabaseFunctions.DatabaseConnections
                     //if it is broken we will close it and open it
                     case System.Data.ConnectionState.Broken:
                         connection.CloseConnection();
-                        if (!connection.OpenConnection()) 
+                        if (!connection.OpenConnection())
                         {
                             //if the connection cannot be established we display an error message 
                             Message.Message.DatabaseConnectionError();
@@ -70,6 +70,9 @@ namespace DataSynch.DatabaseFunctions.DatabaseConnections
                         break;
                 }
             }
+            /// <summary>
+            /// this is the main class for all functions linked to the client data
+            /// </summary>
             #endregion
             public class ClientFunctions
             {
@@ -182,9 +185,9 @@ namespace DataSynch.DatabaseFunctions.DatabaseConnections
                                             "FROM puncte_lucru AS pl " +
                                             "LEFT JOIN setari_puncte_lucru AS spl ON pl.id = spl.punct_lucru_id WHERE pl.guid_punct_lucru = :p_guid_punct_lucru";
                     //the query parameters
-                    NpgsqlParameter[] queryParameters = 
-                    { 
-                        new NpgsqlParameter(":p_guid_punct_lucru", workStation.WorkStationGUID) 
+                    NpgsqlParameter[] queryParameters =
+                    {
+                        new NpgsqlParameter(":p_guid_punct_lucru", workStation.WorkStationGUID)
                     };
                     //we will check the connection if it is
                     CheckConnectionState();
@@ -257,7 +260,7 @@ namespace DataSynch.DatabaseFunctions.DatabaseConnections
                     //then we check the connection State once more
                     CheckConnectionState();
                     //we execute scalar the function and try to parse it to Int32 saving the state of the parsing
-                    Boolean state = Int32.TryParse(connection.ExecuteScalar(queryString, queryParameter).ToString(),out Int32 result);
+                    Boolean state = Int32.TryParse(connection.ExecuteScalar(queryString, queryParameter).ToString(), out Int32 result);
                     //if the parsing failed the procedure failed
                     if (!state) return false;
                     //else we set the result to the WorkStationID
@@ -298,6 +301,59 @@ namespace DataSynch.DatabaseFunctions.DatabaseConnections
                     };
                     return false;
                 }
+            }
+        }
+        /// <summary>
+        /// the main class for functions regarding data update and download 
+        /// </summary>
+        public class DataSynchFunctions
+        {
+            /// <summary>
+            /// the main connection string for the workstation
+            /// </summary>
+            static DatabaseControl.PosgreSqlConnection connection = new DatabaseControl.PosgreSqlConnection(Settings.ServerSettings.dataSynch.LocalWorkStation.WorkStationConnectionString);
+            /// <summary>
+            /// this function will run all sqlCommands from a givan folder
+            /// </summary>
+            /// <param name="sqlPath">the folder path</param>   
+            public static void RunSqlCommands(String sqlPath)
+            {
+                //we create a directory info for the path
+                System.IO.DirectoryInfo directoryInfo = new System.IO.DirectoryInfo(sqlPath);
+                //then retrieve all the files that have the .sql Extension
+                foreach (String sqlFile in directoryInfo.GetFiles().Where(x => x.Extension == "sql").Select(x => x.FullName))
+                {
+                    //and call the database updater 
+                    if (!UpdateTableFromFile(sqlFile)) return;
+                }
+            }
+            /// <summary>
+            /// this procedure will update the database with a given sqlFile
+            /// </summary>
+            /// <param name="sqlFile">the fullPath of the sqlFile</param>
+            /// <returns>the state of the connection and file execution</returns>
+            static Boolean UpdateTableFromFile(String sqlFile)
+            {
+                //we retrieve the complete query from the database
+                String sqlQuery = System.IO.File.ReadAllText(sqlFile);
+                //then open the connection
+                if (connection.OpenConnection())
+                {
+                    try
+                    {
+                        //and attempt to execute the sqlQuery
+                        connection.ExecuteNonQuery(sqlQuery);
+                        connection.CloseConnection();
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                    //then delete the file so that the query will not be run again
+                    System.IO.File.Delete(sqlFile);
+                    return true;
+                }
+                else return false;
             }
         }
     }

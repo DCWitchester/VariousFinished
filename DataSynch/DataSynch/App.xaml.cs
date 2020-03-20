@@ -41,5 +41,6 @@ namespace DataSynch
             //lastly we will run the system tray
             SystemTray.SystemTray.RunSystemTray();
         }
+        void 
     }
 }

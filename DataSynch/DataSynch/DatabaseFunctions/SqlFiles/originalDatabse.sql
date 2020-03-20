@@ -731,6 +731,7 @@ ALTER SEQUENCE public.dispozitii_livrare_id_seq OWNED BY public.dispozitii_livra
 CREATE TABLE public.facturi (
     id integer NOT NULL,
     local_id integer NOT NULL,
+    device_id integer NOT NULL,
     pac character varying(3) DEFAULT ''::character varying NOT NULL,
     nrdoc numeric(10,0) DEFAULT 0 NOT NULL,
     data date DEFAULT ('now'::text)::date NOT NULL,
@@ -777,15 +778,19 @@ CREATE TABLE public.facturi (
     tara character varying(2) DEFAULT ''::character varying NOT NULL,
     z_old boolean DEFAULT false NOT NULL,
     blocat_old boolean DEFAULT false NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
     synched boolean DEFAULT false NOT NULL,
-    retrieved boolean DEFAULT true NOT NULL
+    retrieved boolean DEFAULT true NOT NULL,
+    UNIQUE(local_id,device_id)
 );
 
 --Comments for table Facturi
 COMMENT ON TABLE public.facturi IS 'Echivalent fammyyyy.dbf <= Document Facturi <= Fisier Lunar';
 COMMENT ON COLUMN public.facturi.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.facturi.device_id IS 'The id of the device from the local WorkStation';
 COMMENT ON COLUMN public.facturi.synched IS 'The column used to synch data upward';
 COMMENT ON COLUMN public.facturi.retrieved IS 'The column used to synch data downward';
+COMMENT ON COLUMN public.facturi.deleted IS 'The column used to mark a deleted element';
 COMMENT ON COLUMN public.facturi.andoc IS 'Column is mandatory for the mmyyyy files';
 COMMENT ON COLUMN public.facturi.lunadoc IS 'Column is mandatory for the mmyyyy files';
 --
@@ -1749,7 +1754,8 @@ ALTER SEQUENCE public.procese_verbale_id_seq OWNED BY public.procese_verbale.id;
 
 CREATE TABLE public.produse (
     id integer NOT NULL,
-    local_id integer NOT NULL UNIQUE,
+    local_id integer NOT NULL,
+    device_id integer NOT NULL,
     codp character varying(13) DEFAULT ''::character varying NOT NULL,
     denm character varying(50) DEFAULT ''::character varying NOT NULL,
     um character varying(3) DEFAULT ''::character varying NOT NULL,
@@ -1788,12 +1794,14 @@ CREATE TABLE public.produse (
     z_old boolean DEFAULT false NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
     synched boolean DEFAULT false NOT NULL,
-    retrieved boolean DEFAULT true NOT NULL
+    retrieved boolean DEFAULT true NOT NULL,
+    UNIQUE(local_id,device_id)
 );
 
 --Comments for table Produse
 COMMENT ON TABLE public.produse IS 'Echivalent fp.dbf <= Nomenclator Produse <= Fisier Unic';
 COMMENT ON COLUMN public.produse.local_id IS 'File id on the local dbf file';
+COMMENT ON COLUMN public.produse.device_id IS 'The id of the device from the local WorkStation';
 COMMENT ON COLUMN public.produse.deleted IS 'The column used to mark a deleted element';
 COMMENT ON COLUMN public.produse.synched IS 'The column used to synch data upward';
 COMMENT ON COLUMN public.produse.retrieved IS 'The column used to synch data downward';

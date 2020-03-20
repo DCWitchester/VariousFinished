@@ -89,6 +89,7 @@ namespace DataSynch.FoxResources
     {
         none = -1,
         mem2ini = 0,
-        retreiveProducts = 1
+        retreiveProducts = 1,
+        retreiveSales = 2
     }
 }
