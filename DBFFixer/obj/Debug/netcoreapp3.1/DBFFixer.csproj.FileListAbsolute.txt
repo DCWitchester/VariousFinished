@@ -1,0 +1,11 @@
+D:\dbfFixer\DBFFixer\bin\Debug\netcoreapp3.1\DBFFixer.exe
+D:\dbfFixer\DBFFixer\bin\Debug\netcoreapp3.1\DBFFixer.deps.json
+D:\dbfFixer\DBFFixer\bin\Debug\netcoreapp3.1\DBFFixer.runtimeconfig.json
+D:\dbfFixer\DBFFixer\bin\Debug\netcoreapp3.1\DBFFixer.runtimeconfig.dev.json
+D:\dbfFixer\DBFFixer\bin\Debug\netcoreapp3.1\DBFFixer.dll
+D:\dbfFixer\DBFFixer\bin\Debug\netcoreapp3.1\DBFFixer.pdb
+D:\dbfFixer\DBFFixer\obj\Debug\netcoreapp3.1\DBFFixer.csprojAssemblyReference.cache
+D:\dbfFixer\DBFFixer\obj\Debug\netcoreapp3.1\DBFFixer.AssemblyInfoInputs.cache
+D:\dbfFixer\DBFFixer\obj\Debug\netcoreapp3.1\DBFFixer.AssemblyInfo.cs
+D:\dbfFixer\DBFFixer\obj\Debug\netcoreapp3.1\DBFFixer.dll
+D:\dbfFixer\DBFFixer\obj\Debug\netcoreapp3.1\DBFFixer.pdb

@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql.FSharp" Version="1.17.1" />
+    <PackageReference Include="Npgsql.FSharp" Version="1.19.0" />
   </ItemGroup>
 
 </Project>

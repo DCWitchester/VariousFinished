@@ -1,0 +1,6 @@
+D:\Charts\ChartTest1\bin\Debug\ChartTest1.exe.config
+D:\Charts\ChartTest1\bin\Debug\ChartTest1.exe
+D:\Charts\ChartTest1\bin\Debug\ChartTest1.pdb
+D:\Charts\ChartTest1\obj\Debug\ChartTest1.csprojAssemblyReference.cache
+D:\Charts\ChartTest1\obj\Debug\ChartTest1.exe
+D:\Charts\ChartTest1\obj\Debug\ChartTest1.pdb

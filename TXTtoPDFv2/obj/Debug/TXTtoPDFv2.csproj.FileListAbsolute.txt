@@ -1,0 +1,16 @@
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\MainWindow.g.cs
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\Messages\MessageForm.g.cs
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\App.g.cs
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\TXTtoPDFv2_MarkupCompile.cache
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\TXTtoPDFv2_MarkupCompile.lref
+D:\txtToPdf\TXTtoPDFv2\bin\Debug\TXTtoPDFv2.exe.config
+D:\txtToPdf\TXTtoPDFv2\bin\Debug\TXTtoPDFv2.exe
+D:\txtToPdf\TXTtoPDFv2\bin\Debug\TXTtoPDFv2.pdb
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\App.baml
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\MainWindow.baml
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\Messages\MessageForm.baml
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\TXTtoPDFv2.g.resources
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\TXTtoPDFv2.Properties.Resources.resources
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\TXTtoPDFv2.csproj.GenerateResource.cache
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\TXTtoPDFv2.exe
+D:\txtToPdf\TXTtoPDFv2\obj\Debug\TXTtoPDFv2.pdb

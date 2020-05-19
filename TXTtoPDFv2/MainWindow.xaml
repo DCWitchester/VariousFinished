@@ -1,0 +1,41 @@
+﻿<Window x:Class="TXTtoPDFv2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TXTtoPDFv2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="300" Width="700" Cursor="Arrow" WindowStyle="None" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Visibility="Hidden">
+    <Grid Background="{DynamicResource MainGradientStyle}">
+        <Grid x:Name="grTitleBar" Height="60" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="#2d2d2d" MouseDown="MoveWindow">
+            <Label Foreground="White" Content="Rapoarte Log Stornari" FontSize="25" FontFamily="{StaticResource DefaultFont}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+            <Ellipse Width="35" Height="35" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,10,0" MouseDown="CloseProgram">
+                <!--MouseUp="WindowClosing"-->
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="Resources\close.jpg"/>
+                </Ellipse.Fill>
+            </Ellipse>
+        </Grid>
+        <Grid x:Name="grFormControl" Margin="0,60,0,15">
+            <!--#region Labels-->
+            <Label Margin="5,5,575,195"     FontFamily="{StaticResource DefaultFont}" FontSize="13" FontWeight="Bold" Content="Cale Fisiere Text :"/>
+            <Label Margin="5,40,575,160"    FontFamily="{StaticResource DefaultFont}" FontSize="13" FontWeight="Bold" Content="Orientare :"/>
+            <Label Margin="5,75,575,125"    FontFamily="{StaticResource DefaultFont}" FontSize="13" FontWeight="Bold" Content="Font :"/>
+            <Label Margin="5,110,575,90"    FontFamily="{StaticResource DefaultFont}" FontSize="13" FontWeight="Bold" Content="Dimensiune Font :"/>
+            <!--#endregion-->
+            <!--#region Text Boxes-->
+            <TextBox x:Name="tbFilePath" Margin="150,5,35,195" FontFamily="{StaticResource DefaultFont}" FontSize="13" FontWeight="Bold" VerticalContentAlignment="Center"/>
+            <!--#endregion-->
+            <!--#region Radio Button-->
+            <RadioButton x:Name="rbPortrait"    Margin="150,40,400,160" GroupName="Orientation" FontFamily="{StaticResource DefaultFont}" FontSize="13" FontWeight="Bold" Content="Portrait" VerticalContentAlignment="Center" IsChecked="True"/>
+            <RadioButton x:Name="rbLandscape"   Margin="300,40,250,160" GroupName="Orientation" FontFamily="{StaticResource DefaultFont}" FontSize="13" FontWeight="Bold" Content="Landscape" VerticalContentAlignment="Center"/>
+            <!--#endregion-->
+            <!--#region Buttons-->
+            <Button x:Name="btnFileSearch"  Margin="670,5,5,195"                Content="..."              FontFamily="{StaticResource DefaultFont}" FontSize="13" FontWeight="Bold" Click="SelectDirectoryFolder"/>
+            <Button x:Name="btnGeneratePDF" Margin="0,200,0,0" Width="135"      Content="Genereaza Fisier" FontFamily="{StaticResource DefaultFont}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" Style="{DynamicResource ButtonStyle}" Click="GenerateDocument"/>
+            <!--#endregion-->
+            <!--#region CheckBoxes-->
+            <!--#endregion-->
+        </Grid>
+    </Grid>
+</Window>

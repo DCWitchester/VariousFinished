@@ -1,0 +1,10 @@
+D:\WebServiceTest\WebServicePOS\bin\WebServiceBergenbier.dll.config
+D:\WebServiceTest\WebServicePOS\bin\WebServiceBergenbier.dll
+D:\WebServiceTest\WebServicePOS\bin\WebServiceBergenbier.pdb
+D:\WebServiceTest\WebServicePOS\bin\FirebirdSql.Data.FirebirdClient.dll
+D:\WebServiceTest\WebServicePOS\bin\Newtonsoft.Json.dll
+D:\WebServiceTest\WebServicePOS\bin\FirebirdSql.Data.FirebirdClient.pdb
+D:\WebServiceTest\WebServicePOS\bin\Newtonsoft.Json.xml
+D:\WebServiceTest\WebServicePOS\obj\Release\WebServiceBergenbier.csproj.CopyComplete
+D:\WebServiceTest\WebServicePOS\obj\Release\WebServiceBergenbier.dll
+D:\WebServiceTest\WebServicePOS\obj\Release\WebServiceBergenbier.pdb

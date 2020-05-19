@@ -104,7 +104,7 @@
           "lib/netstandard2.0/Npgsql.dll": {}
         }
       },
-      "Npgsql.FSharp/1.17.1": {
+      "Npgsql.FSharp/1.19.0": {
         "type": "package",
         "dependencies": {
           "FSharp.Core": "4.3.4",
@@ -463,10 +463,10 @@
         "postgresql.png"
       ]
     },
-    "Npgsql.FSharp/1.17.1": {
-      "sha512": "i34Jnw5yasO0D0zA6rwURbl1SXeJLV3q8NngbZwJPl5NhtR3LR1YW/Uve22lJi1gnVTtHx70993dji7J8rvg5Q==",
+    "Npgsql.FSharp/1.19.0": {
+      "sha512": "8uv8qVF3I0rxynzK5bM3YB0Pz0YreEm/3H93ewAGJYi5Kd8Rm2vV+ed4JPXqudQ5vQj7cxon9olxBEvqrh6sLA==",
       "type": "package",
-      "path": "npgsql.fsharp/1.17.1",
+      "path": "npgsql.fsharp/1.19.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -476,7 +476,7 @@
         "lib/netcoreapp3.0/Npgsql.FSharp.xml",
         "lib/netstandard2.0/Npgsql.FSharp.dll",
         "lib/netstandard2.0/Npgsql.FSharp.xml",
-        "npgsql.fsharp.1.17.1.nupkg.sha512",
+        "npgsql.fsharp.1.19.0.nupkg.sha512",
         "npgsql.fsharp.nuspec"
       ]
     },
@@ -740,31 +740,28 @@
     ".NETStandard,Version=v2.0": [
       "FSharp.Core >= 4.7.0",
       "NETStandard.Library >= 2.0.3",
-      "Npgsql.FSharp >= 1.17.1"
+      "Npgsql.FSharp >= 1.19.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\George\\.nuget\\packages\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {},
+    "C:\\Users\\DCW\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Programe\\WorkOrder\\FsharpLibrary\\FsharpLibrary.fsproj",
+      "projectUniqueName": "E:\\GitRepos\\MentorSynch\\WorkOrder\\FsharpLibrary\\FsharpLibrary.fsproj",
       "projectName": "FsharpLibrary",
-      "projectPath": "E:\\Programe\\WorkOrder\\FsharpLibrary\\FsharpLibrary.fsproj",
-      "packagesPath": "C:\\Users\\George\\.nuget\\packages\\",
-      "outputPath": "E:\\Programe\\WorkOrder\\FsharpLibrary\\obj\\",
+      "projectPath": "E:\\GitRepos\\MentorSynch\\WorkOrder\\FsharpLibrary\\FsharpLibrary.fsproj",
+      "packagesPath": "C:\\Users\\DCW\\.nuget\\packages\\",
+      "outputPath": "E:\\GitRepos\\MentorSynch\\WorkOrder\\FsharpLibrary\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Microsoft\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\George\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\DCW\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.0"
@@ -794,7 +791,7 @@
           },
           "Npgsql.FSharp": {
             "target": "Package",
-            "version": "[1.17.1, )"
+            "version": "[1.19.0, )"
           }
         },
         "imports": [
@@ -807,7 +804,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

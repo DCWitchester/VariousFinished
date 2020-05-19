@@ -1,26 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Programe\\WorkOrder\\FsharpLibrary\\FsharpLibrary.fsproj": {}
+    "E:\\GitRepos\\MentorSynch\\WorkOrder\\FsharpLibrary\\FsharpLibrary.fsproj": {}
   },
   "projects": {
-    "E:\\Programe\\WorkOrder\\FsharpLibrary\\FsharpLibrary.fsproj": {
+    "E:\\GitRepos\\MentorSynch\\WorkOrder\\FsharpLibrary\\FsharpLibrary.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Programe\\WorkOrder\\FsharpLibrary\\FsharpLibrary.fsproj",
+        "projectUniqueName": "E:\\GitRepos\\MentorSynch\\WorkOrder\\FsharpLibrary\\FsharpLibrary.fsproj",
         "projectName": "FsharpLibrary",
-        "projectPath": "E:\\Programe\\WorkOrder\\FsharpLibrary\\FsharpLibrary.fsproj",
-        "packagesPath": "C:\\Users\\George\\.nuget\\packages\\",
-        "outputPath": "E:\\Programe\\WorkOrder\\FsharpLibrary\\obj\\",
+        "projectPath": "E:\\GitRepos\\MentorSynch\\WorkOrder\\FsharpLibrary\\FsharpLibrary.fsproj",
+        "packagesPath": "C:\\Users\\DCW\\.nuget\\packages\\",
+        "outputPath": "E:\\GitRepos\\MentorSynch\\WorkOrder\\FsharpLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\George\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\DCW\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
@@ -50,7 +48,7 @@
             },
             "Npgsql.FSharp": {
               "target": "Package",
-              "version": "[1.17.1, )"
+              "version": "[1.19.0, )"
             }
           },
           "imports": [
@@ -63,7 +61,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     }
