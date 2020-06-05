@@ -1,0 +1,36 @@
+﻿@page "/counter"
+
+<h1>Counter</h1>
+
+<p>Current count: @currentCount</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Codp</th>
+            <th>Denumire</th>
+            <th>Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < 3; i++)
+        {
+            <tr>
+                <td>@i.ToString()</td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}

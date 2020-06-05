@@ -1,0 +1,61 @@
+﻿@page "/counter"
+
+@using BlazorApp2.Data
+@using System.Text
+@using System.Xml.Serialization
+@using System.IO
+@inject HttpClient http
+
+<h1>Counter</h1>
+
+<p>Current count: @currentCount</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Cod Produs</th>
+            <th>Denumire</th>
+            <th>Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reteta in products.retete)
+        {
+            <tr>
+                <td>@reteta.codp</td>
+                <td>@reteta.denm</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="@(e => IncrementCount(e,reteta.codp))">
+                        Voteaza
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private int currentCount = 0;
+    private String xmlDocument = String.Empty;
+    private XmlSerializer serializer = new XmlSerializer(typeof(Retete));
+    private Retete products = new Retete();
+
+    private void IncrementCount(MouseEventArgs e, String codp)
+    {
+        String x = "";
+        currentCount++;
+    }
+
+    private void deserializeDocument(String xmlDocument)
+    {
+        using (TextReader reader = new StringReader(xmlDocument))
+        {
+            products = (Retete)serializer.Deserialize(reader);
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        xmlDocument = await http.GetStringAsync("http://192.168.13.13:8432/WS.asmx/getRetete");
+        await Task.Run(() => deserializeDocument(xmlDocument));
+    }
+}
