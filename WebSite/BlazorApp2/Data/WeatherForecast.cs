@@ -27,4 +27,19 @@ namespace BlazorApp2.Data
         [XmlElement("Reteta")]
         public List<Reteta> retete { get; set; } = new List<Reteta>();
     }
+    public class Count
+    {
+        [XmlAttribute]
+        public String codp { get; set; }
+        [XmlAttribute]
+        public String denm { get; set; }
+        [XmlAttribute]
+        public Int32 votecount { get; set; }
+    }
+    [XmlRoot(ElementName = "Counts")]
+    public class Counts
+    {
+        [XmlElement("Count")]
+        public List<Count> counts { get; set; } = new List<Count>();
+    }
 }

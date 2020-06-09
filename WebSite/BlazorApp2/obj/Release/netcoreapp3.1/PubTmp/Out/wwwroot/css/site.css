@@ -12,6 +12,27 @@ a, .btn-link {
     color: #fff;
     background-color: #1b6ec2;
     border-color: #1861ac;
+    margin: 20px;
+}
+.btn-primary:disabled{
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-color: #1861ac;
+    margin: 20px;
+}
+
+/*
+.btn-primary:hover {
+    color: #fff;
+    background-color: darkorange;
+    border-color: #1861ac;
+}*/
+
+.btn-secondary {
+    color: #fff;
+    background-color: darkorange;
+    border-color: #1861ac;
+    margin: 20px;
 }
 
 app {

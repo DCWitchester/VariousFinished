@@ -4,58 +4,92 @@
 @using System.Text
 @using System.Xml.Serialization
 @using System.IO
+@using System.Linq
 @inject HttpClient http
+@inject NavigationManager myNavigationManager
 
-<h1>Counter</h1>
-
-<p>Current count: @currentCount</p>
+<h1>Selectie Produse</h1>
+<br />
 <table class="table">
     <thead>
         <tr>
             <th>Cod Produs</th>
             <th>Denumire</th>
-            <th>Count</th>
+            <th>Selectie</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var reteta in products.retete)
+        @foreach (var produs in products.productList)
         {
             <tr>
-                <td>@reteta.codp</td>
-                <td>@reteta.denm</td>
+                <td>@produs.codProdus</td>
+                <td>@produs.denumireProdus</td>
                 <td>
-                    <button class="btn btn-primary" @onclick="@(e => IncrementCount(e,reteta.codp))">
-                        Voteaza
+                    <button class="btn @produs.btnType" @onclick="@(e => IncrementCount(e,produs.codProdus))">
+                        Selecteaza
                     </button>
                 </td>
             </tr>
         }
     </tbody>
+    <button class="btn btn-primary" @onclick="setVotingProducts">Finalizeaza selectia</button>
+    <button class="btn btn-primary" @onclick="resetVotingProducts">Reseteaza selectia</button>
 </table>
 
 
 @code {
-    private int currentCount = 0;
     private String xmlDocument = String.Empty;
     private XmlSerializer serializer = new XmlSerializer(typeof(Retete));
-    private Retete products = new Retete();
+    private Structures.Products products = new Structures.Products();
 
     private void IncrementCount(MouseEventArgs e, String codp)
     {
-        String x = "";
-        currentCount++;
+        Structures.Product product = products.productList.FirstOrDefault(x => x.codProdus == codp);
+        if (!product.Equals(null))
+        {
+            if (product.voted)
+            {
+                product.voted = false;
+                product.btnType = "btn-primary";
+            }
+            else
+            {
+                product.voted = true;
+                product.btnType = "btn-secondary";
+            }
+        }
     }
-
+    private async void setVotingProducts()
+    {
+        await http.GetAsync(WebMethods.SetResetVoteCount);
+        String selectedProducts = String.Empty;
+        foreach (String codp in products.productList.Where(x => x.voted).Select(x => x.codProdus))
+        {
+            if (String.IsNullOrWhiteSpace(selectedProducts)) selectedProducts += "%27" + codp.Trim() + "%27";
+            else selectedProducts += ",%27" + codp.Trim() + "%27";
+        }
+        if (!String.IsNullOrWhiteSpace(selectedProducts))
+        {
+            await http.GetAsync(WebMethods.SetVotingProducts + selectedProducts);
+            myNavigationManager.NavigateTo("/final");
+        }
+    }
+    private async void resetVotingProducts()
+    {
+        await http.GetStringAsync(WebMethods.SetResetVotingProducts);
+    }
     private void deserializeDocument(String xmlDocument)
     {
+        Retete retete = new Retete();
         using (TextReader reader = new StringReader(xmlDocument))
         {
-            products = (Retete)serializer.Deserialize(reader);
+            retete = (Retete)serializer.Deserialize(reader);
         }
+        products.initializeListFromRetete(retete);
     }
     protected override async Task OnInitializedAsync()
     {
-        xmlDocument = await http.GetStringAsync("http://192.168.13.13:8432/WS.asmx/getRetete");
+        xmlDocument = await http.GetStringAsync(WebMethods.GetRetete);
         await Task.Run(() => deserializeDocument(xmlDocument));
     }
 }

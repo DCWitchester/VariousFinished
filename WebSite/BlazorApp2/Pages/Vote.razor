@@ -1,0 +1,89 @@
+﻿@page "/vote"
+
+@using BlazorApp2.Data
+@using System.Text
+@using System.Xml.Serialization
+@using System.IO
+@using System.Linq
+@inject HttpClient http
+@inject NavigationManager myNavigationManager
+
+<h1>Selectie Produse</h1>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>Cod Produs</th>
+            <th>Denumire</th>
+            <th>Selectie</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var produs in products.productList)
+        {
+            <tr>
+                <td>@produs.codProdus</td>
+                <td>@produs.denumireProdus</td>
+                <td>
+                    <button class="btn @produs.btnType" @onclick="@(e => IncrementCount(e,produs.codProdus))">
+                        Selecteaza
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <button class="btn btn-primary" @onclick="setVotingProducts">Voteaza</button>
+</table>
+
+
+@code {
+    private String xmlDocument = String.Empty;
+    private XmlSerializer serializer = new XmlSerializer(typeof(Retete));
+    private Structures.Products products = new Structures.Products();
+
+    private void IncrementCount(MouseEventArgs e, String codp)
+    {
+        Structures.Product product = products.productList.FirstOrDefault(x => x.codProdus == codp);
+        if (!product.Equals(null))
+        {
+            if (product.voted)
+            {
+                product.voted = false;
+                product.btnType = "btn-primary";
+            }
+            else
+            {
+                product.voted = true;
+                product.btnType = "btn-secondary";
+            }
+        }
+    }
+    private async void setVotingProducts()
+    {
+        String selectedProducts = String.Empty;
+        foreach (String codp in products.productList.Where(x => x.voted).Select(x => x.codProdus))
+        {
+            if (String.IsNullOrWhiteSpace(selectedProducts)) selectedProducts += "%27" + codp.Trim() + "%27";
+            else selectedProducts += ",%27" + codp.Trim() + "%27";
+        }
+        if (!String.IsNullOrWhiteSpace(selectedProducts))
+        {
+            await http.GetAsync(WebMethods.SetVoteCount + selectedProducts);
+            myNavigationManager.NavigateTo("/finalVote");
+        }
+    }
+    private void deserializeDocument(String xmlDocument)
+    {
+        Retete retete = new Retete();
+        using (TextReader reader = new StringReader(xmlDocument))
+        {
+            retete = (Retete)serializer.Deserialize(reader);
+        }
+        products.initializeListFromRetete(retete);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        xmlDocument = await http.GetStringAsync(WebMethods.GetVotableRetete);
+        await Task.Run(() => deserializeDocument(xmlDocument));
+    }
+}

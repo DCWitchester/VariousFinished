@@ -493,7 +493,10 @@ namespace WebServicePOS
                                 "FROM nom\\gest WHERE INLIST(gest,'01','02','20') ";
             oCmd.CommandText = command;
             DataTable dt = new DataTable();
-            dt.Load(oCmd.ExecuteReader());
+            try
+            {
+                dt.Load(oCmd.ExecuteReader());
+            }catch { }
             dt.TableName = "Depozite";
             //write to xml
             StringWriter writer = new StringWriter();
@@ -507,7 +510,10 @@ namespace WebServicePOS
             String command = "SELECT codp,denm FROM nom\\fp WHERE reteta = .T.";
             oCmd.CommandText = command;
             DataTable dt = new DataTable();
-            dt.Load(oCmd.ExecuteReader());
+            try
+            {
+                dt.Load(oCmd.ExecuteReader());
+            } catch { }
             dt.TableName = "Retete";
             WebServiceBergenbier.Classes.Retete retete = new WebServiceBergenbier.Classes.Retete();
             retete.setReteteFromDataTable(dt);
@@ -524,6 +530,100 @@ namespace WebServicePOS
             xmlDocument.LoadXml(result);
             return xmlDocument;
         }
+        public void setVotingProducts(String productList)
+        {
+            String command = "UPDATE nom\\fp SET forvote = .T. WHERE INLIST(codp," + productList + ")";
+            oCmd.CommandText = command;
+            DataTable dt = new DataTable();
+            try
+            {
+                oCmd.ExecuteNonQuery();
+            }
+            catch { }
+        }
+        public void setResetVotingProducts()
+        {
+            String command = "UPDATE nom\\fp SET forvote = .F.";
+            oCmd.CommandText = command;
+            DataTable dt = new DataTable();
+            try
+            {
+                oCmd.ExecuteNonQuery();
+            }
+            catch { }
+        }
+        public XmlDocument getVotableRetete()
+        {
+            String command = "SELECT codp,denm FROM nom\\fp WHERE reteta = .T. AND forvote = .T.";
+            oCmd.CommandText = command;
+            DataTable dt = new DataTable();
+            try
+            {
+                dt.Load(oCmd.ExecuteReader());
+            }catch { }
+            dt.TableName = "Retete";
+            WebServiceBergenbier.Classes.Retete retete = new WebServiceBergenbier.Classes.Retete();
+            retete.setReteteFromDataTable(dt);
+            XmlSerializer serializer = new XmlSerializer(typeof(WebServiceBergenbier.Classes.Retete));
+            String result = String.Empty;
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                serializer.Serialize(memoryStream, retete);
+                memoryStream.Position = 0;
+                result = new StreamReader(memoryStream).ReadToEnd();
+            }
+            //write to xml
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(result);
+            return xmlDocument;
+        }
+        public XmlDocument getVotesForRetete()
+        {
+            String command = "SELECT codp,denm,votecount FROM nom\\fp WHERE reteta = .T. AND forvote = .T. ORDER BY votecount DESCENDING";
+            oCmd.CommandText = command;
+            DataTable dt = new DataTable();
+            try
+            {
+                dt.Load(oCmd.ExecuteReader());
+            }catch { }
+            dt.TableName = "Retete";
+            WebServiceBergenbier.Classes.Counts retete = new WebServiceBergenbier.Classes.Counts();
+            retete.setReteteFromDataTable(dt);
+            XmlSerializer serializer = new XmlSerializer(typeof(WebServiceBergenbier.Classes.Counts));
+            String result = String.Empty;
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                serializer.Serialize(memoryStream, retete);
+                memoryStream.Position = 0;
+                result = new StreamReader(memoryStream).ReadToEnd();
+            }
+            //write to xml
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(result);
+            return xmlDocument;
+        }
+        public void setVoteCount(String productList)
+        {
+            String command = "UPDATE nom\\fp SET votecount = votecount + 1 WHERE INLIST(codp," + productList + ")";
+            oCmd.CommandText = command;
+            DataTable dt = new DataTable();
+            try
+            {
+                oCmd.ExecuteNonQuery();
+            }catch { }
+        }
+        public void setResetVoteCount()
+        {
+            String command = "UPDATE nom\\fp SET votecount = 0";
+            oCmd.CommandText = command;
+            DataTable dt = new DataTable();
+            try
+            {
+                oCmd.ExecuteNonQuery();
+            }
+            catch { }
+        }
+
         public XmlDocument getRetetar(String codp)
         {
             String command = "SELECT fp.codp,fp.denm FROM nom\\fp LEFT JOIN nom\\fr ON fr.codp == fp.codp WHERE UPPER(ALLTRIM(fr.codr)) = '"+codp.Trim()+"'";

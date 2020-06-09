@@ -1,0 +1,54 @@
+﻿@page "/votecount"
+
+@using BlazorApp2.Data
+@using System.Text
+@using System.Xml.Serialization
+@using System.IO
+@using System.Linq
+@inject HttpClient http
+@inject NavigationManager myNavigationManager
+
+<h1>Vot Produse</h1>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>Cod Produs</th>
+            <th>Denumire</th>
+            <th>Selectie</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var produs in products.productList)
+        {
+            <tr>
+                <td>@produs.codProdus</td>
+                <td>@produs.denumireProdus</td>
+                <td>@produs.votedCount</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private String xmlDocument = String.Empty;
+    private XmlSerializer serializer = new XmlSerializer(typeof(Counts));
+    private Structures.Products products = new Structures.Products();
+
+    private void deserializeDocument(String xmlDocument)
+    {
+        Counts counts = new Counts();
+        using (TextReader reader = new StringReader(xmlDocument))
+        {
+            counts = (Counts)serializer.Deserialize(reader);
+        }
+        products.initializeListFromVoteCount(counts);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        xmlDocument = await http.GetStringAsync(WebMethods.GetVotesForRetete);
+        await Task.Run(() => deserializeDocument(xmlDocument));
+    }
+}

@@ -32,6 +32,54 @@ namespace WebServicePOS
                 return vfp.getRetete();
             }
         }
+        [WebMethod]
+        public XmlDocument getVotableRetete()
+        {
+            using (vfpPOS vfp = new vfpPOS())
+            {
+                return vfp.getVotableRetete();
+            }
+        }
+        [WebMethod]
+        public void setVotingProducts(String productList)
+        {
+            using (vfpPOS vfp = new vfpPOS())
+            {
+                vfp.setVotingProducts(productList);
+            }
+        }
+        [WebMethod]
+        public void setResetVotingProducts()
+        {
+            using (vfpPOS vfp = new vfpPOS())
+            {
+                vfp.setResetVotingProducts();
+            }
+        }
+        [WebMethod]
+        public XmlDocument getVotesForRetete()
+        {
+            using(vfpPOS vfp = new vfpPOS())
+            {
+               return  vfp.getVotesForRetete();
+            }
+        }
+        [WebMethod]
+        public void setVoteCount(String productList)
+        {
+            using(vfpPOS vfp = new vfpPOS())
+            {
+                vfp.setVoteCount(productList);
+            }
+        }
+        [WebMethod]
+        public void setResetVoteCount()
+        {
+            using(vfpPOS vfp = new vfpPOS())
+            {
+                vfp.setResetVoteCount();
+            }
+        }
 
         [WebMethod]
         public XmlDocument getRetetar(String cod_produs)
