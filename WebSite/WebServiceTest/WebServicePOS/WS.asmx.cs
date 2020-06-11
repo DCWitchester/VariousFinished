@@ -23,7 +23,7 @@ namespace WebServicePOS
         {
             Setari.citeste();
         }
-
+        #region Vizualizare Retete
         [WebMethod]
         public XmlDocument getRetete()
         {
@@ -89,6 +89,7 @@ namespace WebServicePOS
                 return vfp.getRetetar(cod_produs);
             }
         }
+        #endregion
 
         [WebMethod]
         XmlDocument getAgenti()

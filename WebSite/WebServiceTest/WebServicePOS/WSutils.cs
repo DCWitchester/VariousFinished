@@ -505,139 +505,6 @@ namespace WebServicePOS
             xmlDocument.LoadXml(writer.ToString());
             return xmlDocument;
         }
-        public XmlDocument getRetete()
-        {
-            String command = "SELECT codp,denm FROM nom\\fp WHERE reteta = .T.";
-            oCmd.CommandText = command;
-            DataTable dt = new DataTable();
-            try
-            {
-                dt.Load(oCmd.ExecuteReader());
-            } catch { }
-            dt.TableName = "Retete";
-            WebServiceBergenbier.Classes.Retete retete = new WebServiceBergenbier.Classes.Retete();
-            retete.setReteteFromDataTable(dt);
-            XmlSerializer serializer = new XmlSerializer(typeof(WebServiceBergenbier.Classes.Retete));
-            String result = String.Empty;
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                serializer.Serialize(memoryStream, retete);
-                memoryStream.Position = 0;
-                result = new StreamReader(memoryStream).ReadToEnd();
-            }
-            //write to xml
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(result);
-            return xmlDocument;
-        }
-        public void setVotingProducts(String productList)
-        {
-            String command = "UPDATE nom\\fp SET forvote = .T. WHERE INLIST(codp," + productList + ")";
-            oCmd.CommandText = command;
-            DataTable dt = new DataTable();
-            try
-            {
-                oCmd.ExecuteNonQuery();
-            }
-            catch { }
-        }
-        public void setResetVotingProducts()
-        {
-            String command = "UPDATE nom\\fp SET forvote = .F.";
-            oCmd.CommandText = command;
-            DataTable dt = new DataTable();
-            try
-            {
-                oCmd.ExecuteNonQuery();
-            }
-            catch { }
-        }
-        public XmlDocument getVotableRetete()
-        {
-            String command = "SELECT codp,denm FROM nom\\fp WHERE reteta = .T. AND forvote = .T.";
-            oCmd.CommandText = command;
-            DataTable dt = new DataTable();
-            try
-            {
-                dt.Load(oCmd.ExecuteReader());
-            }catch { }
-            dt.TableName = "Retete";
-            WebServiceBergenbier.Classes.Retete retete = new WebServiceBergenbier.Classes.Retete();
-            retete.setReteteFromDataTable(dt);
-            XmlSerializer serializer = new XmlSerializer(typeof(WebServiceBergenbier.Classes.Retete));
-            String result = String.Empty;
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                serializer.Serialize(memoryStream, retete);
-                memoryStream.Position = 0;
-                result = new StreamReader(memoryStream).ReadToEnd();
-            }
-            //write to xml
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(result);
-            return xmlDocument;
-        }
-        public XmlDocument getVotesForRetete()
-        {
-            String command = "SELECT codp,denm,votecount FROM nom\\fp WHERE reteta = .T. AND forvote = .T. ORDER BY votecount DESCENDING";
-            oCmd.CommandText = command;
-            DataTable dt = new DataTable();
-            try
-            {
-                dt.Load(oCmd.ExecuteReader());
-            }catch { }
-            dt.TableName = "Retete";
-            WebServiceBergenbier.Classes.Counts retete = new WebServiceBergenbier.Classes.Counts();
-            retete.setReteteFromDataTable(dt);
-            XmlSerializer serializer = new XmlSerializer(typeof(WebServiceBergenbier.Classes.Counts));
-            String result = String.Empty;
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                serializer.Serialize(memoryStream, retete);
-                memoryStream.Position = 0;
-                result = new StreamReader(memoryStream).ReadToEnd();
-            }
-            //write to xml
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(result);
-            return xmlDocument;
-        }
-        public void setVoteCount(String productList)
-        {
-            String command = "UPDATE nom\\fp SET votecount = votecount + 1 WHERE INLIST(codp," + productList + ")";
-            oCmd.CommandText = command;
-            DataTable dt = new DataTable();
-            try
-            {
-                oCmd.ExecuteNonQuery();
-            }catch { }
-        }
-        public void setResetVoteCount()
-        {
-            String command = "UPDATE nom\\fp SET votecount = 0";
-            oCmd.CommandText = command;
-            DataTable dt = new DataTable();
-            try
-            {
-                oCmd.ExecuteNonQuery();
-            }
-            catch { }
-        }
-
-        public XmlDocument getRetetar(String codp)
-        {
-            String command = "SELECT fp.codp,fp.denm FROM nom\\fp LEFT JOIN nom\\fr ON fr.codp == fp.codp WHERE UPPER(ALLTRIM(fr.codr)) = '"+codp.Trim()+"'";
-            oCmd.CommandText = command;
-            DataTable dt = new DataTable();
-            dt.Load(oCmd.ExecuteReader());
-            dt.TableName = "Retetar";
-            //write to xml
-            StringWriter writer = new StringWriter();
-            dt.WriteXml(writer, true);
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(writer.ToString());
-            return xmlDocument;
-        }
         public XmlDocument getClienti(DateTime initialPeriod, DateTime finalPeriod)
         {
             String initialDateTimeFile = @"dbf\fa" + initialPeriod.Month.ToString().PadLeft(2, '0') + initialPeriod.Year.ToString();
@@ -751,7 +618,224 @@ namespace WebServicePOS
             return xmlDocument;
         }
 
-        #endregion 
+        #endregion
+        #region Zona Condor
+        /// <summary>
+        /// the main function for retrieve all products marked as recipes
+        /// </summary>
+        /// <returns>the products marked as recipes as an XML</returns>
+        public XmlDocument getRetete()
+        {
+            //we create a command string for the fox syntax
+            String command = "SELECT codp,denm FROM nom\\fp WHERE reteta = .T.";
+            //add it as the oCmd objects command text
+            oCmd.CommandText = command;
+            //then we create a new data Table
+            DataTable dt = new DataTable();
+            //and try to retrieve the data from the fox tables
+            try
+            {
+                dt.Load(oCmd.ExecuteReader());
+            }
+            catch { }
+            //then set the name of the DataTable
+            dt.TableName = "Retete";
+            //and initialize a new object class for the xml serialization
+            WebServiceBergenbier.Classes.Retete retete = new WebServiceBergenbier.Classes.Retete();
+            //initialize the object from the data table
+            retete.setReteteFromDataTable(dt);
+            //create a new serializer over the class
+            XmlSerializer serializer = new XmlSerializer(typeof(WebServiceBergenbier.Classes.Retete));
+            //we will also need an instantiated string to dump the xml into
+            String result = String.Empty;
+            //thn using a memory stream
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                //we serialize the object into the stream
+                serializer.Serialize(memoryStream, retete);
+                //set the cursor at the begining of the stream
+                memoryStream.Position = 0;
+                //and dump the stream into the document
+                result = new StreamReader(memoryStream).ReadToEnd();
+            }
+            //finaly we create a new xml document
+            XmlDocument xmlDocument = new XmlDocument();
+            //and dump the xml into it 
+            xmlDocument.LoadXml(result);
+            //and we retunr the  xml document
+            return xmlDocument;
+        }
+        /// <summary>
+        /// this function will update the forvote column for a given list of products
+        /// </summary>
+        /// <param name="productList">the given product list</param>
+        public void setVotingProducts(String productList)
+        {
+            //we initialize the command string           
+            String command = "UPDATE nom\\fp SET forvote = .T. WHERE INLIST(codp," + productList + ")";
+            //add it as command text to the oCmd object
+            oCmd.CommandText = command;
+            //and then try to execute it as a non-query(NO RETURN)
+            try
+            {
+                oCmd.ExecuteNonQuery();
+            }
+            catch { }
+        }
+        /// <summary>
+        /// this funtion will reset the forvote field to false for all products
+        /// </summary>
+        public void setResetVotingProducts()
+        {
+            //we initialize the command string for the oCmd object
+            String command = "UPDATE nom\\fp SET forvote = .F.";
+            //set it to the object
+            oCmd.CommandText = command;
+            //then try to execute the non-query(NO RETURN)
+            try
+            {
+                oCmd.ExecuteNonQuery();
+            }
+            catch { }
+        }
+        /// <summary>
+        /// this function will return all products that are a recipe and are up for voting
+        /// </summary>
+        /// <returns>an xml with the structure of the products</returns>
+        public XmlDocument getVotableRetete()
+        {
+            //we initialize the command string for the oCmd object
+            String command = "SELECT codp,denm FROM nom\\fp WHERE reteta = .T. AND forvote = .T.";
+            //set it to the object
+            oCmd.CommandText = command;
+            //initialize a new dataTable
+            DataTable dt = new DataTable();
+            //try to execute the reader and load the data to the dataTable
+            try
+            {
+                dt.Load(oCmd.ExecuteReader());
+            }
+            catch { }
+            //set the name for the dataTable
+            dt.TableName = "Retete";
+            //initialize a new object
+            WebServiceBergenbier.Classes.Retete retete = new WebServiceBergenbier.Classes.Retete();
+            //fill the object from the dataTable
+            retete.setReteteFromDataTable(dt);
+            //we then initialize a serializer over the class
+            XmlSerializer serializer = new XmlSerializer(typeof(WebServiceBergenbier.Classes.Retete));
+            //initialize a new result string
+            String result = String.Empty;
+            //the using a memory stream
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                //serialize the object to the stream
+                serializer.Serialize(memoryStream, retete);
+                //position the cursor at the start of the stream
+                memoryStream.Position = 0;
+                //then dump the whole stream into the string
+                result = new StreamReader(memoryStream).ReadToEnd();
+            }
+            //intialize the xmlDocument 
+            XmlDocument xmlDocument = new XmlDocument();
+            //load the string into the xml
+            xmlDocument.LoadXml(result);
+            //and return the xmlDocument
+            return xmlDocument;
+        }
+        /// <summary>
+        /// this function retrieves the votes for any given recipe
+        /// </summary>
+        /// <returns>An XmlDocument for the count structure</returns>
+        public XmlDocument getVotesForRetete()
+        {
+            //we initialize the command string
+            String command = "SELECT codp,denm,votecount FROM nom\\fp WHERE reteta = .T. AND forvote = .T. ORDER BY votecount DESCENDING";
+            //and set it to the oCmd
+            oCmd.CommandText = command;
+            //then initialize a new DataTable
+            DataTable dt = new DataTable();
+            //and try to load the dataTable from the execute Reader
+            try
+            {
+                dt.Load(oCmd.ExecuteReader());
+            }
+            catch { }
+            //set the name for the DataTable
+            dt.TableName = "Retete";
+            //then initialize a new classes for the counts
+            WebServiceBergenbier.Classes.Counts retete = new WebServiceBergenbier.Classes.Counts();
+            //we fill the object from the dataTable
+            retete.setReteteFromDataTable(dt);
+            //we initialize a new serializer over the counts type
+            XmlSerializer serializer = new XmlSerializer(typeof(WebServiceBergenbier.Classes.Counts));
+            //and a new string to contain the xml
+            String result = String.Empty;
+            //the using a memory stream
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                //we serialize we object to the memory stream
+                serializer.Serialize(memoryStream, retete);
+                //set the position to the start of the stream
+                memoryStream.Position = 0;
+                //and write the stream to the string
+                result = new StreamReader(memoryStream).ReadToEnd();
+            }
+            //then we initialize a new xmlDocument
+            XmlDocument xmlDocument = new XmlDocument();
+            //and load the string to it
+            xmlDocument.LoadXml(result);
+            //and return the xmlDocument
+            return xmlDocument;
+        }
+        /// <summary>
+        /// this function will update the vote count for a given product list
+        /// </summary>
+        /// <param name="productList">the given product list</param>
+        public void setVoteCount(String productList)
+        {
+            //we set the command string 
+            String command = "UPDATE nom\\fp SET votecount = votecount + 1 WHERE INLIST(codp," + productList + ")";
+            //and add it to the oCmd
+            oCmd.CommandText = command;
+            //and try to execute the command
+            try
+            {
+                oCmd.ExecuteNonQuery();
+            }
+            catch { }
+        }
+        /// <summary>
+        /// this function will reset the voteCount to 0
+        /// </summary>
+        public void setResetVoteCount()
+        {
+            //we set the command for the object
+            String command = "UPDATE nom\\fp SET votecount = 0";
+            oCmd.CommandText = command;
+            //then we try to execute the non-query
+            try
+            {
+                oCmd.ExecuteNonQuery();
+            }
+            catch { }
+        }
+
+        public XmlDocument getRetetar(String codp)
+        {
+            String command = "SELECT fp.codp,fp.denm FROM nom\\fp LEFT JOIN nom\\fr ON fr.codp == fp.codp WHERE UPPER(ALLTRIM(fr.codr)) = '" + codp.Trim() + "'";
+            oCmd.CommandText = command;
+            DataTable dt = new DataTable();
+            dt.Load(oCmd.ExecuteReader());
+            dt.TableName = "Retetar";
+            //write to xml
+            StringWriter writer = new StringWriter();
+            dt.WriteXml(writer, true);
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(writer.ToString());
+            return xmlDocument;
+        }
+        #endregion
         public DataTable getSetari()
         {
             // aceasta metoda nu va fi expusa prin WS

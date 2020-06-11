@@ -19,12 +19,14 @@
         </tr>
     </thead>
     <tbody>
+        <!--foreach element in the products list we add an element to the grid-->
         @foreach (var produs in products.productList)
         {
             <tr>
                 <td>@produs.codProdus</td>
                 <td>@produs.denumireProdus</td>
                 <td>
+                    <!--for each element we also add a button to select the current product for vote-->
                     <button class="btn @produs.btnType" @onclick="@(e => IncrementCount(e,produs.codProdus))">
                         Selecteaza
                     </button>
@@ -32,58 +34,96 @@
             </tr>
         }
     </tbody>
+    <!--and a button at the end to finalize the vote-->
     <button class="btn btn-primary" @onclick="setVotingProducts">Voteaza</button>
 </table>
 
 
 @code {
+    //we initialize a new string for the xmlDocument
     private String xmlDocument = String.Empty;
+    //we initialize a new serializer over retete
     private XmlSerializer serializer = new XmlSerializer(typeof(Retete));
+    //we initialize a new products structure
     private Structures.Products products = new Structures.Products();
 
+    /// <summary>
+    /// this function will set the voted of a product on button click
+    /// </summary>
+    /// <param name="e">the Mouse Click event</param>
+    /// <param name="codp">the product code</param>
     private void IncrementCount(MouseEventArgs e, String codp)
     {
+        //we find the product based on the product code
         Structures.Product product = products.productList.FirstOrDefault(x => x.codProdus == codp);
+        //if it exists
         if (!product.Equals(null))
         {
+            //and is voted
             if (product.voted)
             {
+                //we unvote it and reset the button graphics
                 product.voted = false;
                 product.btnType = "btn-primary";
             }
             else
             {
+                //we vote it and change the buton graphics
                 product.voted = true;
                 product.btnType = "btn-secondary";
             }
         }
     }
+    /// <summary>
+    /// this function wil update the voting Products o the Server
+    /// </summary>
     private async void setVotingProducts()
     {
+        //we initialize an empty string 
         String selectedProducts = String.Empty;
+        //we will then iterate the product list after retrieving only the voted products
         foreach (String codp in products.productList.Where(x => x.voted).Select(x => x.codProdus))
         {
+            //if we are at the begining of the iteration we will add a new product without a separator
             if (String.IsNullOrWhiteSpace(selectedProducts)) selectedProducts += "%27" + codp.Trim() + "%27";
+            //else we will add a product with a separator
             else selectedProducts += ",%27" + codp.Trim() + "%27";
         }
+        //if at the end of the day there are selected products
         if (!String.IsNullOrWhiteSpace(selectedProducts))
         {
+            //we will call the webService with the parameterList
             await http.GetAsync(WebMethods.SetVoteCount + selectedProducts);
+            //and navigate to the finalizationPage
             myNavigationManager.NavigateTo("/finalVote");
         }
     }
+    /// <summary>
+    /// this function deserializez an xmlDocument passed as a parameter String
+    /// </summary>
+    /// <param name="xmlDocument"> the String containing the xmlDocument</param>
     private void deserializeDocument(String xmlDocument)
     {
+        //we initialize a new Recipe object
         Retete retete = new Retete();
+        //the using a reader to parse the document
         using (TextReader reader = new StringReader(xmlDocument))
         {
+            //we deserialize it to the object
             retete = (Retete)serializer.Deserialize(reader);
         }
+        //then from the final object we initialize our products list from the object
         products.initializeListFromRetete(retete);
     }
+    /// <summary>
+    /// we override the form Initialization Task
+    /// </summary>
+    /// <returns>the original Task</returns>
     protected override async Task OnInitializedAsync()
     {
+        //we retrieve the votable List from the webService
         xmlDocument = await http.GetStringAsync(WebMethods.GetVotableRetete);
+        //and deserialize the document
         await Task.Run(() => deserializeDocument(xmlDocument));
     }
 }

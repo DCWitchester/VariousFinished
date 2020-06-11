@@ -14,6 +14,9 @@ namespace BlazorApp2.Data
 
         public string Summary { get; set; }
     }
+    /// <summary>
+    /// the main Reteta Class for deserialization of the xml
+    /// </summary>
     public class Reteta
     {
         [XmlAttribute]
@@ -21,12 +24,18 @@ namespace BlazorApp2.Data
         [XmlAttribute]
         public String denm { get; set; }
     }
+    /// <summary>
+    /// the main root Retete Class for deserialization of the xml
+    /// </summary>
     [XmlRoot(ElementName = "Retete")]
     public class Retete
     {
         [XmlElement("Reteta")]
         public List<Reteta> retete { get; set; } = new List<Reteta>();
     }
+    /// <summary>
+    /// the main Count Class for deserialization of the xml
+    /// </summary>
     public class Count
     {
         [XmlAttribute]
@@ -36,6 +45,9 @@ namespace BlazorApp2.Data
         [XmlAttribute]
         public Int32 votecount { get; set; }
     }
+    /// <summary>
+    /// the main root Counts Class for deserialization of the xml
+    /// </summary>
     [XmlRoot(ElementName = "Counts")]
     public class Counts
     {

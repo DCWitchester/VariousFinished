@@ -1,12 +1,9 @@
 ﻿@page "/votecount"
 
 @using BlazorApp2.Data
-@using System.Text
 @using System.Xml.Serialization
 @using System.IO
-@using System.Linq
 @inject HttpClient http
-@inject NavigationManager myNavigationManager
 
 <h1>Vot Produse</h1>
 <br />
@@ -19,6 +16,7 @@
         </tr>
     </thead>
     <tbody>
+        <!--We iterate the products list and add display the info in the grid-->
         @foreach (var produs in products.productList)
         {
             <tr>
@@ -32,23 +30,40 @@
 
 
 @code {
+    //we initialize a xmlDocument
     private String xmlDocument = String.Empty;
+    //we initialize a xmlSerializer over the Counts
     private XmlSerializer serializer = new XmlSerializer(typeof(Counts));
+    //we also initialize the products
     private Structures.Products products = new Structures.Products();
 
+    /// <summary>
+    /// this function will deserialize a xmlDocument to the products object
+    /// </summary>
+    /// <param name="xmlDocument">a String based xmlDocument</param>
     private void deserializeDocument(String xmlDocument)
     {
+        //we initialize the counts object
         Counts counts = new Counts();
+        //using a text reader
         using (TextReader reader = new StringReader(xmlDocument))
         {
+            //we deserialize the xml to the equivalent object
             counts = (Counts)serializer.Deserialize(reader);
         }
+        //then initialize the products.products list 
         products.initializeListFromVoteCount(counts);
     }
 
+    /// <summary>
+    /// we override the form initialization
+    /// </summary>
+    /// <returns>the initialization task</returns>
     protected override async Task OnInitializedAsync()
     {
+        //we retrieve the XmlDocument from the WebService
         xmlDocument = await http.GetStringAsync(WebMethods.GetVotesForRetete);
+        //then we desierialize the document
         await Task.Run(() => deserializeDocument(xmlDocument));
     }
 }
