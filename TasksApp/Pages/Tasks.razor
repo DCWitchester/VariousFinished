@@ -1,0 +1,80 @@
+﻿@page "/tasks"
+
+@using TasksApp.Data
+@inject NavigationManager myNavigationManager
+@using MW.Blazor
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<h1>Task-uri</h1>
+
+<style>
+    body {
+        background: #cce6ff
+    }
+</style>
+@if (tasks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <Tree Nodes="tasksTrees" ChildSelector="@(item=>item.Children)"
+          @bind-SelectedNode="treeNode"
+          @bind-ExpandedNodes="expandedTasksTrees"
+          HasChildNodes="@(item=>item.Children?.Any()==true)" SetBackgroundColor="@(item=>item.getColorForTask)">
+        <TitleTemplate>@context.CurrentTask.CurrentTask</TitleTemplate>
+    </Tree>
+    <!-- I hope commenting like this does not cause an error;
+    <p style="margin-top: 2rem">
+        Selected: @treeNode?.CurrentTask.CurrentTask<br />
+        Expanded: @string.Join(", ", expandedTasksTrees.Select(i => i.CurrentTask.CurrentTask))<br />
+    </p>
+    -->
+    <p />
+    <button class="btn btn-primary" @onclick="AddSubtask">Adauga Subtasks</button>
+    <button class="btn btn-primary" @onclick="AddTask">Adauga Tasks</button>
+    <button class="btn btn-primary" @onclick="AlterTask">Modifica Tasks</button>
+    <button class="btn btn-primary" @onclick="Logout">Logout</button>
+
+}
+
+@code {
+    private List<DatabaseControl.DatabaseObjects.Task> tasks = new List<DatabaseControl.DatabaseObjects.Task>();
+    private IEnumerable<ObjectStructures.TasksTree> tasksTrees = new List<ObjectStructures.TasksTree>();
+    private IList<ObjectStructures.TasksTree> expandedTasksTrees = new List<ObjectStructures.TasksTree>();
+    private ObjectStructures.TasksTree treeNode;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Run(() =>RetrieveTaskTree());
+    }
+
+    private void RetrieveTaskTree()
+    {
+        DatabaseControl.DatabaseLink.TaskFunctions.RetrieveTasksForUser(PublicObjects.loggedInUser, tasks);
+        DatabaseControl.DatabaseLink.TaskFunctions.RetrieveTaskStatus();
+        tasksTrees = Miscellaneous.Miscellaneous.createTaskTreeFromTasks(tasks).AsEnumerable();
+    }
+
+    private void Logout()
+    {
+        PublicObjects.loggedInUser = new DatabaseControl.DatabaseObjects.User();
+        myNavigationManager.NavigateTo("/");
+    }
+
+    private void AlterTask()
+    {
+        myNavigationManager.NavigateTo("/TaskEdit/" + (Int32)Miscellaneous.Miscellaneous.PageOperations.Edit + "/" + treeNode?.CurrentTask.Id);
+    }
+
+    private void AddSubtask()
+    {
+        myNavigationManager.NavigateTo("/TaskEdit/" + (Int32)Miscellaneous.Miscellaneous.PageOperations.AddSubtask + "/" + treeNode?.CurrentTask.Id);
+    }
+
+    private void AddTask()
+    {
+        myNavigationManager.NavigateTo("/TaskEdit/" + (Int32)Miscellaneous.Miscellaneous.PageOperations.Add);
+    }
+
+}

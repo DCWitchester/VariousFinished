@@ -1,0 +1,55 @@
+﻿@page "/"
+
+@inject NavigationManager myNavigationManager
+
+<style>
+    body {
+        background: linear-gradient(90deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    }
+</style>
+
+<p class="bg-centerContent">
+    <div class="bg-mentorStyle">
+        <br/>
+        <h1>Login</h1>
+        <br/>
+        <EditForm Model="@user">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div style="text-align : left; margin-left: 25px; align-items : baseline; margin-right: 25px">
+                <label>
+                    Nume utilizator: <br />
+                    <InputText placeholder="Nume utilizator" @bind-Value="user.UserName" />
+                </label>
+                <br />
+                <label>
+                    Parola: <br />
+                    <InputText type="password" placeholder="Parola" @bind-Value="user.Password" />
+                </label>
+                <br />
+            </div>
+            <br/>
+            <button id="btnLogin" type="submit" class="btn-primary" @onclick="Login">Login</button>
+        </EditForm>
+        <br/>
+    </div>
+</p>
+
+
+@code{
+    
+    private ObjectStructures.Users user = new ObjectStructures.Users();
+    private String error = String.Empty;
+
+    private void Login()
+    {
+        DatabaseControl.DatabaseObjects.User localUser = new DatabaseControl.DatabaseObjects.User();
+        DatabaseControl.DatabaseLink.UserFunctions.CheckUser(user);
+        if (user.isPasswordValid && 
+                DatabaseControl.DatabaseLink.UserFunctions.RetrieveUser(user, localUser))
+        {
+            PublicObjects.loggedInUser = localUser;
+            myNavigationManager.NavigateTo("/tasks");
+        }
+    }
+}

@@ -1,0 +1,131 @@
+﻿@page "/TaskEdit"
+@page "/TaskEdit/{pageType:int}"
+@page "/TaskEdit/{pageType:int}/{taskID:int}"
+
+@inject NavigationManager myNavigationManager
+
+<style>
+    body {
+        background: linear-gradient(90deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    }
+</style>
+
+<p class="bg-centerContent">
+    <div class="bg-mentorStyle">
+        <br />
+        <h2>
+            @((PageType==Miscellaneous.Miscellaneous.PageOperations.Edit?
+                "Modifica":
+                PageType==Miscellaneous.Miscellaneous.PageOperations.View?
+                    "Visualizare":
+                    "Adaugare")+
+              " Task")
+        </h2>
+        <br />
+        <EditForm Model="@userTask">
+            <div style="text-align : left; margin-left: 25px; margin-right: 25px;">
+                <label>
+                    Task:
+                    <br />
+                    <InputText style="width: 275px" placeholder="Task" @bind-Value="userTask.Task" />
+                </label>
+                <br />
+                <label>
+                    Status Task:
+                    <br />
+                    <TasksApp.Styles.InputSelectNumber style="width: 275px" @bind-Value="userTask.Task_Status">
+                        @foreach (var element in PublicObjects.taskStatuses)
+                        {
+                            <option value="@element.Id">@element.Status_text</option>
+                        }
+                    </TasksApp.Styles.InputSelectNumber>
+                </label>
+                <br />
+                <label>
+                    Descriere:
+                    <br />
+                    <InputTextArea style="width : 275px; height: 100px" @bind-Value="userTask.Task_Info" />
+                </label>
+                <br />
+                <div style="text-align: center">
+                    <button type="submit" class="btn-primary" @onclick="FormValidate">Salveaza</button>
+                    <button type="submit" class="btn-primary" @onclick="FormCancel">Renunta</button>
+                </div>
+            </div>
+
+            <br/>
+        </EditForm>
+    </div>
+</p>
+
+
+@code {
+    [Parameter]
+    public Int32 taskID { get; set; }
+    [Parameter]
+    public Int32 pageType { get; set; }
+
+    Miscellaneous.Miscellaneous.PageOperations PageType = Miscellaneous.Miscellaneous.PageOperations.None;
+    DatabaseControl.DatabaseObjects.Task currentTask { get; set; } = new DatabaseControl.DatabaseObjects.Task();
+    Int32 ParentID { get; set; } = 0;
+    ObjectStructures.UserTask userTask { get; set; } = new ObjectStructures.UserTask();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Run(() => SetPageSetting());
+    }
+
+    void SetPageSetting()
+    {
+        PageType = (Miscellaneous.Miscellaneous.PageOperations)pageType;
+        InitializeTask();
+
+    }
+    void InitializeTask()
+    {
+        if (PageType.Equals(Miscellaneous.Miscellaneous.PageOperations.Edit) || PageType.Equals(Miscellaneous.Miscellaneous.PageOperations.View))
+        {
+            DatabaseControl.DatabaseLink.TaskFunctions.RetrieveTask(taskID, currentTask);
+            userTask.SetUserTaskFromDatabaseTask(currentTask);
+            return;
+        }
+        if (PageType.Equals(Miscellaneous.Miscellaneous.PageOperations.AddSubtask))
+        {
+            ParentID = taskID;
+        }
+
+    }
+
+    void FormValidate()
+    {
+        if (PageType.Equals(Miscellaneous.Miscellaneous.PageOperations.Edit))
+        {
+            UpdateTask();
+            FormCancel();
+        }
+        else if (pageType.Equals(Miscellaneous.Miscellaneous.PageOperations.View)) FormCancel();
+        else
+        {
+            InsertTask();
+            FormCancel();
+        }
+    }
+
+    void UpdateTask()
+    {
+        userTask.SetDatabaseTaskFromUserTask(currentTask);
+        DatabaseControl.DatabaseLink.TaskFunctions.UpdateTask(currentTask);
+    }
+
+    void InsertTask()
+    {
+        userTask.SetDatabaseTaskFromUserTask(currentTask);
+        currentTask.ParentTask = ParentID;
+        DatabaseControl.DatabaseLink.TaskFunctions.InsertTask(currentTask);
+    }
+
+    void FormCancel()
+    {
+        myNavigationManager.NavigateTo("/tasks");
+    }
+}

@@ -1,0 +1,5 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="_content/MW.Blazor.PagePanel" Path="C:\Users\DCW\.nuget\packages\mw.blazor.pagepanel\1.1.6\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/MW.Blazor.TagSelector" Path="C:\Users\DCW\.nuget\packages\mw.blazor.tagselector\1.2.3\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/MW.Blazor.Tree" Path="C:\Users\DCW\.nuget\packages\mw.blazor.tree\1.1.8\build\..\staticwebassets\" />
+</StaticWebAssets>
