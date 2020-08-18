@@ -1,0 +1,51 @@
+﻿<!--The main callers for the pages-->
+@page "/tableopen"
+<!--We need a table parameter for displaying the table info-->
+@page "/tableopen/{table:int}"
+
+<!--We also inject the NavigationManager-->
+@inject NavigationManager myNavigationManager
+
+<!--The main Style for the Page-->
+<style>
+    body {
+        /*We initiali set the bakgroundImage for the page*/
+        background-image: @Miscellaneous.SetBackgroundImage();
+        /*We then set the width of the image to 100% of the page*/
+        background-size: 100%;
+        /*And finally set the foreground color of the page*/
+        color:@Miscellaneous.SetForegroundColor();
+    }
+</style>
+
+<!--The page info-->
+<!--We also inform the client of his selected table-->
+<h3 style="font-family:'Script MT'">Masa @table este deja deschisa.</h3>
+<h3 style="font-family:'Script MT'">Doriti sa adaugati la comanda deschisa?</h3>
+<!--the buttons for the control-->
+<button class="btn btn-mentor" @onclick="StartSale">Da</button>
+<button class="btn btn-mentor" @onclick="EndSale">Nu</button>
+
+@code {
+    //the Main Table Parameter set for the form
+    [Parameter]
+    public Int32 table { get; set; }
+
+    /// <summary>
+    /// the EndSale function will navigate to the EndMessage
+    /// </summary>
+    /// <param name="e">the Click Event</param>
+    void EndSale(MouseEventArgs e)
+    {
+        myNavigationManager.NavigateTo("/endmessage");
+    }
+
+    /// <summary>
+    /// the StartSale function will navigate to the Main Sale Page
+    /// </summary>
+    /// <param name="e">the Click Event</param>
+    void StartSale(MouseEventArgs e)
+    {
+        myNavigationManager.NavigateTo("/tablemenu/" + table + "/true");
+    }
+}

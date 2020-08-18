@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+
+by customizing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121.
+
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <LastUsedBuildConfiguration>Release</LastUsedBuildConfiguration>
+    <LastUsedPlatform>Any CPU</LastUsedPlatform>
+    <_PublishTargetUrl>C:\inetpub\wwwroot\wsbergenbier</_PublishTargetUrl>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/FirebirdSql.Data.FirebirdClient.dll">
+      <publishTime>03/25/2015 15:12:38</publishTime>
+    </File>
+    <File Include="bin/FirebirdSql.Data.FirebirdClient.pdb">
+      <publishTime>03/25/2015 15:12:38</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>03/17/2015 08:59:34</publishTime>
+    </File>
+    <File Include="bin/WebServiceBergenbier.dll">
+      <publishTime>06/05/2020 17:05:34</publishTime>
+    </File>
+    <File Include="bin/WebServiceBergenbier.pdb">
+      <publishTime>06/05/2020 17:05:34</publishTime>
+    </File>
+    <File Include="bin/WebServicePOS.dll">
+      <publishTime>05/19/2020 13:26:28</publishTime>
+    </File>
+    <File Include="bin/WebServicePOS.pdb">
+      <publishTime>05/19/2020 13:26:28</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>04/07/2017 11:04:24</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>04/06/2020 16:17:45</publishTime>
+    </File>
+    <File Include="WS.asmx">
+      <publishTime>02/06/2012 12:16:49</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

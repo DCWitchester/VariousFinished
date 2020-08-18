@@ -1,0 +1,125 @@
+﻿@page "/fetchdata"
+
+@using LocationDisplay.Data
+@using System.Threading.Tasks
+@using GoogleMapsComponents
+@using GoogleMapsComponents.Maps
+
+@inject IJSRuntime JSRuntime
+
+<h1>Google Maps</h1>
+
+@if (locations == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <h1>Blazor</h1>
+    <GoogleMap @ref="@(this.map1)" Id="map1" Options="@(this.mapOptions)"></GoogleMap>
+}
+
+@code {
+    List<DatabaseConnection.DatabaseObjects.ServerLocation> locations = new List<DatabaseConnection.DatabaseObjects.ServerLocation>();
+    GoogleMapsComponents.Maps.Marker marker;
+    Polyline polyline;
+
+
+    static List<LatLngLiteral> pathpoints = new List<LatLngLiteral>();
+
+
+
+    private GoogleMap map1 = new GoogleMap();
+
+    private MapOptions mapOptions = new MapOptions()
+    {
+        Zoom = 19,
+        Center = new LatLngLiteral()
+        {
+            Lat = 44.18989707,
+            Lng = 28.62403504
+        },
+        MapTypeId = MapTypeId.Roadmap
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Run(() => DatabaseConnection.DatabaseLink.LocationFunctions.RetrieveLocationHistory(locations));
+#pragma warning disable CS4014 
+        Task.Run(() => rebuildURL());
+#pragma warning restore
+    }
+
+    private async void UpdateMap(Double latitude, Double longitude)
+    {
+        if(polyline == null)
+        {
+            polyline = await Polyline.CreateAsync(map1.JsRuntime, new PolylineOptions()
+            {
+                StrokeColor =  "#FF0000",
+                Draggable = true,
+                Editable = true,
+                StrokeWeight =  3,
+                Map = map1.InteropObject
+            });
+        }
+        else
+        {
+#pragma warning disable CS4014 
+            polyline.SetPath(pathpoints);
+#pragma warning restore
+        }
+
+        if(marker == null)
+            marker = await Marker.CreateAsync(map1.JsRuntime, new MarkerOptions()
+            {
+                Position = new LatLngLiteral()
+                {
+                    Lat = latitude,
+                    Lng = longitude
+                },
+                Map = map1.InteropObject
+            });
+        else
+        {
+            var position = new LatLngLiteral()
+            {
+                Lat = latitude,
+                Lng = longitude
+            };
+#pragma warning disable CS4014 
+            marker.SetPosition(position);
+            map1.InteropObject.PanTo(position);
+#pragma warning restore
+        }
+        pathpoints.Add(new LatLngLiteral()
+        {
+            Lat = latitude,
+            Lng = longitude
+        });
+
+    }
+
+    private void createPath()
+    {
+        foreach (var element in locations.Distinct(new LocationDisplay.DatabaseConnection.DatabaseObjects.LocationComparer()).OrderBy(x => x.LastUpdate))
+        {
+            pathpoints.Add(new LatLngLiteral()
+            {
+                Lat = element.Latitude,
+                Lng = element.Longitude
+            });
+        }
+    }
+
+    private void rebuildURL()
+    {
+        foreach (var element in locations.Distinct(new LocationDisplay.DatabaseConnection.DatabaseObjects.LocationComparer()))
+        {
+            //JSRuntime.InvokeVoidAsync("setMarker", new Object[] { this.javaMap, element.Latitude, element.Longitude });
+            UpdateMap(element.Latitude, element.Longitude);
+            System.Threading.Thread.Sleep(LocationDisplay.PublicObjects.Settings.AnimationSpeed);
+        }
+    }
+}

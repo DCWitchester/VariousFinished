@@ -1,0 +1,471 @@
+﻿<!--The main call for the page with 0 parameters-->
+@page "/tablemenu"
+<!--The caller for the page with the table parameter-->
+@page "/tablemenu/{table:int}"
+<!--The caller for the page with two parameters: the table and an active tableCheck-->
+@page "/tablemenu/{table:int}/{tableCheck:bool}"
+<!--The region for the needed C# class import-->
+@using POSTable.Data
+@using System.Xml.Serialization
+@using System.IO
+@using System.Net
+
+<!--We will also inject two global services so that we can access them-->
+<!--The HttpClient is used for accessing the WebService-->
+@inject HttpClient http
+<!--The NavigationManager is used for changing pages-->
+@inject NavigationManager myNavigationManager
+<!--The link is used for accessing special styles-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">-->
+<!--The forms title-->
+<h1 style="font-family:'Script MT'">Meniu</h1>
+<br />
+<!--And the forms subtitle displaying the active table-->
+<h2 style="font-family:'Script MT'">Masa @table</h2>
+<br />
+
+<!--The main Style for the Page-->
+<style>
+    body {
+        /*We initiali set the bakgroundImage for the page*/
+        background-image: @Miscellaneous.SetBackgroundImage();
+        /*We then set the width of the image to 100% of the page*/
+        background-size: 100%;
+        /*And finally set the foreground color of the page*/
+        color:@Miscellaneous.SetForegroundColor();
+        padding-bottom: 20px;
+    }
+</style>
+
+@if (!checkSale)
+{
+    <!--menu.menuCategories.OrderBy(x => x.AdministrationOrder).ThenBy(x => x.CategoryOrder)-->
+    @foreach (var categoryElement in menu.menuCategories.OrderBy(x => x.CategoryOrder))
+    {
+        <div style="margin:2px; color:black; background-color:white; display:flex;
+                        background: @(categoryElement.IsOpened ? "#66b3ff" : "rgb(255, 255, 255) transparent")"
+                @onclick="@(e => DisplayCategory(e, categoryElement.CategoryCode))">
+            <!--Each element is a simple label item-->
+            <label style="margin-left:15px;margin-top:5px">
+                @categoryElement.CategoryCode
+            </label>
+            <label style="margin-left:15px;margin-top:5px">
+                @categoryElement.CategoryName
+            </label>
+        </div>
+        if (!categoryElement.IsOpened)
+        {
+            @foreach (var selectedElement in menu.itemList.Where(x => x.ProductCategory == categoryElement.CategoryCode && x.ProductQuantity > 0))
+            {
+                <!--Each selectedElement will get a card with Code/Name | Price | Quantity-->
+                <!--The card is bordered by a div item with a special style and a click Event-->
+                <!--The card also has a dynamic back color-->
+                <!--We also set the display style to flex to keep container forms and Structures-->
+                <div style="margin: 2px; color: black; background-color: white; display: flex;
+                        background: @(selectedElement.ProductQuantity > 0 ? "#85e085" : "rgb(255, 255, 255) transparent")"
+                        @onclick="@(e => SelectItem(e, selectedElement.ProductCode))">
+                    <!--Each piece of the card is a bordered div item-->
+                    <!--The leftmost part of the card taking half the size contains on two lines: ProductCode and ProductName -->
+                    <div style="width:50%; height:inherit; float:left; border: 1px solid black; ">
+                        <!--Each selectedElement is a simple label item-->
+                        <label style="margin-left:15px;margin-top:5px">
+                            @selectedElement.ProductCode
+                        </label>
+                        <!--Separated by a line break-->
+                        <br />
+                        <label style="margin-left:15px;margin-top:-5px">
+                            @selectedElement.ProductName
+                        </label>
+                    </div>
+                    <!--Then a secondary div item containing the price and quantity will take the remaining half of the form-->
+                    <div style="width: 50%; height: inherit; float: right; border: 1px solid black; display: flex">
+                        <!--This div item will also be broken between the two remaining items: the price and the quantity-->
+                        <!--First one occupying a little less than half the div and containing the price-->
+                        <div style="width: 40%;float: left;border-right: 1px solid black;">
+                            <!--We will bold the Price and the Currency Symbol-->
+                            <h3 style="text-align: center;margin-top: 15px">
+                                @selectedElement.ProductPrice @Miscellaneous.SetCurrency()
+                            </h3>
+                        </div>
+                        <!--And the second one occupying a little over half the div and containing the quantity-->
+                        <div style="width: 60%;
+                                    height: inherit;
+                                    float: right;
+                                    border-left: 1px solid black;">
+                            <!--We set a center div for the label object-->
+                            <!--Had a few page errors for the page layout when it was a label so changed it to a div-->
+                            <div style="margin-top:5px;width:inherit;text-align:center">
+                                Cantitate:
+                            </div>
+                            <!--We set a special class div to access special styles within the div-->
+                            <!--This div is an object containing two spans with special buttons for adding and substracting quantities-->
+                            <div class="qty">
+                                <!--the substraction span-->
+                                <span class="minus bg-dark"
+                                        @onclick="@(e => AlterQuantity(e, selectedElement.ProductCode, QuantityEvents.substract))">-</span>
+                                <!--the label displaying the quantity-->
+                                <label style="margin-left:10px; margin-right:10px">
+                                    @selectedElement.ProductQuantity
+                                </label>
+                                <!--the addition span-->
+                                <span class="plus bg-dark"
+                                        @onclick="@(e => AlterQuantity(e, selectedElement.ProductCode, QuantityEvents.add))">+</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        @if (categoryElement.IsOpened)
+        {
+            <!--Then we iterate the elements in the menu item list-->
+            @foreach (var element in menu.itemList.Where(x => x.ProductCategory == categoryElement.CategoryCode))
+            {
+                <!--Each element will get a card with Code/Name | Price | Quantity-->
+                <!--The card is bordered by a div item with a special style and a click Event-->
+                <!--The card also has a dynamic back color-->
+                <!--We also set the display style to flex to keep container forms and Structures-->
+                <div style="margin: 2px; color: black; background-color: white; display: flex;
+                    background: @(element.ProductQuantity > 0 ? "#85e085" : "rgb(255, 255, 255) transparent")"
+                        @onclick="@(e => SelectItem(e, element.ProductCode))">
+                    <!--Each piece of the card is a bordered div item-->
+                    <!--The leftmost part of the card taking half the size contains on two lines: ProductCode and ProductName -->
+                    <div style="width:50%; height:inherit; float:left; border: 1px solid black; ">
+                        <!--Each element is a simple label item-->
+                        <label style="margin-left:15px;margin-top:5px">
+                            @element.ProductCode
+                        </label>
+                        <!--Separated by a line break-->
+                        <br />
+                        <label style="margin-left:15px;margin-top:-5px">
+                            @element.ProductName
+                        </label>
+                    </div>
+                    <!--Then a secondary div item containing the price and quantity will take the remaining half of the form-->
+                    <div style="width: 50%; height: inherit; float: right; border: 1px solid black; display: flex">
+                        <!--This div item will also be broken between the two remaining items: the price and the quantity-->
+                        <!--First one occupying a little less than half the div and containing the price-->
+                        <div style="width: 40%;float: left;border-right: 1px solid black;">
+                            <!--We will bold the Price and the Currency Symbol-->
+                            <h3 style="text-align: center;margin-top: 15px">
+                                @element.ProductPrice @Miscellaneous.SetCurrency()
+                            </h3>
+                        </div>
+                        <!--And the second one occupying a little over half the div and containing the quantity-->
+                        <div style="width:60%; height:inherit; float: right; border-left:1px solid black;">
+                            <!--We set a center div for the label object-->
+                            <!--Had a few page errors for the page layout when it was a label so changed it to a div-->
+                            <div style="margin-top:5px;width:inherit;text-align:center">
+                                Cantitate:
+                            </div>
+                            <!--We set a special class div to access special styles within the div-->
+                            <!--This div is an object containing two spans with special buttons for adding and substracting quantities-->
+                            <div class="qty">
+                                <!--the substraction span-->
+                                <span class="minus bg-dark"
+                                        @onclick="@(e => AlterQuantity(e, element.ProductCode, QuantityEvents.substract))">-</span>
+                                <!--the label displaying the quantity-->
+                                <label style="margin-left:10px; margin-right:10px">
+                                    @element.ProductQuantity
+                                </label>
+                                <!--the addition span-->
+                                <span class="plus bg-dark"
+                                        @onclick="@(e => AlterQuantity(e, element.ProductCode, QuantityEvents.add))">+</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }
+}
+else
+{
+    <div style="width:100%; margin-bottom:20px">
+        @foreach (var element in menu.itemList.Where(x => x.ProductQuantity > 0))
+        {
+            <div style="display:flex">
+                <div style="width:50%; float:left; text-align: left">
+                    @element.ProductName
+                </div>
+                <div style="width:10%; float:left; text-align: left">
+                    @element.ProductQuantity BUC
+                </div>
+                <div style="width:5%; float:left;">
+                    X
+                </div>
+                <div style="width:10%; float:left; text-align: right">
+                    @(element.ProductPrice.ToString("0.00"))
+                </div>
+                <div style="width:5%; float:left;">
+                    =
+                </div>
+                <div style="width:20%; float:right; text-align: right">
+                    @((element.ProductQuantity * element.ProductPrice).ToString("0.00")) @Miscellaneous.SetCurrency()
+                </div>
+                <br/>
+            </div>
+        }
+        <div style=" width:100%; border-top: 2px solid black; float:right; text-align: right; margin-top:25px; margin-bottom:40px">
+            Total : @(menu.itemList.Where(x => x.ProductQuantity > 0).Sum(x => x.ProductQuantity * x.ProductPrice).ToString("0.00")) @Miscellaneous.SetCurrency()
+        </div>
+    </div>
+}
+
+<!--We enter a line break to set the button layout-->
+<br />
+@if (checkSale)
+{
+    <button class="btn btn-mentor" @onclick="CreateSales">Finalizare Comanda</button>
+}
+<!--The form has two layouts for reseting the active command and for finalizing the command-->
+<button class="btn btn-mentor" @onclick="ResetSelection">Resetare Comanda</button>
+<button class="btn btn-mentor" @onclick="CheckSale">@checkSaleDisplay</button>
+<br />
+<a href="http://www.mentorsoft.ro/" style="margin-top: 25px; font-size:10px">Program ©MentorTableMenu ™SC MENTOR SRL Constanta</a>
+
+<!--The code for the current web page starts here-->
+@code {
+    //The initialization of the page parameters
+    /// <summary>
+    /// the Table parameter is used to link the sale to the table within the POS Structure
+    /// </summary>
+    [Parameter]
+    public Int32 table { get; set; }
+    /// <summary>
+    /// the TableCheck parameter is used for checking an open
+    /// </summary>
+    [Parameter]
+    public Boolean tableCheck { get; set; }
+
+    public Boolean checkSale { get; set; } = false;
+    public Boolean validateSale { get; set; } = false;
+    public String checkSaleDisplay { get; set; } = "Vizualizare Comanda";
+
+    /// <summary>
+    /// the main enum is used for setting the quantity events: adding or subtracting one
+    /// </summary>
+    private enum QuantityEvents
+    {
+        add = 0,
+        substract = 1
+    }
+
+    /// <summary>
+    /// the menu structure used for displaying the items
+    /// </summary>
+    private ObjectStructures.Menu menu = new ObjectStructures.Menu();
+    /// <summary>
+    ///the main sale structure used for calling the web Service
+    /// </summary>
+    private ObjectStructures.Menu sale = new ObjectStructures.Menu();
+
+    protected override async Task OnInitializedAsync()
+    {
+        //we initialize a string for containing the retrieved xmlDocuments
+        String xmlDocument = String.Empty;
+        //first we check if the table is open so we call the WebMethod with the table code
+        xmlDocument = await http.GetStringAsync(WebMethods.GetIsTableOpen + table.ToString());
+        //we deserialize the object and read the answe
+        Boolean answer = await Task.Run(() => CheckTable(xmlDocument));
+        //if the tableCheck has not been made prior and the table has an active sale we display a message that the table is open
+        if (answer && !tableCheck) myNavigationManager.NavigateTo("/tableopen/" + table);
+        else
+        {
+            String xmlDocumentAdministrations = await http.GetStringAsync(WebMethods.GetAdministrations);
+            String xmlDocumentCategories = await http.GetStringAsync(WebMethods.GetCategories);
+            //we retrieve the votable List from the webService
+            xmlDocument = await http.GetStringAsync(WebMethods.GetMenu);
+            //and deserialize the object to the needed structure
+            await Task.Run(() => DeserializeDocument(xmlDocument))
+                        .ContinueWith((t) => DeserializeCategories(xmlDocumentAdministrations, xmlDocumentCategories));
+        }
+    }
+
+    /// <summary>
+    /// this function will deserialize the xml Menu Document
+    /// </summary>
+    /// <param name="xmlDocument">the retrieved XmlDocument</param>
+    private void DeserializeDocument(String xmlDocument)
+    {
+        //we initialize a serializer over the menu object
+        XmlSerializer serializer = new XmlSerializer(typeof(XmlClasses.Meniu));
+        //initialize a new Meniu class
+        XmlClasses.Meniu meniu = new XmlClasses.Meniu();
+        //then using a text reader
+        using (TextReader reader = new StringReader(xmlDocument))
+        {
+            //we deserialize the meniu to a class
+            meniu = (XmlClasses.Meniu)serializer.Deserialize(reader);
+        }
+        //and initialize the global menu from the deserialized object
+        menu.InitializeMenuFromServer(meniu);
+    }
+
+    private void DeserializeCategories(String xmlDocumentAdministrations, String xmlDocumentCategories)
+    {
+        XmlSerializer administrationsSerializer = new XmlSerializer(typeof(XmlClasses.Administrations));
+        XmlSerializer categorySerializer = new XmlSerializer(typeof(XmlClasses.Categories));
+        XmlClasses.Administrations administrations = new XmlClasses.Administrations();
+        XmlClasses.Categories categories = new XmlClasses.Categories();
+        using (TextReader reader = new StringReader(xmlDocumentAdministrations))
+        {
+            administrations = (XmlClasses.Administrations)administrationsSerializer.Deserialize(reader);
+        }
+        using (TextReader reader1 = new StringReader(xmlDocumentCategories))
+        {
+            categories = (XmlClasses.Categories)categorySerializer.Deserialize(reader1);
+        }
+        menu.InitializeMenuCategoriesFromServer(categories, administrations);
+    }
+
+    /// <summary>
+    /// the function will deserialize the answer xmlDocument to check if the table is Open
+    /// </summary>
+    /// <param name="xmlDocument">the XmlDocument retrieve from the WebService</param>
+    /// <returns>the answer value</returns>
+    private Boolean CheckTable(String xmlDocument)
+    {
+        //we initialize a new answe object
+        XmlClasses.Answer answer = new XmlClasses.Answer();
+        //and a new serializer over the answer object
+        XmlSerializer xmlSerializer = new XmlSerializer(typeof(XmlClasses.Answer));
+        //then using a text reader
+        using (TextReader reader = new StringReader(xmlDocument))
+        {
+            //we deserialize the object
+            answer = (XmlClasses.Answer)xmlSerializer.Deserialize(reader);
+        }
+        //and return the answer value
+        return answer.Valoare;
+    }
+
+    /// <summary>
+    /// the main function for the initial select of an item
+    /// </summary>
+    /// <param name="e">the click on the main div item</param>
+    /// <param name="codp">the current items product code</param>
+    private void SelectItem(MouseEventArgs e, Int32 codp)
+    {
+        //we retrieve the object from the list
+        ObjectStructures.MenuItem item = menu.itemList.FirstOrDefault(x => x.ProductCode == codp);
+        //if no object was selected
+        //chances for this to happen are slim to none but we will still check
+        if (!item.Equals(null))
+        {
+            //if the item wasn't selected prior
+            if (!item.IsSelected)
+            {
+                //we select it
+                item.IsSelected = true;
+                //and set the quantity to one
+                item.ProductQuantity = 1;
+            }
+            else if (item.ProductQuantity == 1)
+            {
+                //if it was selected and the quantity is one
+                //we deselect the item
+                item.IsSelected = false;
+                //and set the quantity to 0
+                item.ProductQuantity = 0;
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// this function will reset the selection for all the items
+    /// </summary>
+    private void ResetSelection()
+    {
+        //we iterate the list
+        foreach (var item in menu.itemList)
+        {
+            //and deselect the items
+            item.IsSelected = false;
+            //and set the quantity to 0
+            item.ProductQuantity = 0;
+        }
+    }
+
+    /// <summary>
+    /// this function will increase the quantity by 1
+    /// deprecated
+    /// </summary>
+    /// <param name="e">the click event</param>
+    /// <param name="codp">the current ProductCode</param>
+    private void AddQuantity(MouseEventArgs e, Int32 codp)
+    {
+        //we retrieve the item from the list
+        ObjectStructures.MenuItem item = menu.itemList.FirstOrDefault(x => x.ProductCode == codp);
+        //we increase the quantity by one
+        item.ProductQuantity++;
+    }
+
+    /// <summary>
+    /// this function will decrease the quantity by 1
+    /// deprecated
+    /// </summary>
+    /// <param name="e">the click event</param>
+    /// <param name="codp">the current ProductCode</param>
+    private void SubtractQuantity(MouseEventArgs e, Int32 codp)
+    {
+        //we retrieve the item from the list
+        ObjectStructures.MenuItem item = menu.itemList.FirstOrDefault(x => x.ProductCode == codp);
+        //we decrease the quantity by one
+        if (item.ProductQuantity > 0) item.ProductQuantity--;
+    }
+
+    /// <summary>
+    /// the new function for altering the quantity
+    /// replaces AddQunatity and SubstractQuantity
+    /// </summary>
+    /// <param name="e">the click event</param>
+    /// <param name="codp">the Product Code</param>
+    /// <param name="events">the quantity event</param>
+    private void AlterQuantity(MouseEventArgs e, Int32 codp, QuantityEvents events)
+    {
+        //we will retrieve the needed product
+        ObjectStructures.MenuItem item = menu.itemList.FirstOrDefault(x => x.ProductCode == codp);
+        //we check the event and either increase or decrease the item
+        if (events == QuantityEvents.add) item.ProductQuantity++;
+        else if (events == QuantityEvents.substract && item.ProductQuantity > 0) item.ProductQuantity--;
+        //and if the product quantity is 0 we deselect the product
+        if (item.ProductQuantity == 0) item.IsSelected = false;
+    }
+
+    /// <summary>
+    /// the main release function
+    /// </summary>
+    private async void CreateSales()
+    {
+        //we retrieve the items with positive quantity
+        sale.itemList = menu.itemList.Where(x => x.ProductQuantity > 0).ToList();
+        //then we set the sale time
+        //this is no longer used
+        sale.SetSaleTime();
+        //we set the tableto the sale
+        sale.Table = table;
+        //then we serialize the sale item into a JSON Object
+        String document = sale.CreateSale();
+        //we will then call the web Method
+        await http.GetAsync(WebMethods.SetSales + document);
+        //then we will navigate the page
+        myNavigationManager.NavigateTo("/endmessage");
+    }
+
+    private void DisplayCategory(MouseEventArgs e, Int32 categoryCode)
+    {
+        ObjectStructures.MenuCategory menuCategory = menu.menuCategories.Where(x => x.CategoryCode == categoryCode).FirstOrDefault();
+        menuCategory.IsOpened = !menuCategory.IsOpened;
+    }
+
+    private void CheckSale()
+    {
+        checkSale = !checkSale;
+        if (!checkSale) checkSaleDisplay = "Vizualizare Comanda";
+        else checkSaleDisplay = "Inapoi la selectie";
+    }
+
+}

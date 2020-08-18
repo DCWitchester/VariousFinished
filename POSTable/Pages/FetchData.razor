@@ -1,0 +1,21 @@
+﻿@page "/fetchdata"
+
+
+@using POSTable.Data
+
+<h1>Meniu</h1>
+
+<h2>Masa @table</h2>
+
+
+
+
+@code {
+    [Parameter]
+    public Int32 table { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+}
