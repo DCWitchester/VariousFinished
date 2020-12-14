@@ -9,3 +9,4 @@ D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\bin\WebServiceEvidenta.d
 D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\bin\WebServiceEvidenta.pdb
 D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\obj\Debug\WebServiceEvidenta.dll
 D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\obj\Debug\WebServiceEvidenta.pdb
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\obj\Debug\WebServiceEvidenta.csprojAssemblyReference.cache

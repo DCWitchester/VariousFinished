@@ -1,0 +1,16 @@
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\bin\Debug\netstandard2.1\appsettings.json
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\bin\Debug\netstandard2.1\BarcodeScanner.deps.json
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\bin\Debug\netstandard2.1\BarcodeScanner.dll
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\bin\Debug\netstandard2.1\ref\BarcodeScanner.dll
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\bin\Debug\netstandard2.1\BarcodeScanner.pdb
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\obj\Debug\netstandard2.1\App.xaml.g.cs
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\obj\Debug\netstandard2.1\Components\ScannerPage.xaml.g.cs
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\obj\Debug\netstandard2.1\MainPage.xaml.g.cs
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\obj\Debug\netstandard2.1\BarcodeScanner.AssemblyInfoInputs.cache
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\obj\Debug\netstandard2.1\BarcodeScanner.AssemblyInfo.cs
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\obj\Debug\netstandard2.1\BarcodeScanner.csproj.CoreCompileInputs.cache
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\obj\Debug\netstandard2.1\XamlC.stamp
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\obj\Debug\netstandard2.1\BarcodeScanner.dll
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\obj\Debug\netstandard2.1\ref\BarcodeScanner.dll
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\obj\Debug\netstandard2.1\BarcodeScanner.pdb
+D:\excelsior\BarcodeScanner\BarcodeScanner\BarcodeScanner\obj\Debug\netstandard2.1\BarcodeScanner.csprojAssemblyReference.cache

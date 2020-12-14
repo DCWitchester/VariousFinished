@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "Rpa8NC8iPmZgQd9cOEZONXMpXcwFmh6iGuTY/Bc0+zq84Yiyb59tkd5CQu03ZeMjp1nWedAbZNTVsdZoOudLXw==",
+  "success": true,
+  "projectFilePath": "E:\\GitRepos\\MentorSynch\\BarcodeScanner\\BarcodeScanner.iOS\\BarcodeScanner.iOS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\DCW\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Microsoft\\Xamarin\\NuGet\\xamarin.essentials\\1.5.3.2\\xamarin.essentials.1.5.3.2.nupkg.sha512",
+    "C:\\Users\\DCW\\.nuget\\packages\\xamarin.forms\\4.8.0.1687\\xamarin.forms.4.8.0.1687.nupkg.sha512",
+    "C:\\Users\\DCW\\.nuget\\packages\\zxing.net.mobile\\2.4.1\\zxing.net.mobile.2.4.1.nupkg.sha512",
+    "C:\\Users\\DCW\\.nuget\\packages\\zxing.net.mobile.forms\\2.4.1\\zxing.net.mobile.forms.2.4.1.nupkg.sha512"
+  ],
+  "logs": []
+}

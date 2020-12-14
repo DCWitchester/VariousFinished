@@ -28,5 +28,23 @@ namespace WebServicePOS
                 return vfp.getProductDetails(ProductCode);
             }
         }
+
+        [WebMethod]
+        public XmlDocument getProductName(String ProductCode)
+        {
+            using (vfpPOS vfp = new vfpPOS())
+            {
+                return vfp.getProductName(ProductCode);
+            }
+        }
+
+        [WebMethod]
+        public void setQuantityFile(String QuantityFile)
+        {
+            using (vfpPOS vfp = new vfpPOS())
+            {
+                vfp.SetQuantityFile(QuantityFile);
+            }
+        }
     }
 }

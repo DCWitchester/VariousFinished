@@ -1,7 +1,7 @@
 ﻿@page "/"
-@using Classes
 @inject IJSRuntime JSRuntime
 @inject HttpClient http
+
 <!--The page style used just for setting the background of the page-->
 <style>
     body {
@@ -10,88 +10,34 @@
     }
 </style>
 
+<!--The page has two states based on the HasProductBeenScanned-->
 @if (!HasProductBeenScanned)
 {
+    <!--We preset the div objects for the display settings-->
     <div class="bg-centerContent">
         <div class="bg-mentorStyle">
+            <!--We make a Display-->
             <h1 style="margin:5px">Va rog scanati produsul</h1>
+            <!--Then place an input linked to the ProductCode property of the productControler-->
             <input type="text" id="ProductCode" name="ProductCode" style="margin-bottom:5px" maxlength="12" @bind-value="productController.ProductCode" @onkeypress="@ValidForm" />
         </div>
     </div>
 }
 else
 {
-<div class="bg-centerContent">
-    <div class="bg-mentorStyle">
-        <!--
-    <h1 style="margin:5px">@productController.ProductName</h1>
-    <h1 style="margin:5px">@productController.ProductPrice Lei</h1>
-     -->
-        <div style="width:100%; margin-left:25px; margin-right:25px; display:flex; font-size:large"><h1>@productController.ProductName</h1></div>
-        <div style="display:flex; border-top: 1px solid black; border-bottom:1px solid black">
-            <div style="width:50%; float:left; font-size:large"><h2>Pret:</h2></div>
-            <div style="width:50%; float:right; border-left: 1px solid black; font-size:large"><h2>@productController.ProductPrice Lei</h2></div>
+    <!--We preset the div objects for the display settings-->
+    <div class="bg-centerContent">
+        <div class="bg-mentorStyle">
+            <!--Then we create a flexed div for the controllers ProductName price -->
+            <div style="width:100%; margin-left:25px; margin-right:25px; display:flex; font-size:large"><h1>@productController.ProductName</h1></div>
+            <!--And another flexed div for containing the price broken in two halves: just like a label-->
+            <div style="display:flex; border-top: 1px solid black; border-bottom:1px solid black">
+                <div style="width:50%; float:left; font-size:large"><h2>Pret:</h2></div>
+                <div style="width:50%; float:right; border-left: 1px solid black; font-size:large"><h2>@productController.ProductPrice Lei</h2></div>
+            </div>
+            <!--And add a back button-->
+            <button style="margin-top:10px" class="btn-primary" @onclick="ResetPage">Inapoi</button>
         </div>
-        <button style="margin-top:10px" class="btn-primary" @onclick="ResetPage">Inapoi</button>
     </div>
-</div>
-
 }
 
-@code{
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!HasProductBeenScanned)
-        {
-            await JSRuntime.InvokeVoidAsync("focusElement", "ProductCode");
-            this.StateHasChanged();
-        }
-    }
-
-    private Boolean HasProductBeenScanned { get; set; } = false;
-
-    private ProductController productController { get; set; } = new ProductController();
-
-    async void ValidForm(KeyboardEventArgs e)
-    {
-        if (e.Key == "Enter")
-        {
-            await Task.Run(() => UpdateProductController());
-        }
-    }
-
-    private async void UpdateProductController()
-    {
-        String xmlDocument = String.Empty;
-        try
-        {
-            xmlDocument = await http.GetStringAsync(ProductDisplay.WebFunctions.WebMehtods.GetProduct +
-                                                        productController.ProductCode);
-        }
-        catch { return; }
-        System.Xml.Serialization.XmlSerializer serializer
-            = new System.Xml.Serialization.XmlSerializer(typeof(ProductDisplay.WebFunctions.XmlObjects.ProductDisplay));
-        ProductDisplay.WebFunctions.XmlObjects.ProductDisplay productDisplay = new WebFunctions.XmlObjects.ProductDisplay();
-        using (System.IO.TextReader reader = new System.IO.StringReader(xmlDocument))
-        {
-            productDisplay = (ProductDisplay.WebFunctions.XmlObjects.ProductDisplay)serializer.Deserialize(reader);
-        }
-        productDisplay.SetProductDisplayToObject(productController);
-        ChangePageState();
-    }
-
-    async void ChangePageState()
-    {
-        HasProductBeenScanned = !HasProductBeenScanned;
-        if (HasProductBeenScanned) { }
-        else { }
-    }
-
-    void ResetPage()
-    {
-        productController = new ProductController();
-        ChangePageState();
-    }
-
-}

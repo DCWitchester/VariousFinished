@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Data;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -13,17 +13,30 @@ namespace WebServiceEvidenta
     {
         public class vfpPOS : IDisposable
         {
-            
-            static String EvidentaPath = Decryptor.Decrypt(Properties.Settings.Default.CaleEvidenta);
-            static String odbcCheck = EvidentaPath + @"\FOXUSER.DBF";
-            static String dbfPath = EvidentaPath + @"\DBF";
-            static String nomPath = EvidentaPath + @"\NOM";
+            //the static objects fot accessing file Paths
+            static readonly String EvidentaPath = Miscellaneous.Decryptor.Decrypt(Properties.Settings.Default.CaleEvidenta);
+            /// <summary>
+            /// FoxUser is used for odbcValidity Check
+            /// </summary>
+            static readonly String odbcCheck = EvidentaPath + @"\FOXUSER.DBF";
+            //the DBF and NOM Path
+            static readonly String dbfPath = EvidentaPath + @"\DBF";
+            static readonly String nomPath = EvidentaPath + @"\NOM";
+            /// <summary>
+            /// the oledb Connection
+            /// </summary>
             System.Data.OleDb.OleDbConnection dbfConn = new System.Data.OleDb.OleDbConnection();
+            /// <summary>
+            /// the main Command 
+            /// </summary>
             System.Data.OleDb.OleDbCommand oCmd;
-            string eroare = "";
-            string NomenclatorProduse = nomPath + @"\FP.DBF";
-
-            //
+            #region Nomenclator Files
+            readonly string NomenclatorProduse = nomPath + @"\FP.DBF";
+            #endregion
+            #region Document Files
+            readonly string QuantityFile = dbfPath + @"\CantitatiProduse.DBF";
+            #endregion
+            //the needed preset settings for fox.
             public string newLine = "\r\n";
             public string fontBold = ((char)27).ToString() + ((char)33).ToString() + ((char)10).ToString();
             public string fontBoldMare = ((char)27).ToString() + ((char)33).ToString() + ((char)32).ToString();
@@ -55,21 +68,23 @@ namespace WebServiceEvidenta
             }
             /* END IDisposable */
 
+            /// <summary>
+            /// the main caller for the vfpPOS
+            /// </summary>
             public vfpPOS()
             {
                 #region initializare vfpoledb
+                //we initialize the connectionString
                 dbfConn.ConnectionString = "Provider=vfpoledb.1;Data Source=" + EvidentaPath + ";Collating Sequence=general;";
-                String x = "";
+                //try to open the dbfConnection
                 try
                 {
                     dbfConn.Open();
-                }
-                catch (Exception ee)
+                }catch (Exception e)
                 {
-                    //eroare = "Eroare: nu ma pot conecta la baza de date pentru comunicare: " + fisVanzari + " " + ee.Message;
-                    // trebuie sa si trimit eroarea asta la o pagina de facut Erori.aspx?text=eroare;
                     return;
                 }
+                //then we set the needed presets
                 oCmd = dbfConn.CreateCommand();
                 oCmd.CommandText = "SET EXCLUSIVE OFF";
                 oCmd.ExecuteNonQuery();
@@ -84,101 +99,141 @@ namespace WebServiceEvidenta
             }
             #region ProductDisplay
           
+            /// <summary>
+            /// this is the main function for retriving the name and the price of a given ProductCode
+            /// </summary>
+            /// <param name="productCode">the given product code</param>
+            /// <returns>the xmlDocument containing the product name and price</returns>
             public XmlDocument getProductDetails(String productCode)
             { 
+                //we set the command string
                 String command = String.Format("SELECT TOP 1 denm,pv FROM '{0}' WHERE UPPER(ALLTRIM(codp)) == '{1}' ORDER BY codp",
                                                     NomenclatorProduse,
                                                     productCode.ToUpper().Trim());
+                //then set the command text for the ole object
                 oCmd.CommandText = command;
+                //then initialize a new dataTable
                 DataTable dt = new DataTable();
                 try
                 {
+                    //and load it from the reader
                     dt.Load(oCmd.ExecuteReader());
                 } catch { }
+                //and set a name for the table just because I can
                 dt.TableName = "Produs";
+                //we initialize a new productDisplay  
                 Classes.ProductDisplay productDisplay = new Classes.ProductDisplay();
+                //then we will retrieve the data from the table and fill the object
                 productDisplay.GetProductDisplayFromDataTable(dt);
+                //we initialize a serializer over tge ProductDisplay classes
                 XmlSerializer serializer = new XmlSerializer(typeof(Classes.ProductDisplay));
+                //we initialize a resultString
                 String result = String.Empty;
+                //then using a memoryStream
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
+                    //we serialize the object onto the memoryStream
                     serializer.Serialize(memoryStream, productDisplay);
+                    //then place myself at the start of the stream
                     memoryStream.Position = 0;
+                    //and dump the string into the result string
                     result = new StreamReader(memoryStream).ReadToEnd();
                 }
+                //we create a new XmlDocument
                 XmlDocument xmlDocument = new XmlDocument();
+                //and load it from the resulted string
                 xmlDocument.LoadXml(result);
+                //before finally returning the result.
                 return xmlDocument;
             }
-            #endregion 
-        }
-    }
-    public class Decryptor
-    {
-        /// <summary>
-        /// the main encryptionServiceProvider
-        /// </summary>
-        private static TripleDESCryptoServiceProvider cryptoService = new TripleDESCryptoServiceProvider();
 
-        /// <summary>
-        /// the main encoding
-        /// </summary>
-        private static UTF8Encoding encoding = new UTF8Encoding();
+            /// <summary>
+            /// this is the main function for retriving the name and the price of a given ProductCode
+            /// </summary>
+            /// <param name="productCode">the given product code</param>
+            /// <returns>the xmlDocument containing the product name and price</returns>
+            public XmlDocument getProductName(String productCode)
+            {
+                //we set the command string
+                String command = String.Format("SELECT TOP 1 denm,pv " +
+                                                    "FROM '{0}' " +
+                                                    "WHERE UPPER(ALLTRIM(codp)) == '{1}' OR UPPER(ALLTRIM(codext)) == '{1}' " +
+                                                    "ORDER BY codp",
+                                                    NomenclatorProduse,
+                                                    productCode.ToUpper().Trim());
+                //then set the command text for the ole object
+                oCmd.CommandText = command;
+                //then initialize a new dataTable
+                DataTable dt = new DataTable();
+                try
+                {
+                    //and load it from the reader
+                    dt.Load(oCmd.ExecuteReader());
+                }
+                catch { }
+                //and set a name for the table just because I can
+                dt.TableName = "Produs";
+                //we initialize a new productDisplay  
+                Classes.ProductDisplay productDisplay = new Classes.ProductDisplay();
+                //then we will retrieve the data from the table and fill the object
+                productDisplay.GetProductDisplayFromDataTable(dt);
+                //we initialize a serializer over tge ProductDisplay classes
+                XmlSerializer serializer = new XmlSerializer(typeof(Classes.ProductDisplay));
+                //we initialize a resultString
+                String result = String.Empty;
+                //then using a memoryStream
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    //we serialize the object onto the memoryStream
+                    serializer.Serialize(memoryStream, productDisplay);
+                    //then place myself at the start of the stream
+                    memoryStream.Position = 0;
+                    //and dump the string into the result string
+                    result = new StreamReader(memoryStream).ReadToEnd();
+                }
+                //we create a new XmlDocument
+                XmlDocument xmlDocument = new XmlDocument();
+                //and load it from the resulted string
+                xmlDocument.LoadXml(result);
+                //before finally returning the result.
+                return xmlDocument;
+            }
 
-        ///<summary>
-        /// the procedure exists to alter a base ByteArray
-        /// </summary>
-        private static Byte[] Transform(Byte[] input, ICryptoTransform cryptoTransform)
-        {
-            if (input.Length <= 0) return new Byte[] { 0 };
+            public void SetQuantityFile(String qunatityDocument)
+            {
+                //we Deserialize the Object into the sale
+                Classes.Qunatities quantities = JsonConvert.DeserializeObject<Classes.Qunatities>(qunatityDocument);
+                CheckQuantityFile();
+                //we set the command string
+                StringBuilder builder = new StringBuilder(50 * quantities.ProductQuantities.Count);
 
-            MemoryStream memoryStream = new MemoryStream();
-            CryptoStream cryptoStream = new CryptoStream(memoryStream, cryptoTransform, CryptoStreamMode.Write);
-            cryptoStream.Write(input, 0, input.Length);
-            cryptoStream.FlushFinalBlock();
-            memoryStream.Position = 0;
-            Byte[] result = memoryStream.ToArray();
-            cryptoStream.Close();
-            memoryStream.Close();
-            return result;
-        }
-        /// <summary>
-        /// the function used for encrypting a given string
-        /// </summary>
-        /// <param name="text">the given string</param>
-        /// <returns>an encryted text</returns>
-        public static String Encrypt(String text)
-        {
-            #region key and vector lenght generating 
-            Byte[] key = new Byte[24];
-            Byte[] lenghtVector = new Byte[8];
-            RNGCryptoServiceProvider randomGenerator = new RNGCryptoServiceProvider();
-            randomGenerator.GetBytes(key);
-            randomGenerator.GetBytes(lenghtVector);
-            cryptoService.Key = key;
-            cryptoService.IV = lenghtVector;
+                foreach (var element in quantities.ProductQuantities) 
+                {
+                    builder.Append(String.Format("INSERT INTO '{0}' " +
+                                                        "VALUES ('{1}',{2}); ",
+                                                        QuantityFile,
+                                                        element.ProductCode.Substring(0, 12),
+                                                        element.ProductQunatity
+                                                        ));
+                }
+
+                oCmd.CommandText = builder.ToString();
+                oCmd.ExecuteNonQuery();
+            }
             #endregion
 
-            return Convert.ToBase64String(cryptoService.Key) + Convert.ToBase64String(Transform(encoding.GetBytes(text), cryptoService.CreateEncryptor(cryptoService.Key, cryptoService.IV))) +
-                    Convert.ToBase64String(cryptoService.IV);
-        }
-        /// <summary>
-        /// the function used for decrypting a given string
-        /// </summary>
-        /// <param name="encryptedText">the already encrypted text</param>
-        /// <returns>the original text</returns>
-        public static String Decrypt(String encryptedText)
-        {
-            try
+            #region Functionality
+            void CheckQuantityFile()
             {
-                return encoding.GetString(Transform(Convert.FromBase64String(encryptedText.Substring(32, encryptedText.Length - 44)),
-                        cryptoService.CreateDecryptor(Convert.FromBase64String(encryptedText.Substring(0, 32)),
-                        Convert.FromBase64String(encryptedText.Substring(encryptedText.Length - 12)))));
+                if (!File.Exists(QuantityFile))
+                {
+                    String command = String.Format("CREATE TABLE '{0}' (code Character(12), quantity Numeric(18,4))", QuantityFile);
+                    //then set the command text for the ole object
+                    oCmd.CommandText = command;
+                    oCmd.ExecuteNonQuery();
+                }
             }
-            catch (Exception)
-            {
-                return null;
-            }
+            #endregion 
         }
     }
 }
