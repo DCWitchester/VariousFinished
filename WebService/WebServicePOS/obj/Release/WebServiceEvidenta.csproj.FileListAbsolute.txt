@@ -1,0 +1,12 @@
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\bin\FirebirdSql.Data.FirebirdClient.dll
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\bin\Newtonsoft.Json.dll
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\bin\FirebirdSql.Data.FirebirdClient.pdb
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\bin\Newtonsoft.Json.xml
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\obj\Release\WebServiceEvidenta.csprojAssemblyReference.cache
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\obj\Release\WebServiceEvidenta.csproj.CoreCompileInputs.cache
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\obj\Release\WebServiceEvidenta.csproj.CopyComplete
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\bin\WebServiceEvidenta.dll.config
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\bin\WebServiceEvidenta.dll
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\bin\WebServiceEvidenta.pdb
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\obj\Release\WebServiceEvidenta.dll
+D:\AlfaBeta\VizualizarePreturi\WebService\WebServicePOS\obj\Release\WebServiceEvidenta.pdb
