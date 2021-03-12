@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\txtToPdf\TXTtoPDFv2\obj\Debug\
+E:\GitRepos\MentorSynch\TXTtoPDFv2\obj\Debug\
 TXTtoPDFv2
 none
 false
 DEBUG;TRACE
-D:\txtToPdf\TXTtoPDFv2\App.xaml
+E:\GitRepos\MentorSynch\TXTtoPDFv2\App.xaml
 2-289342928
 
-561637556811
+57882987027
 17649828674
 MainWindow.xaml;Messages\MessageForm.xaml;
 
-False
+True
 

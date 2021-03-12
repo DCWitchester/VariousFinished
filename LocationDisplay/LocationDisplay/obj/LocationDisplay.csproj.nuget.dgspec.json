@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\locationDisplay\\LocationDisplay\\LocationDisplay\\LocationDisplay.csproj": {}
+    "E:\\GitRepos\\MentorSynch\\LocationDisplay\\LocationDisplay\\LocationDisplay.csproj": {}
   },
   "projects": {
-    "D:\\locationDisplay\\LocationDisplay\\LocationDisplay\\LocationDisplay.csproj": {
+    "E:\\GitRepos\\MentorSynch\\LocationDisplay\\LocationDisplay\\LocationDisplay.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\locationDisplay\\LocationDisplay\\LocationDisplay\\LocationDisplay.csproj",
+        "projectUniqueName": "E:\\GitRepos\\MentorSynch\\LocationDisplay\\LocationDisplay\\LocationDisplay.csproj",
         "projectName": "LocationDisplay",
-        "projectPath": "D:\\locationDisplay\\LocationDisplay\\LocationDisplay\\LocationDisplay.csproj",
+        "projectPath": "E:\\GitRepos\\MentorSynch\\LocationDisplay\\LocationDisplay\\LocationDisplay.csproj",
         "packagesPath": "C:\\Users\\DCW\\.nuget\\packages\\",
-        "outputPath": "D:\\locationDisplay\\LocationDisplay\\LocationDisplay\\obj\\",
+        "outputPath": "E:\\GitRepos\\MentorSynch\\LocationDisplay\\LocationDisplay\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -28,10 +28,12 @@
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "F:\\LocalPackages": {},
+          "F:\\test\\radzen-blazor-master\\Radzen.Blazor\\bin\\Debug\\net5.0": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -43,6 +45,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "BlazorGoogleMaps": {
               "target": "Package",
@@ -71,7 +74,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
         }
       }
     }

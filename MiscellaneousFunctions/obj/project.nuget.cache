@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "5pd557g2Ga95IMYd6NawtzOUktikPfF/yKFBtfxBSoXzzROKly2sBMFxeFRgs3jxROQ4njgY5iz1yGoA1i8jTQ==",
+  "success": true,
+  "projectFilePath": "E:\\GitRepos\\MentorSynch\\MiscellaneousFunctions\\MiscellaneousFunctions.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\DCW\\.nuget\\packages\\fsharp.core\\5.0.0\\fsharp.core.5.0.0.nupkg.sha512",
+    "C:\\Users\\DCW\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.0.1\\microsoft.aspnetcore.app.ref.3.0.1.nupkg.sha512",
+    "C:\\Users\\DCW\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\3.0.0\\microsoft.windowsdesktop.app.ref.3.0.0.nupkg.sha512",
+    "C:\\Users\\DCW\\.nuget\\packages\\microsoft.netcore.app.ref\\3.0.0\\microsoft.netcore.app.ref.3.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
