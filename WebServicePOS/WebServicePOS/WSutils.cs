@@ -648,7 +648,7 @@ namespace WebServicePOS
             {
                 //we create a new insert command
                 command = String.Format(@"INSERT INTO vanz(tora,cuser,ntable,nbon,ncodp,cden,npret,ncant,nid,uid,nota)
-                                                VALUES(Date(),'{1}',{2},{3},{4},'{5}',{6},{7},{8},{9},{10})",
+                                                VALUES(DateTime(),'{1}',{2},{3},{4},'{5}',{6},{7},{8},{9},{10})",
                                                 element.SaleTime,
                                                 element.SaleClient,
                                                 element.Table,

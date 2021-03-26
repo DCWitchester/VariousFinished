@@ -14,14 +14,14 @@
 }
 else
 {
-
+    <!--The div element sets the base page-->
     <div style=" background-color: #80aaff; border : solid black 1px; margin-bottom: 2px; display: flex ">
         <EditForm Model="historyController"> 
             <DataAnnotationsValidator/>
             <ValidationSummary/>
             <div>
                 <p>
-                    <div style="margin-top:10px; margin-left:10px" s>
+                    <div style="margin-top:10px; margin-left:10px">
                         <label>
                             Coduri Agent:
                             <InputText @bind-Value="historyController.AgentFilter" />

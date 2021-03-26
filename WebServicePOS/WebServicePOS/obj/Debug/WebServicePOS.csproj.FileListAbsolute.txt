@@ -45,3 +45,15 @@ E:\Programe\Android.MentorPOS\WebServicePOS\WebServicePOS\WebServicePOS\obj\Debu
 E:\Programe\Android.MentorPOS\WebServicePOS\WebServicePOS\WebServicePOS\obj\Debug\WebServicePOS.csprojAssemblyReference.cache
 E:\Programe\Android.MentorPOS\WebServicePOS\WebServicePOS\WebServicePOS\obj\Debug\WebServicePOS.csproj.CopyComplete
 E:\Programe\Android.MentorPOS\WebServicePOS\WebServicePOS\WebServicePOS\obj\Debug\WebServicePOS.csproj.CoreCompileInputs.cache
+E:\GitRepos\MentorSynch\WebServicePOS\WebServicePOS\bin\WebServicePOS.dll.config
+E:\GitRepos\MentorSynch\WebServicePOS\WebServicePOS\bin\WebServicePOS.dll
+E:\GitRepos\MentorSynch\WebServicePOS\WebServicePOS\bin\WebServicePOS.pdb
+E:\GitRepos\MentorSynch\WebServicePOS\WebServicePOS\bin\FirebirdSql.Data.FirebirdClient.dll
+E:\GitRepos\MentorSynch\WebServicePOS\WebServicePOS\bin\Newtonsoft.Json.dll
+E:\GitRepos\MentorSynch\WebServicePOS\WebServicePOS\bin\FirebirdSql.Data.FirebirdClient.pdb
+E:\GitRepos\MentorSynch\WebServicePOS\WebServicePOS\bin\Newtonsoft.Json.xml
+E:\GitRepos\MentorSynch\WebServicePOS\WebServicePOS\obj\Debug\WebServicePOS.csprojAssemblyReference.cache
+E:\GitRepos\MentorSynch\WebServicePOS\WebServicePOS\obj\Debug\WebServicePOS.csproj.CoreCompileInputs.cache
+E:\GitRepos\MentorSynch\WebServicePOS\WebServicePOS\obj\Debug\WebServicePOS.csproj.CopyComplete
+E:\GitRepos\MentorSynch\WebServicePOS\WebServicePOS\obj\Debug\WebServicePOS.dll
+E:\GitRepos\MentorSynch\WebServicePOS\WebServicePOS\obj\Debug\WebServicePOS.pdb

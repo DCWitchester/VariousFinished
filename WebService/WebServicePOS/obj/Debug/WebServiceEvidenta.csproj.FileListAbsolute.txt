@@ -22,3 +22,15 @@ D:\WebServiceEvidentaV2\WebService\WebServicePOS\obj\Debug\WebServiceEvidenta.cs
 D:\WebServiceEvidentaV2\WebService\WebServicePOS\obj\Debug\WebServiceEvidenta.csproj.CopyComplete
 D:\WebServiceEvidentaV2\WebService\WebServicePOS\obj\Debug\WebServiceEvidenta.dll
 D:\WebServiceEvidentaV2\WebService\WebServicePOS\obj\Debug\WebServiceEvidenta.pdb
+E:\GitRepos\MentorSynch\WebService\WebServicePOS\bin\WebServiceEvidenta.dll.config
+E:\GitRepos\MentorSynch\WebService\WebServicePOS\bin\WebServiceEvidenta.dll
+E:\GitRepos\MentorSynch\WebService\WebServicePOS\bin\WebServiceEvidenta.pdb
+E:\GitRepos\MentorSynch\WebService\WebServicePOS\bin\FirebirdSql.Data.FirebirdClient.dll
+E:\GitRepos\MentorSynch\WebService\WebServicePOS\bin\Newtonsoft.Json.dll
+E:\GitRepos\MentorSynch\WebService\WebServicePOS\bin\FirebirdSql.Data.FirebirdClient.pdb
+E:\GitRepos\MentorSynch\WebService\WebServicePOS\bin\Newtonsoft.Json.xml
+E:\GitRepos\MentorSynch\WebService\WebServicePOS\obj\Debug\WebServiceEvidenta.csprojAssemblyReference.cache
+E:\GitRepos\MentorSynch\WebService\WebServicePOS\obj\Debug\WebServiceEvidenta.csproj.CoreCompileInputs.cache
+E:\GitRepos\MentorSynch\WebService\WebServicePOS\obj\Debug\WebServiceEvidenta.csproj.CopyComplete
+E:\GitRepos\MentorSynch\WebService\WebServicePOS\obj\Debug\WebServiceEvidenta.dll
+E:\GitRepos\MentorSynch\WebService\WebServicePOS\obj\Debug\WebServiceEvidenta.pdb
