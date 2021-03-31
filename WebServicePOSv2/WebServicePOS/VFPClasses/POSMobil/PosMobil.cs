@@ -46,7 +46,7 @@ namespace WebServicePOS.VFPClasses.POSMobil
         {
             System.Data.OleDb.OleDbCommand oCmd = base.FileBaseConnection.CreateCommand();
             // aceasta metoda nu va fi expusa prin WS
-            oCmd.CommandText = @"SELECT * FROM " + base.fisSettings;
+            oCmd.CommandText = @"SELECT * FROM " + base.fisSetari;
             DataTable dt = new DataTable();
             if (!base.OpenConnection()) return null;
             try
@@ -313,7 +313,7 @@ namespace WebServicePOS.VFPClasses.POSMobil
         public string GetDataFiscalaWinPOS()
         {
             System.Data.OleDb.OleDbCommand oCmd = base.FileBaseConnection.CreateCommand();
-            oCmd.CommandText = @"SELECT SUBSTR(DTOS(datafisc),1,4)+'-'+SUBSTR(DTOS(datafisc),5,2)+'-'+SUBSTR(DTOS(datafisc),7,2) FROM " + fisSettings;
+            oCmd.CommandText = @"SELECT SUBSTR(DTOS(datafisc),1,4)+'-'+SUBSTR(DTOS(datafisc),5,2)+'-'+SUBSTR(DTOS(datafisc),7,2) FROM " + fisSetari;
             if (!base.OpenConnection()) return "";
             return (string)oCmd.ExecuteScalar();
         }
@@ -1030,9 +1030,9 @@ namespace WebServicePOS.VFPClasses.POSMobil
             }
             else
             {
-                oCmd.CommandText = @"update  " + fisSettings + " set nbon=nbon+1";
+                oCmd.CommandText = @"update  " + fisSetari + " set nbon=nbon+1";
                 oCmd.ExecuteNonQuery();
-                oCmd.CommandText = @"select nbon from " + fisSettings;
+                oCmd.CommandText = @"select nbon from " + fisSetari;
                 DataTable db = new DataTable("Settings");
                 db.Load(oCmd.ExecuteReader());
                 int.TryParse(db.Rows[0]["nbon"].ToString(), out int nbon);
@@ -1076,7 +1076,7 @@ namespace WebServicePOS.VFPClasses.POSMobil
                 dt.Load(oCmd.ExecuteReader());
                 oCmd.CommandText = @"delete from " + fisVanzari + " where ntable=" + masa.Replace('\'', ' ').Replace('"', ' ');
                 oCmd.ExecuteNonQuery();
-                oCmd.CommandText = @"select dtoc(datafisc) as datafisc, npos from " + fisSettings;
+                oCmd.CommandText = @"select dtoc(datafisc) as datafisc, npos from " + fisSetari;
                 DataTable ds = new DataTable("Settings");
                 ds.Load(oCmd.ExecuteReader());
                 string datafisc = "{" + ds.Rows[0]["datafisc"].ToString() + "}";
@@ -1111,7 +1111,7 @@ namespace WebServicePOS.VFPClasses.POSMobil
         {
             System.Data.OleDb.OleDbCommand oCmd = base.FileBaseConnection.CreateCommand();
             base.OpenConnection();
-            oCmd.CommandText = @"SELECT cardvaloric FROM " + fisSettings;
+            oCmd.CommandText = @"SELECT cardvaloric FROM " + fisSetari;
             DataTable dv = new DataTable("Settings");
             dv.Load(oCmd.ExecuteReader());
             bool.TryParse(dv.Rows[0]["cardvaloric"].ToString(), out bool cv);
@@ -1138,7 +1138,7 @@ namespace WebServicePOS.VFPClasses.POSMobil
         {
             System.Data.OleDb.OleDbCommand oCmd = base.FileBaseConnection.CreateCommand();
             base.OpenConnection();
-            oCmd.CommandText = @"SELECT allt(padl(lastUpProd,10)) as lastUpProd FROM [" + fisSettings + "]";
+            oCmd.CommandText = @"SELECT allt(padl(lastUpProd,10)) as lastUpProd FROM [" + fisSetari + "]";
             base.CloseConnection();
             return (string)oCmd.ExecuteScalar();
         }

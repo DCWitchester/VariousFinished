@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Xml;
 using System.Xml.Serialization;
+using WebServicePOS.Classes;
 
 namespace WebServicePOS.VFPClasses.POSTable
 {
@@ -156,7 +157,7 @@ namespace WebServicePOS.VFPClasses.POSTable
             //we Deserialize the Object into the sale
             Classes.Sale sale = JsonConvert.DeserializeObject<Classes.Sale>(saleDocument);
             //we create a new command to retrieve the new sale id from the program settings
-            String command = @"SELECT TOP 1 nbon FROM Settings ORDER BY nbon";
+            String command = @"SELECT TOP 1 nbon FROM setari ORDER BY nbon";
             //set the command for the OleDB 
             oCmd.CommandText = command;
             //initialize a new sale ID
@@ -169,7 +170,7 @@ namespace WebServicePOS.VFPClasses.POSTable
             //else we will increment the new SaleID
             else newSaleID++;
             //and create a new command to update the value in the settings
-            command = @"UPDATE Settings SET nbon = nbon + 1";
+            command = @"UPDATE setari SET nbon = nbon + 1";
             //set the command to the OleDB
             oCmd.CommandText = command;
             //and execute the update
@@ -201,8 +202,8 @@ namespace WebServicePOS.VFPClasses.POSTable
             foreach (var element in dBFSales)
             {
                 //we create a new insert command
-                command = String.Format(@"INSERT INTO vanz(tora,cuser,ntable,nbon,ncodp,cden,npret,ncant,nid,uid,nota,status)
-                                                VALUES(DateTime(),'{1}',{2},{3},{4},'{5}',{6},{7},{8},{9},{10},3)",
+                command = String.Format(@"INSERT INTO vanz(tora,cuser,ntable,nbon,ncodp,cden,npret,ncant,nid,uid,nota,stare)
+                                                VALUES(DateTime(),'{1}',{2},{3},{4},'{5}',{6},{7},{8},{9},{10},4)",
                                                 element.SaleTime,
                                                 element.SaleClient,
                                                 element.Table,
@@ -218,8 +219,9 @@ namespace WebServicePOS.VFPClasses.POSTable
                 oCmd.CommandText = command;
                 //and Execute the Query
                 oCmd.ExecuteNonQuery();
-                base.CloseConnection();
+                
             };
+            base.CloseConnection();
         }
         #endregion
 
@@ -272,6 +274,8 @@ namespace WebServicePOS.VFPClasses.POSTable
             //and return the xmlDocument
             return xmlDocument;
         }
+
+
         #endregion
     }
 }

@@ -84,6 +84,7 @@
     <Compile Include="Classes\DBFSale.cs" />
     <Compile Include="Classes\Meniu.cs" />
     <Compile Include="Classes\MenuItem.cs" />
+    <Compile Include="Classes\OpenSale.cs" />
     <Compile Include="Classes\Sale.cs" />
     <Compile Include="Classes\SaleItem.cs" />
     <Compile Include="Classes\Table.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="VFPClasses\POSMobil\PosMobil.cs" />
     <Compile Include="VFPClasses\POSTable\PosTable.cs" />
+    <Compile Include="VFPClasses\POSTable\PosTableKitchen.cs" />
     <Compile Include="VFPClasses\POSTable\PosTableWaiter.cs" />
     <Compile Include="VFPClasses\VFPConnection.cs" />
     <Compile Include="WebServiceFunctionality\DataTable2XmlDocument.cs" />

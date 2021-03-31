@@ -93,7 +93,7 @@ namespace WebServicePOS.VFPClasses
         protected readonly string fisCateg        = Settings.calePOS + @"\categ.dbf";
         protected readonly string fisProd         = Settings.calePOS + @"\prod.dbf";
         protected readonly string fisMese         = Settings.calePOS + @"\mese.dbf";
-        protected readonly string fisSettings     = Settings.calePOS + @"\Settings.dbf";
+        protected readonly string fisSetari       = Settings.calePOS + @"\setari.dbf";
         protected readonly string fisIstoric      = Settings.calePOS + @"\istoric.dbf";
         protected readonly string fisFeluri       = Settings.calePOS + @"\feluri.dbf";
         protected readonly string fisTipProd      = Settings.calePOS + @"\tipprod.dbf";

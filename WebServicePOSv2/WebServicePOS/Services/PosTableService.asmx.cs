@@ -97,6 +97,15 @@ namespace WebServicePOS.Services
                 return vfp.CheckWaiter(waiterCode);
             }
         }
+
+        [WebMethod]
+        public XmlDocument GetSaleOfTable(String tableCode)
+        {
+            using (PosTableWaiter vfp = new PosTableWaiter())
+            {
+                return vfp.GetSaleOfTable(tableCode);
+            }
+        }
         #endregion
     }
 }

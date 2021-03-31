@@ -88,10 +88,10 @@ namespace WebServicePOS.VFPClasses.POSTable
         public XmlDocument GetTables()
         {
             System.Data.OleDb.OleDbCommand oCmd = FileBaseConnection.CreateCommand();
-            String command = $@"SELECT DISTINCT mq.masa, NVL(vanz.stare,0) AS stare, NVL(pr._id,-1) AS _id,
+            String command = $@"SELECT mq.masa, NVL(vanz.stare,0) AS stare, NVL(pr._id,-1) AS _id,
                                     NVL(pr.ccod,SPACE(10)) as ccod, NVL(pr.cnume,SPACE(35)) as cnume 
                                 FROM (SELECT RECNO() as masa FROM {base.fisMese}) AS mq
-                                LEFT JOIN {base.fisVanzari}
+                                LEFT JOIN ( SELECT vanz.ntable , MAX(vanz.stare) as stare, vanz.cuser FROM {base.fisVanzari} GROUP BY vanz.ntable) as vanz
                                     ON vanz.ntable == mq.masa
                                 LEFT JOIN (SELECT RECNO() as _id, ccod, cnume FROM {base.fisPers}) AS pr
                                     ON pr.ccod == vanz.cuser";
@@ -116,6 +116,50 @@ namespace WebServicePOS.VFPClasses.POSTable
             }
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(result);
+            return xmlDocument;
+        }
+
+        /// <summary>
+        /// this function will return the active sale for a given table
+        /// </summary>
+        /// <param name="table">the given table</param>
+        /// <returns></returns>
+        public XmlDocument GetSaleOfTable(String table)
+        {
+            System.Data.OleDb.OleDbCommand oCmd = base.FileBaseConnection.CreateCommand();
+            base.OpenConnection();
+            //the new Select Command
+            String command = String.Format("SELECT SUM(ncant) as ncant,ncodp FROM {0} GROUP BY ncodp,ntable WHERE ntable = {1}", fisVanzari, table);
+            //and set the command to the OleDb
+            oCmd.CommandText = command;
+            //initialize a new DataTable
+            DataTable dt = new DataTable();
+            dt.Load(oCmd.ExecuteReader());
+            base.CloseConnection();
+            List<OpenSale> openSales = dt.AsEnumerable().Select(element => new OpenSale
+            {
+                ProductCode = (Int32)element.Field<Decimal>("ncodp"),
+                ProductQuantity = (Int32)element.Field<Decimal>("ncant")
+            }).ToList();
+            //we initialize a new serializer over the object
+            XmlSerializer serializer = new XmlSerializer(typeof(List<OpenSale>));
+            //and a new string for the memory strean
+            String result = String.Empty;
+            //and using a new memory stream
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                //serialize the object to the stream
+                serializer.Serialize(memoryStream, openSales);
+                //position the cursor at the start of the stream
+                memoryStream.Position = 0;
+                //then dump the whole stream into the string
+                result = new StreamReader(memoryStream).ReadToEnd();
+            }
+            //intialize the xmlDocument 
+            XmlDocument xmlDocument = new XmlDocument();
+            //load the string into the xml
+            xmlDocument.LoadXml(result);
+            //and return the xmlDocument
             return xmlDocument;
         }
     }

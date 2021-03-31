@@ -7,7 +7,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <_PublishTargetUrl>E:\Published_projects\wsPOS</_PublishTargetUrl>
-    <History>True|2021-03-25T09:09:29.4114718Z;True|2021-03-23T11:23:46.2612004+02:00;True|2021-03-23T11:06:02.2234082+02:00;True|2021-03-23T11:02:33.7743497+02:00;</History>
+    <History>True|2021-03-30T11:29:37.0455827Z;True|2021-03-30T14:15:06.1182340+03:00;True|2021-03-30T12:59:32.0262066+03:00;True|2021-03-30T12:48:28.8383971+03:00;True|2021-03-25T11:09:29.4114718+02:00;True|2021-03-23T11:23:46.2612004+02:00;True|2021-03-23T11:06:02.2234082+02:00;True|2021-03-23T11:02:33.7743497+02:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/FirebirdSql.Data.FirebirdClient.dll">
@@ -20,10 +20,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/17/2015 08:59:34</publishTime>
     </File>
     <File Include="bin/WebServicePOS.dll">
-      <publishTime>03/25/2021 11:09:28</publishTime>
+      <publishTime>03/30/2021 14:29:36</publishTime>
     </File>
     <File Include="bin/WebServicePOS.pdb">
-      <publishTime>03/25/2021 11:09:28</publishTime>
+      <publishTime>03/30/2021 14:29:36</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>07/04/2017 11:04:24</publishTime>
